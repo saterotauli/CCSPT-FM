@@ -1,0 +1,381 @@
+:root {
+  /* Grayscale Colors */
+  --bim-ui_gray-0: hsl(220, 20%, 8%);
+  --bim-ui_gray-1: hsl(220, 15%, 12%);
+  --bim-ui_gray-2: hsl(220, 10%, 20%);
+  --bim-ui_gray-4: hsl(220, 5%, 30%);
+  --bim-ui_gray-6: hsl(220, 3%, 60%);
+  --bim-ui_gray-8: hsl(220, 2%, 60%);
+  --bim-ui_gray-9: hsl(220, 1%, 70%);
+  --bim-ui_gray-10: hsl(220, 0%, 80%);
+  --bim-ui_base: #28b4d7;
+
+  /* Brand Colors */
+  --bim-ui_main-base: #28b4d7;
+  --bim-ui_accent-base: #28A745;
+
+  /* Brand Colors Contrasts */
+  --bim-ui_main-contrast: var(--bim-ui_gray-10);
+  --bim-ui_accent-contrast: var(--bim-ui_gray-0);
+}
+
+/* Background Colors */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bim-ui_bg-base: var(--bim-ui_gray-0);
+    --bim-ui_bg-contrast-10: var(--bim-ui_gray-1);
+    --bim-ui_bg-contrast-20: var(--bim-ui_gray-2);
+    --bim-ui_bg-contrast-40: var(--bim-ui_gray-4);
+    --bim-ui_bg-contrast-60: var(--bim-ui_gray-6);
+    --bim-ui_bg-contrast-80: var(--bim-ui_gray-8);
+    --bim-ui_bg-contrast-100: var(--bim-ui_gray-10);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --bim-ui_bg-base: var(--bim-ui_gray-10);
+    --bim-ui_bg-contrast-10: var(--bim-ui_gray-9);
+    --bim-ui_bg-contrast-20: var(--bim-ui_gray-8);
+    --bim-ui_bg-contrast-40: var(--bim-ui_gray-6);
+    --bim-ui_bg-contrast-60: var(--bim-ui_gray-4);
+    --bim-ui_bg-contrast-80: var(--bim-ui_gray-2);
+    --bim-ui_bg-contrast-100: var(--bim-ui_gray-0);
+    --bim-ui_accent-base: var(--bim-ui_base);
+  }
+}
+
+html.bim-ui-dark {
+  --bim-ui_bg-base: var(--bim-ui_gray-0);
+  --bim-ui_bg-contrast-10: var(--bim-ui_gray-1);
+  --bim-ui_bg-contrast-20: var(--bim-ui_gray-2);
+  --bim-ui_bg-contrast-40: var(--bim-ui_gray-4);
+  --bim-ui_bg-contrast-60: var(--bim-ui_gray-6);
+  --bim-ui_bg-contrast-80: var(--bim-ui_gray-8);
+  --bim-ui_bg-contrast-100: var(--bim-ui_gray-10);
+}
+
+html.bim-ui-light {
+  --bim-ui_bg-base: var(--bim-ui_gray-10);
+  --bim-ui_bg-contrast-10: var(--bim-ui_gray-9);
+  --bim-ui_bg-contrast-20: var(--bim-ui_gray-8);
+  --bim-ui_bg-contrast-40: var(--bim-ui_gray-6);
+  --bim-ui_bg-contrast-60: var(--bim-ui_gray-4);
+  --bim-ui_bg-contrast-80: var(--bim-ui_gray-2);
+  --bim-ui_bg-contrast-100: var(--bim-ui_gray-0);
+  --bim-ui_accent-base: var(--bim-ui_main-base);
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+html {
+  font-family: sans-serif;
+  font-size: 17px;
+  height: 100%;
+}
+
+#root {
+  width: 100%;
+  height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+#app {
+  width: 100% !important;
+  height: 100vh !important;
+  margin: 0;
+  padding: 0;
+}
+
+bim-grid[floating] {
+  z-index: 100;
+}
+
+bim-grid:not([floating]) {
+  border-radius: 0;
+  background-color: var(--bim-ui_bg-contrast-10);
+}
+
+bim-panel {
+  outline: 1px solid var(--bim-ui_bg-contrast-40);
+  border-radius: 0.25rem;
+}
+
+bim-grid:not([floating])>bim-panel {
+  background-color: var(--bim-ui_bg-contrast-10);
+}
+
+bim-panel-section {
+  --bim-panel-section_hc: var(--bim-ui_accent-base);
+  overflow: auto;
+}
+
+bim-panel-section>bim-table {
+  flex: 1;
+}
+
+:not(bim-panel)>bim-panel-section {
+  outline: 1px solid var(--bim-ui_base);
+  border-radius: 0.25rem;
+}
+
+bim-grid[floating]>bim-toolbar {
+  border: none;
+  justify-self: center;
+  outline: 1px solid var(--bim-ui_main-base);
+}
+
+
+bim-context-menu {
+  background-color: var(--bim-ui_bg-base);
+  outline: 1px solid var(--bim-ui_main-base);
+}
+
+bim-context-menu bim-button {
+  background-color: transparent;
+}
+
+bim-context-menu bim-button[active] {
+  background-color: var(--bim-ui_main-base);
+}
+
+bim-context-menu bim-dropdown {
+  --bim-input--bgc: transparent
+}
+
+bim-context-menu bim-button:hover {
+  background-color: var(--bim-ui_main-base) !important;
+}
+
+.context-style-a {
+  --bim-input--bgc: transparent
+}
+
+.context-panel {
+  padding: 0;
+  max-height: none;
+}
+
+.context-panel bim-dropdown {
+  --bim-input--bgc: var(--bim-dropdown--bgc,
+      var(--bim-ui_bg-contrast-20))
+}
+
+.dashboard-card {
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  box-shadow: 0px 2px 8px var(--bim-ui_bg-contrast-10);
+  border-radius: 0.25rem;
+  outline: 1px solid var(--bim-ui_base);
+  background-color: var(--bim-ui_bg-contrast-10);
+  overflow: auto;
+}
+
+bim-grid[floating] .dashboard-card {
+  background-color: var(--bim-ui_bg-base);
+  height: fit-content;
+}
+
+.dashboard-card>div:first-child {
+  overflow: hidden;
+}
+
+.card-label {
+  font-size: 0.9rem;
+  color: var(--bim-ui_accent-base);
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.viewer-message-label {
+  justify-self: center;
+  background-color: #dad588;
+  padding: 0.75rem;
+  border-radius: 0.25rem;
+  color: #424025;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  width: 100%;
+  padding: 0.25rem 0;
+}
+
+/* Custom sidebar button styles */
+.sidebar bim-button {
+  width: 100%;
+  min-height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 0.25rem 0.5rem;
+  border-radius: 0.25rem;
+  transition: background-color 0.2s ease;
+  font-size: 0.9rem;
+}
+
+/* Make icons larger in sidebar */
+.sidebar bim-button bim-icon {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  font-size: 1.5rem !important;
+}
+
+.sidebar bim-button:hover {
+  background-color: var(--bim-ui_bg-contrast-20) !important;
+}
+
+.sidebar bim-button[active] {
+  background-color: var(--bim-ui_accent-base) !important;
+  color: var(--bim-ui_accent-contrast);
+}
+
+/* Sidebar container styles */
+bim-grid>div[style*="border-right"] {
+  min-width: 4rem;
+  max-width: 12rem;
+}
+
+/* Global icon styling - make all icons larger with maximum specificity */
+* bim-icon,
+bim-icon,
+bim-button bim-icon,
+bim-toolbar bim-icon,
+bim-panel bim-icon,
+bim-panel-section bim-icon,
+bim-context-menu bim-icon,
+bim-dropdown bim-icon,
+bim-checkbox bim-icon,
+bim-table bim-icon {
+  width: 2rem !important;
+  height: 2rem !important;
+  font-size: 2rem !important;
+  min-width: 2rem !important;
+  min-height: 2rem !important;
+  max-width: 2rem !important;
+  max-height: 2rem !important;
+}
+
+/* Toolbar icons - make them even larger for better visibility */
+bim-toolbar bim-icon,
+bim-toolbar bim-button bim-icon {
+  width: 2.25rem !important;
+  height: 2.25rem !important;
+  font-size: 2.25rem !important;
+  min-width: 2.25rem !important;
+  min-height: 2.25rem !important;
+  max-width: 2.25rem !important;
+  max-height: 2.25rem !important;
+}
+
+/* Sidebar icons - keep them large but not too large */
+.sidebar bim-button bim-icon,
+bim-grid>div[style*="border-right"] bim-icon {
+  width: 1.75rem !important;
+  height: 1.75rem !important;
+  font-size: 1.75rem !important;
+  min-width: 1.75rem !important;
+  min-height: 1.75rem !important;
+  max-width: 1.75rem !important;
+  max-height: 1.75rem !important;
+}
+
+/* Context menu and dropdown icons - slightly smaller */
+bim-context-menu bim-icon,
+bim-dropdown bim-icon {
+  width: 1.5rem !important;
+  height: 1.5rem !important;
+  font-size: 1.5rem !important;
+  min-width: 1.5rem !important;
+  min-height: 1.5rem !important;
+  max-width: 1.5rem !important;
+  max-height: 1.5rem !important;
+}
+
+/* Override any inline styles that might be affecting icon size */
+bim-icon[style*="width"],
+bim-icon[style*="height"],
+bim-icon[style*="font-size"] {
+  width: 2rem !important;
+  height: 2rem !important;
+  font-size: 2rem !important;
+  min-width: 2rem !important;
+  min-height: 2rem !important;
+  max-width: 2rem !important;
+  max-height: 2rem !important;
+}
+
+/* Ensure icons in buttons are properly sized regardless of inline styles */
+bim-button bim-icon[style*="width"],
+bim-button bim-icon[style*="height"],
+bim-button bim-icon[style*="font-size"] {
+  width: 2rem !important;
+  height: 2rem !important;
+  font-size: 2rem !important;
+  min-width: 2rem !important;
+  min-height: 2rem !important;
+  max-width: 2rem !important;
+  max-height: 2rem !important;
+}
+
+/* Force icon size for all icon elements */
+bim-icon::before,
+bim-icon::after {
+  font-size: inherit !important;
+}
+
+/* Custom select styling to match BIM UI design */
+select {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem !important;
+}
+
+select:hover {
+  background-color: var(--bim-ui_bg-contrast-30) !important;
+  border-color: var(--bim-ui_bg-contrast-60) !important;
+}
+
+select option {
+  background-color: var(--bim-ui_bg-contrast-20);
+  color: var(--bim-ui_bg-contrast-100);
+  padding: 0.5rem;
+}
+
+select option:hover {
+  background-color: var(--bim-ui_accent-base);
+  color: var(--bim-ui_accent-contrast);
+}
+
+
+
+/*--------------------------------*/
+
+bim-toolbar {
+  border-radius: 0.25rem;
+  --background-color: #b5e7f3;
+}
+
+bim-toolbar-section {
+  border-right: 1px solid var(--bim-ui_main-base);
+}

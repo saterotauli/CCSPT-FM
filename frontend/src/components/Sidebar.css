@@ -1,0 +1,107 @@
+.sidebar-container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background: var(--bim-ui_bg-contrast-10);
+  height: 100vh;
+  width: 5rem;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.04);
+  z-index: 20;
+  padding-top: 1.5rem;
+  padding-bottom: 2rem;
+  gap: 0;
+}
+
+.sidebar-logo {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 0 2.5rem 0;
+  padding-top: 0rem;
+}
+
+.logo-image {
+  width: 3.5rem;
+  height: 3.5rem;
+  object-fit: contain;
+  display: block;
+  border-radius: 0.7rem;
+  box-shadow: none;
+  margin: 0 auto;
+}
+
+.sidebar-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: 0.2rem;
+  justify-content: flex-start;
+}
+
+.sidebar-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.5rem 0.1rem 0.5rem 0.1rem;
+  margin: 0 auto;
+  background: none;
+  border: none;
+  color: var(--bim-ui_base);
+  font-weight: 550;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  outline: none;
+  gap: 0.2rem;
+}
+
+.sidebar-button:hover,
+.sidebar-button.active {
+  background: var(--bim-ui_base);
+  color: #fff;
+}
+
+.sidebar-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.sidebar-label {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 0.7rem;
+  text-align: center;
+  white-space: normal;
+  word-break: break-word;
+}
+
+.sidebar-separator {
+  width: 70%;
+  height: 2px;
+  background: var(--bim-ui_base);
+  margin: 1.2rem 0 0.5rem 0;
+}
+
+/* Consistent styling for all themes */
+.sidebar-button,
+.sidebar-toggle {
+  color: var(--bim-ui_base);
+}
+
+.sidebar-button:hover,
+.sidebar-toggle:hover {
+  background-color: var(--bim-ui_base);
+  color: white !important;
+}
+
+.sidebar-button.active {
+  background-color: var(--bim-ui_base);
+  color: white !important;
+}
