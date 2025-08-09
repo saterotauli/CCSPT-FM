@@ -64,11 +64,14 @@ const restoreModelMaterials = () => {
 
 export const viewerToolbarTemplate: BUI.StatefullComponent<
   ViewerToolbarState
-> = (state) => {
+> = (state, update) => {
   const { components, world } = state;
 
   const highlighter = components.get(OBF.Highlighter);
   const hider = components.get(OBC.Hider);
+  const lengthMeasurer = components.get(OBF.LengthMeasurement);
+  const areaMeasurer = components.get(OBF.AreaMeasurement);
+  const clipper = components.get(OBC.Clipper);
 
   const onToggleGhost = () => {
     if (originalColors.size) {
@@ -76,6 +79,48 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
     } else {
       setModelTransparent(components);
     }
+  };
+
+  // Tool functions for the "Eines" section
+  const areMeasurementsEnabled = lengthMeasurer.enabled || areaMeasurer.enabled;
+
+  const disableAll = (exceptions?: ("clipper" | "length" | "area")[]) => {
+    BUI.ContextMenu.removeMenus();
+    highlighter.clear("select");
+    highlighter.enabled = false;
+    if (!exceptions?.includes("length")) lengthMeasurer.enabled = false;
+    if (!exceptions?.includes("area")) areaMeasurer.enabled = false;
+    if (!exceptions?.includes("clipper")) clipper.enabled = false;
+  };
+
+  const onLengthMeasurement = () => {
+    disableAll(["length"]);
+    lengthMeasurer.enabled = !lengthMeasurer.enabled;
+    highlighter.enabled = !lengthMeasurer.enabled;
+    update(state);
+  };
+
+  const onAreaMeasurement = () => {
+    disableAll(["area"]);
+    areaMeasurer.enabled = !areaMeasurer.enabled;
+    highlighter.enabled = !areaMeasurer.enabled;
+    update(state);
+  };
+
+  const onModelSection = () => {
+    disableAll(["clipper"]);
+    clipper.enabled = !clipper.enabled;
+    highlighter.enabled = !clipper.enabled;
+    update(state);
+  };
+
+  const onMeasurementsClick = () => {
+    if (areMeasurementsEnabled) {
+      lengthMeasurer.enabled = false;
+      areaMeasurer.enabled = false;
+      highlighter.enabled = true;
+    }
+    update(state);
   };
 
   let focusBtn: BUI.TemplateResult | undefined;
@@ -114,6 +159,8 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
     await hider.set(true);
     target.loading = false;
   };
+
+
 
   const colorInputId = BUI.Manager.newRandomId();
   const getColorValue = () => {
@@ -172,7 +219,16 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
             </div>
           </bim-context-menu>
         </bim-button>
-      </bim-toolbar-section> 
+      </bim-toolbar-section>
+      <bim-toolbar-section label="Eines" icon=${appIcons.SETTINGS}>
+        <bim-button @click=${onMeasurementsClick} ?active=${areMeasurementsEnabled} label="Mesurament" tooltip-title="Mesurament" icon=${appIcons.RULER}>
+          <bim-context-menu>
+            <bim-button ?active=${lengthMeasurer.enabled} label="Longitud" @click=${onLengthMeasurement}></bim-button>
+            <bim-button ?active=${areaMeasurer.enabled} label="Àrea" @click=${onAreaMeasurement}></bim-button>
+          </bim-context-menu>
+        </bim-button>
+        <bim-button ?active=${clipper.enabled} @click=${onModelSection} label="Secció" tooltip-title="Secció del Model" icon=${appIcons.CLIPPING}></bim-button> 
+      </bim-toolbar-section>
     </bim-toolbar>
   `;
 };
