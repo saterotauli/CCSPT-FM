@@ -5,23 +5,59 @@ import * as FRAGS from "@thatopen/fragments";
 import * as THREE from "three";
 import { appIcons, modelStore, BUILDINGS } from "../../globals";
 import { ClassificationUtils } from "../../utils/ClassificationUtils";
+import { ensureGlobalMarkerCSS, createSpaceMarker } from "../../bim/Markers";
 
 export interface ActiusPanelState {
   components: OBC.Components;
-  viewCategory?: "Espais" | "Instal·lacions";
-  subCategory?: string;
-  departmentsLegend?: { name: string; color: string; count: number }[];
   searchQuery?: string;
+  // Filter state
+  selectedBuildings?: string[]; // array of building codes (codi)
+  buildingsList?: Array<{ guid: string; nom: string; codi: string; id?: number; centre_cost?: string | null }>;
+  showFilterModal?: boolean;
+  tempSelectedBuildings?: string[];
+  // Planta filter
+  selectedFloors?: string[]; // a.planta values
+  tempSelectedFloors?: string[];
+  activeFilterTab?: 'edifici' | 'planta';
+  availableFloors?: string[];
   searchResults?: Array<{
     guid: string;
     departament: string;
     dispositiu: string;
     edifici: string;
     planta: string;
+    zona?: string;
+    space_dispositiu?: string;
     total_area: number;
     element_count: number;
     tipo_coincidencia: string;
   }>;
+  // Details modal state
+  showActiuModal?: boolean;
+  selectedActiuGuid?: string;
+  selectedActiuDetail?: any;
+  activeDetailsTab?: 'informacio' | 'imatges' | 'manteniment';
+  // Images tab
+  actiuImages?: Array<{ id: string; url: string; thumbUrl: string; filename: string; mime?: string; size?: number; createdAt?: string }>
+  uploading?: boolean;
+  // Lightbox
+  lightboxUrl?: string | null;
+  // Camera modal
+  showCamera?: boolean;
+  cameraStream?: MediaStream | null;
+  // Maintenance tab
+  maintenanceRecords?: Array<any>;
+  maintenanceLoading?: boolean;
+  maintenanceCreating?: boolean;
+  maintenanceNew?: {
+    performedAt?: string;
+    periodMonths?: number;
+    periodDays?: number;
+    responsible?: string;
+    incidents?: string;
+    correctiveActions?: string;
+  };
+  maintenanceUploadingFor?: string | null; // recordId currently uploading attachments
 }
 
 const originalColors = new Map<
@@ -66,12 +102,278 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
   state,
   update,
 ) => {
-  const viewCategory = state.viewCategory ?? "";
-  const subCategory = state.subCategory ?? "";
-
   const components = state.components;
 
   // const escapeRegExp = (s: string) => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
+  const exportToExcel = (results: Array<any>) => {
+    if (!results || results.length === 0) return;
+    
+    // Create CSV content with proper formatting for Excel
+    const headers = ['GUID', 'Departament', 'Dispositiu', 'Edifici', 'Planta', 'Zona', 'Space Dispositiu', 'Àrea Total (m²)', 'Nombre d\'Elements'];
+    const csvRows = [headers.join(';')]; // Use semicolon for European Excel
+    
+    results.forEach(result => {
+      const row = [
+        (result.guid || '').toString().replace(/"/g, '""'),
+        (result.departament || '').toString().replace(/"/g, '""'),
+        (result.dispositiu || '').toString().replace(/"/g, '""'),
+        (result.edifici || '').toString().replace(/"/g, '""'),
+        (result.planta || '').toString().replace(/"/g, '""'),
+        (result.zona || '').toString().replace(/"/g, '""'),
+        (result.space_dispositiu || '').toString().replace(/"/g, '""'),
+        typeof result.total_area === 'number' ? result.total_area.toString().replace('.', ',') : (parseFloat(result.total_area) || 0).toString().replace('.', ','),
+        typeof result.element_count === 'number' ? result.element_count.toString() : (parseInt(result.element_count) || 0).toString()
+      ];
+      csvRows.push(row.map(cell => `"${cell}"`).join(';'));
+    });
+    
+    // Add UTF-8 BOM for proper Excel encoding
+    const csvContent = '\uFEFF' + csvRows.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `actius-resultats-${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+  };
+
+  // Lightbox helpers
+  const openLightbox = (url: string) => { state.lightboxUrl = url; update(state); };
+  const closeLightbox = () => { state.lightboxUrl = null; update(state); };
+
+  // Camera helpers
+  const openCamera = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
+      state.cameraStream = stream;
+      state.showCamera = true;
+      update(state);
+      setTimeout(() => {
+        const v = document.getElementById('actiu-camera-video') as HTMLVideoElement | null;
+        if (v && stream) { v.srcObject = stream; v.play().catch(() => {}); }
+      }, 0);
+    } catch (e) {
+      console.warn('No es pot obrir la càmera', e);
+      alert('No es pot obrir la càmera en aquest dispositiu o sense permisos.');
+    }
+  };
+
+  const closeCamera = () => {
+    try { state.cameraStream?.getTracks().forEach(t => t.stop()); } catch {}
+    state.cameraStream = null;
+    state.showCamera = false;
+    update(state);
+  };
+
+  const capturePhoto = async () => {
+    try {
+      const video = document.getElementById('actiu-camera-video') as HTMLVideoElement | null;
+      if (!video) return;
+      const canvas = document.createElement('canvas');
+      const w = video.videoWidth || 1280;
+      const h = video.videoHeight || 720;
+      canvas.width = w; canvas.height = h;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      ctx.drawImage(video, 0, 0, w, h);
+      const blob = await new Promise<Blob | null>((resolve) => canvas.toBlob((b) => resolve(b), 'image/jpeg', 0.92));
+      if (!blob) return;
+      const file = new File([blob], `photo-${Date.now()}.jpg`, { type: 'image/jpeg' });
+      await uploadActiuImages([file]);
+      closeCamera();
+    } catch (e) { console.error('Error capturant foto', e); }
+  };
+
+  // Details modal helpers
+  const openActiuModal = async (guid: string) => {
+    try {
+      state.selectedActiuGuid = guid;
+      state.activeDetailsTab = state.activeDetailsTab || 'informacio';
+      state.showActiuModal = true;
+      update(state);
+
+      const resp = await fetch(`/api/actius/${encodeURIComponent(guid)}`, { headers: { Accept: 'application/json' } });
+      if (!resp.ok) {
+        console.warn('No s\'han pogut obtenir els detalls de l\'actiu');
+        return;
+      }
+      const detail = await resp.json();
+      state.selectedActiuDetail = detail;
+      // Preload images list when opening
+      try {
+        const r2 = await fetch(`/api/actius/${encodeURIComponent(guid)}/images`, { headers: { Accept: 'application/json' } });
+        if (r2.ok) state.actiuImages = await r2.json(); else state.actiuImages = [];
+      } catch { state.actiuImages = []; }
+      update(state);
+    } catch (e) {
+      console.error('Error obrint el modal d\'actiu:', e);
+    }
+  };
+
+  // Maintenance helpers
+  const loadMaintenanceRecords = async () => {
+    const guid = state.selectedActiuGuid;
+    if (!guid) return;
+    try {
+      state.maintenanceLoading = true;
+      update(state);
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/maintenance`, { headers: { Accept: 'application/json' } });
+      if (!r.ok) throw new Error('No s\'han pogut carregar els registres');
+      const records = await r.json();
+      // Fetch attachments per record
+      const withAtt = await Promise.all((records || []).map(async (rec: any) => {
+        try {
+          const ra = await fetch(`/api/actius/${encodeURIComponent(guid)}/maintenance/${encodeURIComponent(rec.id)}/attachments`, { headers: { Accept: 'application/json' } });
+          rec.attachments = ra.ok ? await ra.json() : [];
+        } catch { rec.attachments = []; }
+        return rec;
+      }));
+      state.maintenanceRecords = withAtt;
+    } catch (err) {
+      console.warn('Error carregant manteniment:', err);
+      state.maintenanceRecords = [];
+    } finally {
+      state.maintenanceLoading = false;
+      update(state);
+    }
+  };
+
+  const createMaintenanceRecord = async () => {
+    const guid = state.selectedActiuGuid;
+    if (!guid) return;
+    const payload = {
+      performedAt: state.maintenanceNew?.performedAt || null,
+      nextPlannedAt: null,
+      periodMonths: Number(state.maintenanceNew?.periodMonths || 0) || 0,
+      periodDays: Number(state.maintenanceNew?.periodDays || 0) || 0,
+      responsible: state.maintenanceNew?.responsible || '',
+      incidents: state.maintenanceNew?.incidents || '',
+      correctiveActions: state.maintenanceNew?.correctiveActions || '',
+      checklist: null,
+    };
+    try {
+      state.maintenanceCreating = true;
+      update(state);
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/maintenance`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!r.ok) throw new Error('No s\'ha pogut crear el registre');
+      // reload
+      state.maintenanceNew = {};
+      await loadMaintenanceRecords();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.maintenanceCreating = false;
+      update(state);
+    }
+  };
+
+  const deleteMaintenanceRecord = async (recordId: string) => {
+    const guid = state.selectedActiuGuid;
+    if (!guid) return;
+    if (!confirm('Eliminar aquest registre de manteniment?')) return;
+    try {
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/maintenance/${encodeURIComponent(recordId)}`, { method: 'DELETE' });
+      if (!r.ok) throw new Error('No s\'ha pogut eliminar');
+      await loadMaintenanceRecords();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const uploadMaintenanceAttachments = async (recordId: string, files: FileList) => {
+    const guid = state.selectedActiuGuid;
+    if (!guid || !files || files.length === 0) return;
+    try {
+      state.maintenanceUploadingFor = recordId;
+      update(state);
+      const fd = new FormData();
+      Array.from(files).forEach((f) => fd.append('files', f));
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/maintenance/${encodeURIComponent(recordId)}/attachments`, { method: 'POST', body: fd });
+      if (!r.ok) throw new Error('Error pujant fitxers');
+      await loadMaintenanceRecords();
+    } catch (e) {
+      console.error(e);
+    } finally {
+      state.maintenanceUploadingFor = null;
+      update(state);
+    }
+  };
+
+  const deleteMaintenanceAttachment = async (recordId: string, attachmentId: string) => {
+    const guid = state.selectedActiuGuid;
+    if (!guid) return;
+    if (!confirm('Eliminar aquest fitxer?')) return;
+    try {
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/maintenance/${encodeURIComponent(recordId)}/attachments/${encodeURIComponent(attachmentId)}`, { method: 'DELETE' });
+      if (!r.ok) throw new Error('No s\'ha pogut eliminar el fitxer');
+      await loadMaintenanceRecords();
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  // Images helpers
+  const reloadActiuImages = async () => {
+    const guid = state.selectedActiuGuid;
+    if (!guid) return;
+    try {
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/images`, { headers: { Accept: 'application/json' } });
+      if (r.ok) state.actiuImages = await r.json(); else state.actiuImages = [];
+    } catch { state.actiuImages = []; }
+    update(state);
+  };
+
+  const uploadActiuImages = async (files: FileList | File[]) => {
+    const guid = state.selectedActiuGuid;
+    if (!guid || !files || (files as any).length === 0) return;
+    const form = new FormData();
+    const fileArray: File[] = Array.isArray(files) ? (files as File[]) : Array.from(files as FileList);
+    for (const f of fileArray) {
+      form.append('files', f);
+    }
+    state.uploading = true; update(state);
+    try {
+      const r = await fetch(`/api/actius/${encodeURIComponent(guid)}/images`, { method: 'POST', body: form });
+      if (!r.ok) {
+        const t = await r.text();
+        console.warn('Upload error', r.status, t);
+      }
+      await reloadActiuImages();
+    } catch (e) {
+      console.error('Error pujant imatges', e);
+    } finally {
+      state.uploading = false; update(state);
+    }
+  };
+
+  const deleteActiuImage = async (id: string) => {
+    const guid = state.selectedActiuGuid;
+    if (!guid) return;
+    try {
+      const r = await fetch(`/api/actius/images/${encodeURIComponent(id)}?guid=${encodeURIComponent(guid)}`, { method: 'DELETE' });
+      if (!r.ok) {
+        console.warn('Delete error', r.status);
+      } else {
+        await reloadActiuImages();
+      }
+    } catch (e) { console.error('Error eliminant imatge', e); }
+  };
+
+  const closeActiuModal = () => {
+    state.showActiuModal = false;
+    state.selectedActiuGuid = undefined;
+    state.selectedActiuDetail = undefined;
+    update(state);
+  };
 
   const performSearch = async (query: string) => {
     if (!query || query.trim().length < 2) {
@@ -82,7 +384,13 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
 
     try {
       console.log(`🔍 Buscando: "${query}"`);
-      const url = `/api/ifcspace/search-all?query=${encodeURIComponent(query.trim())}`;
+      const edificis = (state.selectedBuildings && state.selectedBuildings.length > 0)
+        ? `&edificis=${encodeURIComponent(state.selectedBuildings.join(','))}`
+        : '';
+      const plantes = (state.selectedFloors && state.selectedFloors.length > 0)
+        ? `&plantes=${encodeURIComponent(state.selectedFloors.join(','))}`
+        : '';
+      const url = `/api/actius/search-all?query=${encodeURIComponent(query.trim())}${edificis}${plantes}`;
       const resp = await fetch(url, { headers: { Accept: 'application/json' } });
       
       if (!resp.ok) {
@@ -109,7 +417,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
       
       // Lista de archivos conocidos para cada edificio
       const buildingFiles: Record<string, string[]> = {
-        'RAC': ['CCSPT-RAC-M3D-AS.frag'],
+        'TAU': ['CCSPT-TAU-M3D-AS.frag'],
         'TOC': ['CCSPT-TOC-M3D-AS.frag'],
         'ALB': ['CCSPT-ALB-M3D-AS.frag'],
         'CQA': ['CCSPT-CQA-M3D-AS.frag'],
@@ -230,24 +538,6 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
      }
    };
 
-                   const clearDepartmentStyles = async () => {
-       const highlighter = components.get(OBF.Highlighter);
-       for (const [styleName] of highlighter.styles) {
-         if (typeof styleName === "string" && styleName.startsWith("dept:")) {
-           await highlighter.clear(styleName);
-           highlighter.styles.delete(styleName);
-         }
-       }
-       restoreModelMaterials();
-       
-       // Limpiar markers cuando se desactiva
-       const marker = components.get(OBF.Marker);
-       marker.list.clear();
-       
-       // Limpiar la leyenda cuando se desactiva
-       updateLegendDisplay([]);
-     };
-
            // Función para limpiar el efecto fantasma y highlights de departamentos y dispositivos
       const clearDepartmentFocus = async () => {
         const highlighter = components.get(OBF.Highlighter);
@@ -367,20 +657,10 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                     
                     console.log(`✅ Posición encontrada para dispositivo ${deviceName}:`, elementPosition);
                     
-                    // Crear el elemento 2D con el nombre del dispositivo
+                    // Crear el elemento 2D con el nombre del dispositivo (unificado)
                     console.log(`🎨 Creando marker con texto: "${deviceName}"`);
-                    
-                    // Crear el elemento usando el enfoque del ejemplo con línea conectora
-                    const markerElement = BUI.Component.create(() => 
-                      BUI.html`
-                        <div data-marker="true" style="position: relative; display: flex; flex-direction: column; align-items: center;">
-                          <!-- Etiqueta -->
-                          <div style="font-size: 12px; background: rgba(0,0,0,0.8); color: white; padding: 2px 6px; border-radius: 4px; white-space: nowrap; font-family: Arial, sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${deviceName}</div>
-                          <!-- Línea conectora -->
-                          <div style="width: 2px; height: 20px; background: rgba(255,255,255,0.6); margin-top: 2px;"></div>
-                        </div>
-                      `
-                    );
+                    ensureGlobalMarkerCSS();
+                    const markerElement = createSpaceMarker(deviceName);
                     
                     // Crear el marker en la posición del elemento
                     try {
@@ -391,15 +671,9 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                         deviceName: deviceName
                       });
                       
-                      // Calcular posición por encima del elemento
-                      const elevatedPosition = new THREE.Vector3(
-                        elementPosition.x,
-                        elementPosition.y + 2, // Elevar 2 unidades por encima
-                        elementPosition.z
-                      );
-                      
-                      marker.create(world, markerElement, elevatedPosition);
-                      console.log(`📍 Marker creado para ${deviceName} en posición elevada:`, elevatedPosition);
+                      // Para actius: sin offset, colocar etiqueta exactamente en la posición del elemento
+                      marker.create(world, markerElement as unknown as HTMLElement, elementPosition);
+                      console.log(`📍 Marker creado para ${deviceName} en posición exacta:`, elementPosition);
                     } catch (markerError) {
                       console.error(`❌ Error al crear marker para ${deviceName}:`, markerError);
                     }
@@ -630,23 +904,13 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                            console.log(`📱 No se encontró dispositivo para GUID ${guid} en deviceData`);
                          }
                        } else {
-                         console.log(`📱 Índice fuera de rango: positionIndex=${positionIndex}, guids.length=${targetDept.guids.length}`);
+                         console.log(`📱 Índice fuera de Rang: positionIndex=${positionIndex}, guids.length=${targetDept.guids.length}`);
                        }
                      
-                                           // Crear el elemento 2D con el nombre del dispositivo
-                      console.log(`🎨 Creando marker con texto: "${deviceName}"`);
-                      
-                                                                     // Crear el elemento usando el enfoque del ejemplo con línea conectora
-                        const markerElement = BUI.Component.create(() => 
-                          BUI.html`
-                            <div data-marker="true" style="position: relative; display: flex; flex-direction: column; align-items: center;">
-                              <!-- Etiqueta -->
-                              <div style="font-size: 12px; background: rgba(0,0,0,0.8); color: white; padding: 2px 6px; border-radius: 4px; white-space: nowrap; font-family: Arial, sans-serif; box-shadow: 0 2px 4px rgba(0,0,0,0.3);">${deviceName}</div>
-                              <!-- Línea conectora -->
-                              <div style="width: 2px; height: 20px; background: rgba(255,255,255,0.6); margin-top: 2px;"></div>
-                            </div>
-                          `
-                        );
+                                           // Crear el elemento 2D con el nombre del dispositivo (unificado)
+                       console.log(`🎨 Creando marker con texto: "${deviceName}"`);
+                       ensureGlobalMarkerCSS();
+                       const markerElement = createSpaceMarker(deviceName);
                      
                                            // Crear el marker en la posición del elemento
                                              try {
@@ -666,7 +930,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                              elementPosition.z
                            );
                            
-                           marker.create(world, markerElement, elevatedPosition);
+                           marker.create(world, markerElement as unknown as HTMLElement, elevatedPosition);
                            console.log(`📍 Marker creado para ${deviceName} en posición elevada:`, elevatedPosition);
                          } else {
                            console.log(`⚠️ Saltando marker para "${deviceName}"`);
@@ -797,7 +1061,6 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                // Guardar leyenda en store global y actualizar display
         console.log(`📊 Actualizando leyenda con ${legendItems.length} elementos`);
         modelStore.setDepartmentsLegend(legendItems);
-        state.departmentsLegend = legendItems;
         updateLegendDisplay(legendItems);
      } catch (error) {
        console.error("Error al colorear por departaments:", error);
@@ -828,203 +1091,566 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
       <div style="display: flex; flex-direction: column; gap: 0.5rem;">
         
                  <!-- Buscador -->
-         <div style="margin-bottom: 0.5rem;">
-           <div style="font-weight: 600; color: var(--bim-ui_bg-contrast-100); margin-bottom: 0.25rem; font-size: 0.875rem;">Cercador</div>
-           <div style="position: relative; width: 100%;">
-             <input
-               type="text"
-               placeholder="Cerca departaments i dispositius..."
-               value=${state.searchQuery || ''}
-               style="width: 100%; box-sizing: border-box; padding: 0.75rem; padding-left: 2.5rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem; font-family: inherit; outline: none; transition: all 0.2s ease;"
-               @input=${(e: Event) => {
-                 const input = e.target as HTMLInputElement;
-                 state.searchQuery = input.value;
-                 update(state);
-                 // Debounce search
-                 clearTimeout((globalThis as any).searchTimeout);
-                 (globalThis as any).searchTimeout = setTimeout(() => performSearch(input.value), 300);
-               }}
-               @focus=${(e: Event) => {
-                 const input = e.target as HTMLInputElement;
-                 input.style.borderColor = 'var(--bim-ui_accent-base)';
-                 input.style.boxShadow = '0 0 0 2px rgba(40, 180, 215, 0.2)';
-               }}
-               @blur=${(e: Event) => {
-                 const input = e.target as HTMLInputElement;
-                 input.style.borderColor = 'var(--bim-ui_bg-contrast-40)';
-                 input.style.boxShadow = 'none';
-               }}
-             />
-             <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--bim-ui_bg-contrast-60); font-size: 0.875rem; pointer-events: none;">🔍</div>
-           </div>
-         </div>
+        <div style="margin-bottom: 0.5rem;">
+          <div style="position: relative; width: 100%;">
+            <input
+              type="text"
+              placeholder="Cerca actius"
+              value=${state.searchQuery || ''}
+              style="width: 100%; box-sizing: border-box; padding: 0.75rem; padding-left: 2.5rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem; font-family: inherit; outline: none; transition: all 0.2s ease;"
+              @input=${(e: Event) => {
+                const input = e.target as HTMLInputElement;
+                state.searchQuery = input.value;
+                update(state);
+                // Debounce search
+                clearTimeout((globalThis as any).searchTimeout);
+                (globalThis as any).searchTimeout = setTimeout(() => performSearch(input.value), 300);
+              }}
+              @focus=${(e: Event) => {
+                const input = e.target as HTMLInputElement;
+                input.style.borderColor = 'var(--bim-ui_accent-base)';
+                input.style.boxShadow = '0 0 0 2px rgba(40, 180, 215, 0.2)';
+              }}
+              @blur=${(e: Event) => {
+                const input = e.target as HTMLInputElement;
+                input.style.borderColor = 'var(--bim-ui_bg-contrast-40)';
+                input.style.boxShadow = 'none';
+              }}
+            />
+            <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--bim-ui_bg-contrast-60); font-size: 0.875rem; pointer-events: none;">🔍</div>
+            <!-- Funnel button on the right of searcher -->
+            <button
+              style="position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); height: 28px; padding: 0 8px; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-10); color: var(--bim-ui_bg-contrast-100); cursor: pointer; display: flex; align-items: center; gap: 6px;"
+              @click=${async () => {
+                // Open modal and preload buildings list if needed
+                state.showFilterModal = true;
+                state.tempSelectedBuildings = [...(state.selectedBuildings || [])];
+                state.tempSelectedFloors = [...(state.selectedFloors || [])];
+                state.activeFilterTab = 'edifici';
+                update(state);
+                if (!state.buildingsList) {
+                  try {
+                    const resp = await fetch('/api/ifcbuildings', { headers: { Accept: 'application/json' } });
+                    if (resp.ok) {
+                      const data = await resp.json();
+                      state.buildingsList = data as any[];
+                      update(state);
+                    } else {
+                      console.warn('No se pudo cargar la lista de edificios');
+                    }
+                  } catch (err) {
+                    console.error('Error cargando edificios:', err);
+                  }
+                }
+                // If exactly one building is selected, fetch available floors
+                if ((state.tempSelectedBuildings || []).length === 1) {
+                  try {
+                    const code = state.tempSelectedBuildings![0];
+                    const r = await fetch(`/api/actius/plantes?edifici=${encodeURIComponent(code)}`, { headers: { Accept: 'application/json' } });
+                    if (r.ok) {
+                      state.availableFloors = await r.json();
+                      update(state);
+                    }
+                  } catch (e) { console.warn('No se pudieron cargar las plantas:', e); }
+                } else {
+                  state.availableFloors = [];
+                }
+              }}
+              title="Filtres"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path d="M4.25 5c0-.414.336-.75.75-.75h14a.75.75 0 0 1 .53 1.28l-5.53 5.53v6.69a.75.75 0 0 1-1.06.67l-3-1.5a.75.75 0 0 1-.42-.67v-5.19L4.22 5.53A.75.75 0 0 1 4.25 5z"/>
+              </svg>
+              <span style="font-size: 0.8rem; font-weight: 600;">Filtres</span>
+            </button>
+          </div>
+          <!-- Selected building codes chips -->
+          ${state.selectedBuildings && state.selectedBuildings.length > 0 ? BUI.html`
+            <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem;">
+              ${state.selectedBuildings.map((code) => BUI.html`
+                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.45rem; background: var(--bim-ui_bg-contrast-20); border: 1px solid var(--bim-ui_bg-contrast-40); color: var(--bim-ui_bg-contrast-100); border-radius: 9999px; font-size: 0.75rem;">
+                  ${code}
+                  <button
+                    style="border: none; background: transparent; color: var(--bim-ui_bg-contrast-80); cursor: pointer; font-weight: 700;"
+                    @click=${() => {
+                      state.selectedBuildings = (state.selectedBuildings || []).filter((c) => c !== code);
+                      update(state);
+                      if (state.searchQuery && state.searchQuery.trim().length >= 2) {
+                        performSearch(state.searchQuery);
+                      }
+                    }}
+                    title="Eliminar"
+                  >×</button>
+                </span>
+              `)}
+              <button
+                style="border: 1px dashed var(--bim-ui_bg-contrast-50); background: transparent; color: var(--bim-ui_bg-contrast-90); border-radius: 0.375rem; padding: 0.15rem 0.45rem; font-size: 0.75rem; cursor: pointer;"
+                @click=${() => { state.showFilterModal = true; state.activeFilterTab = 'edifici'; state.tempSelectedBuildings = [...(state.selectedBuildings || [])]; state.tempSelectedFloors = [...(state.selectedFloors || [])]; update(state); }}
+              >Editar filtres…</button>
+            </div>
+          ` : ''}
 
-        <!-- Resultados de búsqueda -->
-        ${state.searchResults && state.searchResults.length > 0 ? BUI.html`
-          <div style="margin-bottom: 0.5rem;">
-            <div style="font-weight: 600; color: var(--bim-ui_bg-contrast-100); margin-bottom: 0.25rem; font-size: 0.875rem;">Resultats (${state.searchResults.length})</div>
-            <div style="max-height: 20rem; overflow: auto; border: 1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_bg-contrast-20); border-radius: 0.5rem; padding: 0.5rem;">
+        ${state.showActiuModal ? BUI.html`
+          <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+            <div style="width: 820px; max-width: calc(100% - 2rem); background: var(--bim-ui_bg-contrast-10); border: 1px solid var(--bim-ui_bg-contrast-30); border-radius: 0.6rem; box-shadow: 0 14px 34px rgba(0,0,0,0.32);">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--bim-ui_bg-contrast-20);">
+                <div style="font-weight: 800; color: #fff; font-size: 1.1rem; letter-spacing: 0.2px;">Detall d\'Actiu</div>
+                <button style="border: none; background: transparent; color: var(--bim-ui_bg-contrast-90); cursor: pointer; font-size: 1.15rem;" @click=${() => closeActiuModal()} title="Tancar">✕</button>
+              </div>
+              <div style="padding: 0.9rem 1.1rem;">
+                <div style="display: flex; gap: 0.4rem; border-bottom: 1px solid var(--bim-ui_bg-contrast-20); margin-bottom: 0.9rem;">
+                  <button
+                    @click=${async () => { state.activeDetailsTab = 'informacio'; update(state); await reloadActiuImages(); }}
+                    style="padding: 0.5rem 0.85rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-bottom: none; font-size: 0.95rem; background: ${state.activeDetailsTab === 'informacio' ? 'var(--bim-ui_base)' : 'transparent'}; color: ${state.activeDetailsTab === 'informacio' ? '#0b1f28' : '#fff'}; border-radius: 0.45rem 0.45rem 0 0; cursor: pointer; font-weight: 800;"
+                  >Informació</button>
+                  <button
+                    @click=${async () => { state.activeDetailsTab = 'manteniment'; update(state); await loadMaintenanceRecords(); }}
+                    style="padding: 0.5rem 0.85rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-bottom: none; font-size: 0.95rem; background: ${state.activeDetailsTab === 'manteniment' ? 'var(--bim-ui_base)' : 'transparent'}; color: ${state.activeDetailsTab === 'manteniment' ? '#0b1f28' : '#fff'}; border-radius: 0.45rem 0.45rem 0 0; cursor: pointer; font-weight: 800;"
+                  >Manteniment</button>
+                </div>
+
+                ${state.activeDetailsTab === 'informacio' ? BUI.html`
+                  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.65rem 1.25rem; font-size: 1rem;">
+                    ${state.selectedActiuDetail ? BUI.html`
+                      ${[{
+                        label: 'GUID', value: state.selectedActiuDetail.guid
+                      }, {
+                        label: 'Tipus', value: state.selectedActiuDetail.tipus
+                      }, {
+                        label: 'Subtipus', value: state.selectedActiuDetail.subtipus
+                      }, {
+                        label: 'Edifici', value: state.selectedActiuDetail.edifici
+                      }, {
+                        label: 'Planta', value: state.selectedActiuDetail.planta
+                      }, {
+                        label: 'Zona', value: state.selectedActiuDetail.zona
+                      }, {
+                        label: 'Ubicació', value: state.selectedActiuDetail.ubicacio
+                      }].map((row: any) => BUI.html`
+                        <div style="display:flex; gap: 0.65rem; align-items: flex-start; line-height: 1.4; padding: 0.15rem 0;">
+                          <span style="color: #fff; min-width: 8.5rem; font-weight: 600;">${row.label}:</span>
+                          <span style="color: #fff; font-weight: 700; ${row.label === 'GUID' ? 'word-break: break-all; font-family: ui-monospace, SFMono-Regular, Menlo, monospace;' : ''}">
+                            ${row.value ?? '-'}
+                          </span>
+                          ${row.label === 'GUID' ? BUI.html`<button title="Copiar GUID" style="margin-left: 0.35rem; padding: 0.15rem 0.4rem; border: 1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); border-radius: 0.3rem; cursor: pointer; font-size: 0.75rem;" @click=${async () => { try { await navigator.clipboard.writeText(String(state.selectedActiuDetail?.guid || '')); } catch {} }}>Copiar</button>` : ''}
+                        </div>
+                      `)}
+                    ` : BUI.html`<div style="grid-column: 1 / -1; color: #fff;">Carregant informació...</div>`}
+                  </div>
+                  <!-- Imatges (merged into Informació) -->
+                  <div style="margin-top: 1rem; display:flex; flex-direction: column; gap: 0.75rem; color: #fff;">
+                    <div style="display:flex; align-items:center; gap: 0.5rem;">
+                      <button
+                        style="border: 1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); padding: 0.4rem 0.7rem; border-radius: 0.35rem; cursor: pointer; font-weight: 700;"
+                        @click=${() => {
+                          const input = document.getElementById(`actiu-file-input-${state.selectedActiuGuid}`) as HTMLInputElement | null;
+                          if (input) input.click();
+                        }}
+                        title="Fer foto o pujar imatges"
+                      >Afegir imatges</button>
+                      <button
+                        style="border: 1px solid var(--bim-ui_bg-contrast-40); background: transparent; color: var(--bim-ui_bg-contrast-100); padding: 0.4rem 0.7rem; border-radius: 0.35rem; cursor: pointer; font-weight: 700;"
+                        @click=${() => openCamera()}
+                        title="Obrir càmera"
+                      >Fer foto</button>
+                      ${state.uploading ? BUI.html`<span style="font-size:0.9rem; color: var(--bim-ui_bg-contrast-80);">Pujant...</span>` : ''}
+                      <input id="actiu-file-input-${state.selectedActiuGuid}"
+                        type="file" accept="image/*" capture="environment" multiple style="display:none"
+                        @change=${(e: Event) => {
+                          const t = e.target as HTMLInputElement;
+                          if (t && t.files) uploadActiuImages(t.files);
+                          if (t) t.value = '';
+                        }} />
+                    </div>
+
+                    ${(() => {
+                      const images = state.actiuImages || [];
+                      if (!images || images.length === 0) return BUI.html`<div style="color:#fff;">Encara no hi ha imatges disponibles.</div>`;
+                      return BUI.html`
+                        <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 0.6rem;">
+                          ${images.map((img: any) => BUI.html`
+                            <div style="position: relative; border: 1px solid var(--bim-ui_bg-contrast-30); border-radius: 0.4rem; overflow: hidden; background: #111;">
+                              <a href="javascript:void(0)" @click=${() => openLightbox(img.url)} title="Veure gran">
+                                <img src="${img.thumbUrl || img.url}" style="width: 100%; height: 110px; object-fit: cover; display:block;" />
+                              </a>
+                              ${(() => {
+                                const dateStr = img?.createdAt ? new Date(img.createdAt).toLocaleString() : '';
+                                return dateStr ? BUI.html`
+                                  <div title="${img.createdAt}" style="position:absolute; left:4px; bottom:4px; padding:2px 6px; border-radius: 4px; background: rgba(0,0,0,0.55); color:#fff; font-size: 0.72rem; font-weight: 700; line-height: 1; text-shadow: 0 1px 1px rgba(0,0,0,0.5);">
+                                    ${dateStr}
+                                  </div>
+                                ` : BUI.html``;
+                              })()}
+                              <div style="position:absolute; top:4px; right:4px; display:flex; gap:4px;">
+                                <button title="Eliminar" style="border:none; background: rgba(0,0,0,0.55); color:#fff; padding:4px 6px; border-radius:4px; cursor:pointer;" @click=${() => deleteActiuImage(img.id)}>🗑️</button>
+                              </div>
+                            </div>
+                          `)}
+                        </div>`;
+                    })()}
+                  </div>
+                ` : ''}
+
+                ${state.lightboxUrl ? BUI.html`
+                  <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.85); display:flex; align-items:center; justify-content:center; z-index: 2147483646;" @click=${(e: Event) => { if (e.target === e.currentTarget) closeLightbox(); }}>
+                    <img src="${state.lightboxUrl}" style="max-width: 92vw; max-height: 92vh; border-radius: 0.4rem;" />
+                    <button style="position: absolute; top: 14px; right: 16px; border:none; background: rgba(0,0,0,0.6); color:#fff; padding: 6px 10px; border-radius: 6px; cursor:pointer;" @click=${() => closeLightbox()}>✕</button>
+                  </div>
+                ` : ''}
+
+                ${state.showCamera ? BUI.html`
+                  <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.75); display:flex; align-items:center; justify-content:center; z-index: 2147483647;">
+                    <div style="background:#111; border:1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.6rem; padding: 0.75rem; width: min(720px, 95vw);">
+                      <div style="display:flex; justify-content:space-between; align-items:center; color:#fff; padding: 0.25rem 0.25rem 0.5rem 0.25rem;">
+                        <div style="font-weight:800;">Càmera</div>
+                        <button style="border:none; background:transparent; color:#fff; font-size:1.1rem; cursor:pointer;" @click=${() => closeCamera()}>✕</button>
+                      </div>
+                      <div style="background:#000; border-radius: 0.4rem; overflow:hidden;">
+                        <video id="actiu-camera-video" autoplay playsinline style="width:100%; height:auto; display:block;"></video>
+                      </div>
+                      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.6rem;">
+                        <button style="border:1px solid var(--bim-ui_bg-contrast-40); background:transparent; color:#fff; padding:0.4rem 0.7rem; border-radius:0.35rem; cursor:pointer;" @click=${() => closeCamera()}>Cancel·lar</button>
+                        <button style="border:1px solid var(--bim-ui_bg-contrast-40); background:var(--bim-ui_base); color:#0b1f28; padding:0.45rem 0.8rem; border-radius:0.35rem; cursor:pointer; font-weight:800;" @click=${() => capturePhoto()}>Capturar</button>
+                      </div>
+                    </div>
+                  </div>
+                ` : ''}
+
+                
+
+                ${state.activeDetailsTab === 'manteniment' ? BUI.html`
+                  <div style="display:flex; flex-direction: column; gap: 0.75rem; color: #fff;">
+                    <div style="display:flex; align-items: center; justify-content: space-between;">
+                      <div style="font-weight:800;">Registres de manteniment</div>
+                      ${state.maintenanceLoading ? BUI.html`<span style="color: var(--bim-ui_bg-contrast-80);">Carregant…</span>` : ''}
+                    </div>
+                    <div style="border:1px solid var(--bim-ui_bg-contrast-30); border-radius:0.5rem; padding:0.6rem; background: var(--bim-ui_bg-contrast-20);">
+                      <div style="font-weight:700; margin-bottom:0.4rem;">Afegir registre</div>
+                      <div style="display:grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap:0.5rem;">
+                        <label style="display:flex; flex-direction:column; gap:0.25rem;">
+                          <span>Data realitzat</span>
+                          <input type="date" value=${state.maintenanceNew?.performedAt || ''}
+                            @input=${(e: Event) => { const v=(e.target as HTMLInputElement).value; state.maintenanceNew = { ...(state.maintenanceNew||{}), performedAt: v }; update(state); }}
+                            style="padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-40); border-radius:0.35rem; background: var(--bim-ui_bg-contrast-10); color:#fff;" />
+                        </label>
+                        <label style="display:flex; flex-direction:column; gap:0.25rem;">
+                          <span>Responsable</span>
+                          <input type="text" placeholder="Nom" value=${state.maintenanceNew?.responsible || ''}
+                            @input=${(e: Event) => { const v=(e.target as HTMLInputElement).value; state.maintenanceNew = { ...(state.maintenanceNew||{}), responsible: v }; update(state); }}
+                            style="padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-40); border-radius:0.35rem; background: var(--bim-ui_bg-contrast-10); color:#fff;" />
+                        </label>
+                        <label style="display:flex; flex-direction:column; gap:0.25rem;">
+                          <span>Periodicitat (mesos)</span>
+                          <input type="number" min="0" value=${String(state.maintenanceNew?.periodMonths ?? '')}
+                            @input=${(e: Event) => { const v=Number((e.target as HTMLInputElement).value||0); state.maintenanceNew = { ...(state.maintenanceNew||{}), periodMonths: v }; update(state); }}
+                            style="padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-40); border-radius:0.35rem; background: var(--bim-ui_bg-contrast-10); color:#fff;" />
+                        </label>
+                        <label style="display:flex; flex-direction:column; gap:0.25rem;">
+                          <span>Periodicitat (dies)</span>
+                          <input type="number" min="0" value=${String(state.maintenanceNew?.periodDays ?? '')}
+                            @input=${(e: Event) => { const v=Number((e.target as HTMLInputElement).value||0); state.maintenanceNew = { ...(state.maintenanceNew||{}), periodDays: v }; update(state); }}
+                            style="padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-40); border-radius:0.35rem; background: var(--bim-ui_bg-contrast-10); color:#fff;" />
+                        </label>
+                        <label style="grid-column: 1 / -1; display:flex; flex-direction:column; gap:0.25rem;">
+                          <span>Incidències</span>
+                          <textarea rows="2" value=${state.maintenanceNew?.incidents || ''}
+                            @input=${(e: Event) => { const v=(e.target as HTMLTextAreaElement).value; state.maintenanceNew = { ...(state.maintenanceNew||{}), incidents: v }; update(state); }}
+                            style="padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-40); border-radius:0.35rem; background: var(--bim-ui_bg-contrast-10); color:#fff; resize: vertical;"></textarea>
+                        </label>
+                        <label style="grid-column: 1 / -1; display:flex; flex-direction:column; gap:0.25rem;">
+                          <span>Accions correctives</span>
+                          <textarea rows="2" value=${state.maintenanceNew?.correctiveActions || ''}
+                            @input=${(e: Event) => { const v=(e.target as HTMLTextAreaElement).value; state.maintenanceNew = { ...(state.maintenanceNew||{}), correctiveActions: v }; update(state); }}
+                            style="padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-40); border-radius:0.35rem; background: var(--bim-ui_bg-contrast-10); color:#fff; resize: vertical;"></textarea>
+                        </label>
+                      </div>
+                      <div style="display:flex; justify-content:flex-end; gap:0.5rem; margin-top:0.5rem;">
+                        <button style="border:1px solid var(--bim-ui_bg-contrast-40); background:transparent; color:#fff; padding:0.4rem 0.7rem; border-radius:0.35rem; cursor:pointer;"
+                          @click=${() => { state.maintenanceNew = {}; update(state); }}>Netejar</button>
+                        <button style="border:1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_base); color:#0b1f28; padding:0.45rem 0.8rem; border-radius:0.35rem; cursor:pointer; font-weight:800;"
+                          ?disabled=${state.maintenanceCreating}
+                          @click=${() => createMaintenanceRecord()}>${state.maintenanceCreating ? 'Guardant…' : 'Guardar'}</button>
+                      </div>
+                    </div>
+
+                    <div>
+                      ${(state.maintenanceRecords && state.maintenanceRecords.length > 0) ? BUI.html`
+                        <div style="display:grid; gap:0.5rem;">
+                          ${state.maintenanceRecords.map((rec: any) => BUI.html`
+                            <div style="border:1px solid var(--bim-ui_bg-contrast-30); border-radius:0.5rem; overflow:hidden;">
+                              <div style="display:flex; justify-content:space-between; align-items:center; padding:0.5rem 0.6rem; background: var(--bim-ui_bg-contrast-20);">
+                                <div style="display:flex; gap:0.75rem; align-items:center;">
+                                  <span style="font-weight:700;">${rec.performedAt ? new Date(rec.performedAt).toLocaleDateString() : '-'}</span>
+                                  <span style="color: var(--bim-ui_bg-contrast-80);">Resp.: ${rec.responsible || '-'}</span>
+                                  <span style="color: var(--bim-ui_bg-contrast-80);">Peri.: ${rec.periodMonths || 0}m / ${rec.periodDays || 0}d</span>
+                                </div>
+                                <div style="display:flex; gap:0.4rem;">
+                                  <button title="Eliminar" style="border:none; background:#a11; color:#fff; padding:0.3rem 0.6rem; border-radius:0.3rem; cursor:pointer;" @click=${() => deleteMaintenanceRecord(rec.id)}>🗑️</button>
+                                </div>
+                              </div>
+                              <div style="padding:0.6rem; display:flex; flex-direction:column; gap:0.5rem;">
+                                ${rec.incidents ? BUI.html`<div><span style="font-weight:700;">Incidències:</span> <span>${rec.incidents}</span></div>` : ''}
+                                ${rec.correctiveActions ? BUI.html`<div><span style="font-weight:700;">Accions:</span> <span>${rec.correctiveActions}</span></div>` : ''}
+                                <div>
+                                  <div style="font-weight:700; margin-bottom:0.25rem;">Adjunts</div>
+                                  <div style="display:flex; align-items:center; gap:0.5rem; margin-bottom:0.35rem;">
+                                    <input id="maint-file-${String(rec.id)}" type="file" multiple style="display:none" @change=${(e: Event) => { const t=e.target as HTMLInputElement; if (t && t.files) { uploadMaintenanceAttachments(rec.id, t.files); t.value=''; } }} />
+                                    <button style="border:1px solid var(--bim-ui_bg-contrast-40); background:transparent; color:#fff; padding:0.3rem 0.6rem; border-radius:0.3rem; cursor:pointer;" @click=${() => {
+                                      const el = document.getElementById(`maint-file-${String(rec.id)}`) as HTMLInputElement | null;
+                                      if (el) el.click();
+                                    }}>Pujar fitxers</button>
+                                    ${state.maintenanceUploadingFor === rec.id ? BUI.html`<span style="color: var(--bim-ui_bg-contrast-80);">Pujant…</span>` : ''}
+                                  </div>
+                                  ${(rec.attachments && rec.attachments.length > 0) ? BUI.html`
+                                    <div style="display:flex; flex-wrap:wrap; gap:0.4rem;">
+                                      ${rec.attachments.map((att: any) => BUI.html`
+                                        <div style="display:flex; align-items:center; gap:0.35rem; border:1px solid var(--bim-ui_bg-contrast-30); border-radius:0.35rem; padding:0.25rem 0.4rem; background:#111;">
+                                          <a href="${att.url}" target="_blank" style="color:#8bd; text-decoration:underline;">${att.filename || 'fitxer'}</a>
+                                          <button title="Eliminar adjunt" style="border:none; background:transparent; color:#f77; cursor:pointer;" @click=${() => deleteMaintenanceAttachment(rec.id, att.id)}>✕</button>
+                                        </div>
+                                      `)}
+                                    </div>
+                                  ` : BUI.html`<div style="color: var(--bim-ui_bg-contrast-80);">No hi ha adjunts.</div>`}
+                                </div>
+                              </div>
+                            </div>
+                          `)}
+                        </div>
+                      ` : BUI.html`<div style="color: var(--bim-ui_bg-contrast-80);">Encara no hi ha registres.</div>`}
+                    </div>
+                  </div>
+                ` : ''}
+              </div>
+              <div style="display: flex; justify-content: flex-end; padding: 0.7rem 1.1rem; border-top: 1px solid var(--bim-ui_bg-contrast-20);">
+                <button style="border: 1px solid var(--bim-ui_bg-contrast-40); background: transparent; color: var(--bim-ui_bg-contrast-100); padding: 0.45rem 0.85rem; border-radius: 0.4rem; cursor: pointer; font-size: 0.95rem;" @click=${() => closeActiuModal()}>Tancar</button>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+          <!-- Selected floor chips -->
+          ${state.selectedFloors && state.selectedFloors.length > 0 ? BUI.html`
+            <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem;">
+              ${state.selectedFloors.map((p) => BUI.html`
+                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.45rem; background: var(--bim-ui_bg-contrast-20); border: 1px solid var(--bim-ui_bg-contrast-40); color: var(--bim-ui_bg-contrast-100); border-radius: 9999px; font-size: 0.75rem;">
+                  ${p}
+                  <button
+                    style="border: none; background: transparent; color: var(--bim-ui_bg-contrast-80); cursor: pointer; font-weight: 700;"
+                    @click=${() => {
+                      state.selectedFloors = (state.selectedFloors || []).filter((x) => x !== p);
+                      update(state);
+                      if (state.searchQuery && state.searchQuery.trim().length >= 2) {
+                        performSearch(state.searchQuery);
+                      }
+                    }}
+                    title="Eliminar"
+                  >×</button>
+                </span>
+              `)}
+              <button
+                style="border: 1px dashed var(--bim-ui_bg-contrast-50); background: transparent; color: var(--bim-ui_bg-contrast-90); border-radius: 0.375rem; padding: 0.15rem 0.45rem; font-size: 0.75rem; cursor: pointer;"
+                @click=${() => { state.showFilterModal = true; state.activeFilterTab = 'planta'; state.tempSelectedBuildings = [...(state.selectedBuildings || [])]; state.tempSelectedFloors = [...(state.selectedFloors || [])]; update(state); }}
+              >Editar plantes…</button>
+            </div>
+          ` : ''}
+        </div>
+
+        <!-- Filters Modal -->
+        ${state.showFilterModal ? BUI.html`
+          <div style="position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 2147483647;" @click=${(e: Event) => {
+            if (e.target === e.currentTarget) { state.showFilterModal = false; update(state); }
+          }}>
+            <div style="width: min(520px, 92vw); max-height: 85vh; overflow: auto; background: #2a2a2a; color: var(--bim-ui_bg-contrast-100); border: 1px solid var(--bim-ui_bg-contrast-30); border-radius: 0.5rem; box-shadow: 0 10px 30px rgba(0,0,0,0.35);">
+              <div style="display: flex; align-items: center; justify-content: space-between; padding: 0.9rem 1rem; border-bottom: 1px solid var(--bim-ui_bg-contrast-20);">
+                <div style="font-weight: 700;">Filtres de cerca</div>
+                <button style="border: none; background: transparent; font-size: 1.2rem; cursor: pointer; color: var(--bim-ui_bg-contrast-90);" @click=${() => { state.showFilterModal = false; update(state); }}>×</button>
+              </div>
+              <div style="padding: 0.85rem 1rem; display: grid; gap: 0.75rem;">
+                <!-- Tabs header -->
+                <div style="display:flex; gap:0.5rem; border-bottom:1px solid var(--bim-ui_bg-contrast-20); padding-bottom:0.25rem;">
+                  ${(() => {
+                    const tabs: Array<'edifici' | 'planta'> = ['edifici'];
+                    if ((state.tempSelectedBuildings || []).length === 1) tabs.push('planta');
+                    return tabs.map((tab) => {
+                      const active = (state.activeFilterTab || 'edifici') === (tab as any);
+                      const label = tab === 'edifici' ? 'Edifici' : 'Planta';
+                      return BUI.html`
+                        <button
+                          style="padding: 0.35rem 0.6rem; border-radius: 0.375rem; border: 1px solid ${active ? 'var(--bim-ui_accent-base)' : 'transparent'}; background: ${active ? 'var(--bim-ui_bg-contrast-20)' : 'transparent'}; color: var(--bim-ui_bg-contrast-100); cursor: pointer;"
+                        @click=${() => { state.activeFilterTab = tab as any; update(state); }}
+                        >${label}</button>`;
+                    });
+                  })()}
+                </div>
+
+                <!-- Tabs content -->
+                ${((state.activeFilterTab || 'edifici') === 'edifici') ? BUI.html`
+                  <div>
+                    <div style="font-weight: 600; margin: 0.35rem 0;">Edifici</div>
+                    <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem;">
+                      ${(state.buildingsList || []).map((b) => {
+                        const code = b.codi;
+                        const checked = (state.tempSelectedBuildings || []).includes(code);
+                        return BUI.html`
+                          <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.35rem; border: 1px solid var(--bim-ui_bg-contrast-30); border-radius: 0.375rem; cursor: pointer;">
+                            <input type="checkbox" .checked=${checked} @change=${async (e: Event) => {
+                              const el = e.target as HTMLInputElement;
+                              const arr = new Set(state.tempSelectedBuildings || []);
+                              if (el.checked) arr.add(code); else arr.delete(code);
+                              state.tempSelectedBuildings = Array.from(arr);
+                              // Handle planta availability based on building count
+                              const count = state.tempSelectedBuildings.length;
+                              if (count === 1) {
+                                try {
+                                  const only = state.tempSelectedBuildings[0];
+                                  const r = await fetch(`/api/actius/plantes?edifici=${encodeURIComponent(only)}`, { headers: { Accept: 'application/json' } });
+                                  if (r.ok) {
+                                    state.availableFloors = await r.json();
+                                  }
+                                } catch (e) { state.availableFloors = []; }
+                              } else {
+                                state.availableFloors = [];
+                                state.tempSelectedFloors = [];
+                                if ((state.activeFilterTab || 'edifici') === 'planta') state.activeFilterTab = 'edifici';
+                              }
+                              update(state);
+                            }} />
+                            <span style="font-weight:600;">${b.codi}</span>
+                            <span style="color: var(--bim-ui_bg-contrast-70); font-size: 0.85rem;">${b.nom}</span>
+                          </label>`;
+                      })}
+                    </div>
+                  </div>
+                ` : BUI.html`
+                  <div>
+                    <div style="font-weight: 600; margin: 0.35rem 0;">Planta</div>
+                    ${(state.availableFloors && state.availableFloors.length > 0) ? BUI.html`
+                      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.4rem;">
+                        ${state.availableFloors.map((p) => {
+                          const checked = (state.tempSelectedFloors || []).includes(p);
+                          return BUI.html`
+                            <label style="display:flex; align-items:center; gap:0.5rem; padding:0.35rem; border:1px solid var(--bim-ui_bg-contrast-30); border-radius:0.375rem; cursor:pointer;">
+                              <input type="checkbox" .checked=${checked} @change=${(e: Event) => {
+                                const el = e.target as HTMLInputElement;
+                                const set = new Set(state.tempSelectedFloors || []);
+                                if (el.checked) set.add(p); else set.delete(p);
+                                state.tempSelectedFloors = Array.from(set);
+                                update(state);
+                              }} />
+                              <span style="font-weight:600;">${p}</span>
+                            </label>`;
+                        })}
+                      </div>
+                    ` : BUI.html`<div style="color: var(--bim-ui_bg-contrast-70);">No hi ha plantes disponibles.</div>`}
+                  </div>
+                `}
+              </div>
+              <div style="display: flex; justify-content: flex-end; gap: 0.5rem; padding: 0.8rem 1rem; border-top: 1px solid var(--bim-ui_bg-contrast-20);">
+                <button style="border: 1px solid var(--bim-ui_bg-contrast-40); background: transparent; color: var(--bim-ui_bg-contrast-100); padding: 0.4rem 0.75rem; border-radius: 0.375rem; cursor: pointer;" @click=${() => { state.showFilterModal = false; update(state); }}>Cancelar</button>
+                <button style="border: 1px solid var(--bim-ui_accent-base); background: var(--bim-ui_accent-base); color: white; padding: 0.4rem 0.75rem; border-radius: 0.375rem; cursor: pointer;" @click=${() => {
+                  state.selectedBuildings = [...(state.tempSelectedBuildings || [])];
+                  state.selectedFloors = [...(state.tempSelectedFloors || [])];
+                  state.showFilterModal = false;
+                  update(state);
+                  if (state.searchQuery && state.searchQuery.trim().length >= 2) {
+                    performSearch(state.searchQuery);
+                  }
+                }}>Aplicar</button>
+              </div>
+            </div>
+          </div>
+        ` : ''}
+
+        <!-- Results section -->
+        ${(state.searchResults && state.searchResults.length > 0) ? BUI.html`
+          <div style="margin-top: 0.5rem;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 0.5rem;">
+              <div style="font-weight: 600; color: var(--bim-ui_bg-contrast-100); font-size: 1rem;">
+                Resultats (${state.searchResults.length})
+              </div>
+              <button
+                style="padding: 0.25rem 0.5rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); cursor: pointer; font-size: 0.75rem; display: flex; align-items: center; gap: 0.25rem;"
+                @click=${() => exportToExcel(state.searchResults || [])}
+                title="Exportar a Excel"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                  <polyline points="14,2 14,8 20,8"/>
+                  <line x1="16" y1="13" x2="8" y2="21"/>
+                  <line x1="8" y1="13" x2="16" y2="21"/>
+                </svg>
+                Excel
+              </button>
+            </div>
+            <div style="max-height: 20rem; overflow: auto; border: 1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_bg-contrast-20); border-radius: 0.5rem; padding: 0.75rem;">
               ${state.searchResults.map((result, index) => BUI.html`
                 <div 
-                  style="display: flex; flex-direction: column; gap: 0.25rem; padding: 0.5rem; border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-10); margin-bottom: 0.25rem; cursor: pointer; transition: background-color 0.2s ease;"
+                  style="display: flex; flex-direction: column; gap: 0.35rem; padding: 0.6rem; border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-10); margin-bottom: 0.35rem; cursor: pointer; transition: background-color 0.2s ease;"
                   @mouseover=${(e: Event) => {
-                    const div = e.target as HTMLDivElement;
+                    const div = e.currentTarget as HTMLDivElement;
                     div.style.backgroundColor = 'var(--bim-ui_bg-contrast-30)';
                   }}
                   @mouseout=${(e: Event) => {
-                    const div = e.target as HTMLDivElement;
+                    const div = e.currentTarget as HTMLDivElement;
                     div.style.backgroundColor = 'var(--bim-ui_bg-contrast-10)';
                   }}
-                                     @click=${async () => {
-                     try {
-                       const displayName = result.tipo_coincidencia === 'dispositiu' ? result.dispositiu : result.departament;
-                       console.log(`🎯 Navegando a: ${displayName} en edificio ${result.edifici}`);
-                       
-                       const fragments = components.get(OBC.FragmentsManager);
-                       const currentState = modelStore.getState();
-                       
-                       // Verificar si el edificio del elemento está cargado
-                       const isBuildingLoaded = Array.from(fragments.list.keys()).some(modelId => 
-                         modelId.includes(result.edifici)
-                       );
-                       
-                       if (!isBuildingLoaded) {
-                         console.log(`🏢 El edificio ${result.edifici} no está cargado, cargándolo...`);
-                         const success = await loadBuildingByCode(result.edifici);
-                         if (!success) {
-                           console.error(`❌ No se pudo cargar el edificio ${result.edifici}`);
-                           return;
-                         }
-                       } else {
-                         console.log(`✅ El edificio ${result.edifici} ya está cargado`);
-                       }
-                       
-                                               // Ahora enfocar en el elemento específico
-                        // Para elementos de departamento, usar focusOnDepartment
-                        if (result.tipo_coincidencia === 'departament') {
-                          await focusOnDepartment(result.departament);
-                        } else {
-                          // Para dispositivos, aplicar efecto fantasma y highlight
-                          await focusOnDevice(result.guid, displayName);
+                  @dblclick=${() => openActiuModal(result.guid)}
+                  @click=${async () => {
+                    try {
+                      const isDeviceLike = result.tipo_coincidencia === 'dispositiu' || result.tipo_coincidencia === 'actiu';
+                      const displayName = isDeviceLike ? result.dispositiu : result.departament;
+                      console.log(`🎯 Navegando a: ${displayName} en edificio ${result.edifici}`);
+
+                      const fragments = components.get(OBC.FragmentsManager);
+
+                      // Verificar si el edificio del elemento está cargado
+                      const isBuildingLoaded = Array.from(fragments.list.keys()).some(modelId => 
+                        modelId.includes(result.edifici)
+                      );
+
+                      if (!isBuildingLoaded) {
+                        console.log(`🏢 El edificio ${result.edifici} no está cargado, cargándolo...`);
+                        const success = await loadBuildingByCode(result.edifici);
+                        if (!success) {
+                          console.error(`❌ No se pudo cargar el edificio ${result.edifici}`);
+                          return;
                         }
-                     } catch (error) {
-                       console.error('❌ Error navegando al elemento:', error);
-                     }
-                   }}
+                      } else {
+                        console.log(`✅ El edificio ${result.edifici} ya está cargado`);
+                      }
+
+                      // Ahora enfocar en el elemento específico
+                      if (result.tipo_coincidencia === 'departament') {
+                        await focusOnDepartment(result.departament);
+                      } else {
+                        await focusOnDevice(result.guid, displayName);
+                      }
+                    } catch (error) {
+                      console.error('❌ Error navegando al elemento:', error);
+                    }
+                  }}
                 >
-                                     <div style="display: flex; align-items: center; gap: 0.5rem;">
-                     <span style="font-size: 0.75rem; padding: 0.125rem 0.375rem; border-radius: 0.25rem; background: ${result.tipo_coincidencia === 'departament' ? 'var(--bim-ui_accent-base)' : result.tipo_coincidencia === 'dispositiu' ? '#10b981' : '#f59e0b'}; color: white; font-weight: 600; text-transform: uppercase; pointer-events: none;">${result.tipo_coincidencia}</span>
-                     <span style="font-weight: 600; color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem;">${result.tipo_coincidencia === 'dispositiu' ? result.dispositiu : result.departament}</span>
-                   </div>
-                                     <div style="display: flex; gap: 1rem; font-size: 0.75rem; color: var(--bim-ui_bg-contrast-80);">
-                     <span>🏢 ${result.edifici}</span>
-                     <span>🏗️ ${result.planta}</span>
-                     <span>📐 ${result.total_area?.toFixed(1) || '0.0'} m²</span>
-                   </div>
+                  <div style="display: flex; align-items: center; gap: 0.5rem;">
+                    <span style="font-size: 0.75rem; padding: 0.125rem 0.375rem; border-radius: 0.25rem; background: ${result.tipo_coincidencia === 'departament' ? 'var(--bim-ui_accent-base)' : (result.tipo_coincidencia === 'dispositiu' || result.tipo_coincidencia === 'actiu') ? '#10b981' : '#f59e0b'}; color: white; font-weight: 600; text-transform: uppercase; pointer-events: none;">${result.tipo_coincidencia === 'actiu' ? 'ACTIU' : result.tipo_coincidencia}</span>
+                  
+  <span style="font-weight: 600; color: var(--bim-ui_bg-contrast-100); font-size: 1rem;">${(result.tipo_coincidencia === 'dispositiu' || result.tipo_coincidencia === 'actiu') ? result.dispositiu : result.departament}</span>
+                  </div>
+                  <div style="display: flex; gap: 1rem; font-size: 0.9rem; color: var(--bim-ui_bg-contrast-80);">
+                    <span>🏢 ${result.edifici}</span>
+                    <span>🏗️ ${result.planta}</span>
+                    <span>📍 ${result.zona || '-'}</span>
+                  </div>
+                  ${result.space_dispositiu ? BUI.html`
+                    <div style="font-size: 0.9rem; color: var(--bim-ui_bg-contrast-80); margin-top: 0.15rem;">
+                      <span>🧩 ${result.space_dispositiu}</span>
+                    </div>
+                  ` : ''}
                 </div>
               `)}
             </div>
           </div>
         ` : ''}
-        <select
-          style="padding: 0.75rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem; font-family: inherit; cursor: pointer; transition: all 0.2s ease; outline: none;"
-          @change=${(e: Event) => {
-      const select = e.target as HTMLSelectElement;
-      state.viewCategory = (select.value || "") as any;
-      state.subCategory = "";
-      update(state);
-    }}
-          @focus=${(e: Event) => {
-      const select = e.target as HTMLSelectElement;
-      select.style.borderColor = 'var(--bim-ui_accent-base)';
-      select.style.boxShadow = '0 0 0 2px rgba(40, 180, 215, 0.2)';
-    }}
-          @blur=${(e: Event) => {
-      const select = e.target as HTMLSelectElement;
-      select.style.borderColor = 'var(--bim-ui_bg-contrast-40)';
-      select.style.boxShadow = 'none';
-    }}
-        >
-          <option value="">Sel·lecciona àmbit...</option>
-          <option value="Espais" ?selected=${viewCategory === 'Espais'}>Espais</option>
-          <option value="Instal·lacions" ?selected=${viewCategory === 'Instal·lacions'}>Instal·lacions</option>
-        </select>
-
-        ${viewCategory === 'Espais' ? BUI.html`
-          <select
-            style="padding: 0.75rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem; font-family: inherit; cursor: pointer; transition: all 0.2s ease; outline: none;"
-            @change=${async (e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        state.subCategory = select.value || "";
-        modelStore.setDepartamentsActive(state.subCategory === "Departaments" && state.viewCategory === 'Espais');
-        update(state);
-                 if (modelStore.getState().isDepartamentsActive) await colorizeDepartments();
-                  else {
-            await clearDepartmentStyles();
-            // Limpiar la leyenda cuando se desactiva Departaments
-            state.departmentsLegend = [];
-            modelStore.setDepartmentsLegend([]);
-          }
-      }}
-            @focus=${(e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        select.style.borderColor = 'var(--bim-ui_accent-base)';
-        select.style.boxShadow = '0 0 0 2px rgba(40, 180, 215, 0.2)';
-      }}
-            @blur=${(e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        select.style.borderColor = 'var(--bim-ui_bg-contrast-40)';
-        select.style.boxShadow = 'none';
-      }}
-          >
-            <option value="">Sel·lecciona...</option>
-            <option value="Departaments" ?selected=${subCategory === 'Departaments'}>Departaments</option>
-            <option value="Dispositius" ?selected=${subCategory === 'Dispositius'}>Dispositius</option>
-          </select>
-        ` : ''}
-
-        ${viewCategory === 'Instal·lacions' ? BUI.html`
-          <select
-            style="padding: 0.75rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem; font-family: inherit; cursor: pointer; transition: all 0.2s ease; outline: none;"
-            @change=${(e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        state.subCategory = select.value || "";
-        update(state);
-      }}
-            @focus=${(e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        select.style.borderColor = 'var(--bim-ui_accent-base)';
-        select.style.boxShadow = '0 0 0 2px rgba(40, 180, 215, 0.2)';
-      }}
-            @blur=${(e: Event) => {
-        const select = e.target as HTMLSelectElement;
-        select.style.borderColor = 'var(--bim-ui_bg-contrast-40)';
-        select.style.boxShadow = 'none';
-      }}
-          >
-            <option value="">Sel·lecciona...</option>
-            <option value="Clima" ?selected=${subCategory === 'Clima'}>Clima</option>
-            <option value="Fontaneria" ?selected=${subCategory === 'Fontaneria'}>Fontaneria</option>
-            <option value="PCI" ?selected=${subCategory === 'PCI'}>PCI</option>
-            <option value="Sanejament" ?selected=${subCategory === 'Sanejament'}>Sanejament</option>
-            <option value="Electricitat" ?selected=${subCategory === 'Electricitat'}>Electricitat</option>
-            <option value="Il·luminació" ?selected=${subCategory === 'Il·luminació'}>Il·luminació</option>
-            <option value="Informàtica" ?selected=${subCategory === 'Informàtica'}>Informàtica</option>
-            <option value="Seguretat" ?selected=${subCategory === 'Seguretat'}>Seguretat</option>
-          </select>
-        ` : ''}
-
-                 ${viewCategory === 'Espais' && subCategory === 'Departaments' ? BUI.html`
-           <div id="departments-legend" style="margin-top: 0.5rem; display: flex; flex-direction: column; gap: 0.25rem;">
-             <div style="font-weight: 700; color: var(--bim-ui_bg-contrast-100); letter-spacing: 0.3px;">Llegenda</div>
-             <div style="max-height: 24rem; overflow: auto; border: 1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_bg-contrast-20); border-radius: 0.5rem; padding: 0.5rem; box-shadow: 0 1px 2px rgba(0,0,0,0.25);">
-               <div id="legend-content"></div>
-             </div>
-           </div>
-         ` : ''}
       </div>
     </bim-panel-section>
   `;
 };
-
-

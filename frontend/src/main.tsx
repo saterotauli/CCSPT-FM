@@ -1,5 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
+import { BrowserRouter } from 'react-router-dom';
 import App from './App';
 import AppTest from './App.test';
 import './style.css';
@@ -13,6 +14,8 @@ const useTestComponent = false;
 
 root.render(
   <React.StrictMode>
-    {useTestComponent ? <AppTest /> : <App />}
+    <BrowserRouter>
+      {useTestComponent ? <AppTest /> : <App />}
+    </BrowserRouter>
   </React.StrictMode>
 );

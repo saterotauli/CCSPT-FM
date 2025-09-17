@@ -31,6 +31,7 @@ model ifcbuilding {
   guid String @id
   nom  String
   codi String
+  color String?
 
   @@map("ifcbuilding")
   @@schema("patrimoni")
@@ -47,6 +48,8 @@ model ifcspace {
   centre_cost String
   area Float
 
+  sensorData sensor_data[]
+
   @@map("ifcspace")
   @@schema("patrimoni")
 }
@@ -62,6 +65,8 @@ model actius {
   ubicacio String?
 
   ifcdoor  ifcdoor?
+  images   actiu_images[]
+  maintenanceRecords maintenance_record[]
 
   @@map("actius")
   @@schema("patrimoni")
@@ -85,4 +90,77 @@ model ifcdoor_fire {
   ifcdoor    ifcdoor @relation(fields: [ifcdoor_id], references: [actiu_id], onDelete: Cascade)
   @@map("ifcdoor_fire")
   @@schema("patrimoni")
+}
+
+model actiu_images {
+  id         String   @id @default(uuid())
+  actiuGuid  String
+  actiu      actius   @relation(fields: [actiuGuid], references: [guid])
+  filename   String
+  mime       String
+  size       Int
+  url        String
+  thumbUrl   String
+  width      Int?
+  height     Int?
+  description String?
+  isCover    Boolean  @default(false)
+  sortOrder  Int      @default(0)
+  uploadedBy String?
+  createdAt  DateTime @default(now())
+
+  @@map("actiu_images")
+  @@schema("patrimoni")
+  @@index([actiuGuid, sortOrder])
+  @@index([actiuGuid, createdAt])
+}
+
+model maintenance_record {
+  id               String   @id @default(uuid())
+  actiuGuid        String
+  actiu            actius   @relation(fields: [actiuGuid], references: [guid])
+  performedAt      DateTime
+  nextPlannedAt    DateTime?
+  periodMonths     Int?
+  periodDays       Int?
+  responsible      String?
+  incidents        String?
+  correctiveActions String?
+  checklist        Json?
+  attachments      maintenance_attachment[]
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@map("maintenance_record")
+  @@schema("patrimoni")
+  @@index([actiuGuid, performedAt])
+}
+
+model maintenance_attachment {
+  id        String               @id @default(uuid())
+  recordId  String
+  record    maintenance_record   @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  type      String?
+  filename  String
+  url       String
+  createdAt DateTime             @default(now())
+
+  @@map("maintenance_attachment")
+  @@schema("patrimoni")
+  @@index([recordId])
+}
+
+model sensor_data {
+  id          String   @id @default(uuid())
+  spaceGuid   String
+  space       ifcspace @relation(fields: [spaceGuid], references: [guid], onDelete: Cascade)
+  temperature Float    // Temperatura en grados Celsius
+  humidity    Float    // Humedad relativa en porcentaje (0-100)
+  ppm         Float    // PPM (partes por millón) - calidad del aire
+  timestamp   DateTime @default(now())
+  
+  @@map("sensor_data")
+  @@schema("patrimoni")
+  @@index([spaceGuid, timestamp])
+  @@index([timestamp])
 }

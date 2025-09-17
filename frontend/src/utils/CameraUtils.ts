@@ -10,11 +10,35 @@ export class CameraUtils {
   private components: OBC.Components;
   private world: any;
   private boxer: OBC.BoundingBoxer;
+  // Factor para acercar más tras el fit (solo ortográfica). 1.0 = sin extra, >1 = más cerca
+  private fitCloseFactor: number = 1.85;
+  // Factor para ESCALAR el box antes del fit ( <1 encuadra más cerca, >1 más lejos )
+  private fitScaleFactor: number = 0.9;
 
   constructor(components: OBC.Components, world: any) {
     this.components = components;
     this.world = world;
     this.boxer = components.get(OBC.BoundingBoxer);
+  }
+
+  /**
+   * Configura cuánto se acerca la cámara adicionalmente tras el fit (solo ortográfica)
+   * @param factor 1.0 = sin extra, 1.2..2.0 más cerca
+   */
+  setFitCloseFactor(factor: number) {
+    if (Number.isFinite(factor) && factor > 0) {
+      this.fitCloseFactor = factor;
+    }
+  }
+
+  /**
+   * Configura el factor de escala aplicado al Box3 antes del fit.
+   * Valores < 1 encuadran más cerca (reducen el box), > 1 más lejos.
+   */
+  setFitScaleFactor(factor: number) {
+    if (Number.isFinite(factor) && factor > 0) {
+      this.fitScaleFactor = factor;
+    }
   }
 
   /**
@@ -338,48 +362,54 @@ export class CameraUtils {
         [modelId]: new Set([elementId])
       };
 
-      // Obtener bounding box del elemento usando BoundingBoxer
+      // 1) Camino preferente: usar el mismo método que el botón "Enfocar"
+      //    Esto garantiza exactamente el mismo padding/comportamiento.
+      try {
+        const cam: any = this.world?.camera;
+        if (cam && typeof cam.fitToItems === 'function') {
+          await cam.fitToItems(modelIdMap);
+          console.log('✅ Fit completado con camera.fitToItems (coincide con toolbar)');
+          return;
+        }
+      } catch (e) {
+        console.warn('⚠️ No se pudo usar camera.fitToItems, usando fallback boxer:', e);
+      }
+
+      // 2) Fallback: usar BoundingBoxer y fitToSphere
       this.boxer.list.clear();
       await this.boxer.addFromModelIdMap(modelIdMap);
       const box = this.boxer.get();
       this.boxer.list.clear();
 
       if (!box || box.isEmpty()) {
-        console.warn('⚠️ No se pudo obtener bounding box del elemento, usando fallback');
-        // Fallback: usar el método existente
+        console.warn('⚠️ No se pudo obtener bounding box del elemento, usando fallback genérico');
         await this.fitToElement(modelId, elementId);
         return;
       }
 
-      // Crear esfera del bounding box
       const sphere = new THREE.Sphere();
       box.getBoundingSphere(sphere);
+      // Dar un poco de aire para no quedar demasiado cerca
+      sphere.radius *= 1.25;
 
-      // Ajustar el radio de la esfera para que el elemento se vea más cerca
-      sphere.radius *= 0.8; // Reducir el radio para acercar la cámara
-
-      console.log('🎯 Ajustando cámara a elemento específico:', {
+      console.log('🎯 Ajustando cámara a elemento (fallback boxer):', {
         center: sphere.center,
         radius: sphere.radius,
         elementId,
         modelId
       });
 
-      // Hacer fit de la cámara a la esfera usando la estructura correcta de ThatOpen
       if (!this.world.camera || !this.world.camera.controls) {
-        console.warn('⚠️ Controles de cámara no disponibles');
-        // Fallback: usar el método existente
+        console.warn('⚠️ Controles de cámara no disponibles (fallback boxer)');
         await this.fitToElement(modelId, elementId);
         return;
       }
 
       try {
-        // Usar fitToSphere para centrar la cámara en el elemento
         await this.world.camera.controls.fitToSphere(sphere, true);
-        console.log('✅ Fit completado usando BoundingBoxer para elemento específico');
+        console.log('✅ Fit completado usando BoundingBoxer (fallback)');
       } catch (error) {
-        console.error('❌ Error ajustando cámara al elemento:', error);
-        // Fallback al método existente
+        console.error('❌ Error ajustando cámara (fallback boxer):', error);
         await this.fitToElement(modelId, elementId);
       }
 
@@ -416,19 +446,64 @@ export class CameraUtils {
       return;
     }
 
-    // Ajustar el radio de la esfera para que el modelo se vea más cerca
-    sphere.radius *= 0.8; // Reducir el radio para acercar la cámara
-
-    console.log('🎯 Ajustando cámara a esfera:', {
+    // Intentar un encuadre con padding casi nulo para acercar al máximo
+    const padding = 0; // píxeles
+    console.log('🎯 Ajustando cámara a box con padding reducido:', {
       center: sphere.center,
       radius: sphere.radius,
-      boxSize: box.getSize(new THREE.Vector3())
+      boxSize: box.getSize(new THREE.Vector3()),
+      padding
     });
 
     try {
-      // Usar fitToSphere para centrar la cámara
-      await this.world.camera.controls.fitToSphere(sphere, true);
-      console.log('✅ Cámara ajustada exitosamente');
+      // Reducir o ampliar el box alrededor de su centro para controlar la distancia percibida
+      const scaledBox = box.clone();
+      const center = scaledBox.getCenter(new THREE.Vector3());
+      const size = scaledBox.getSize(new THREE.Vector3()).multiplyScalar(this.fitScaleFactor);
+      scaledBox.setFromCenterAndSize(center, size);
+
+      if (typeof this.world.camera.controls.fitToBox === 'function') {
+        await this.world.camera.controls.fitToBox(scaledBox, true, {
+          paddingLeft: padding,
+          paddingRight: padding,
+          paddingTop: padding,
+          paddingBottom: padding,
+        });
+      } else {
+        // Fallback a esfera si fitToBox no está disponible
+        await this.world.camera.controls.fitToSphere(sphere, true);
+      }
+
+      // Acercar aún más después del fit según tipo de cámara
+      const cam = this.world.camera.three;
+      if (!cam) {
+        console.warn('⚠️ Cámara Three.js no disponible tras el fit');
+      } else if ((cam as any).isOrthographicCamera) {
+        // ORTHO: aumentar zoom
+        if (this.world.camera.controls?.zoomTo) {
+          const currentZoom = cam.zoom || 1;
+          // Elevar límites si existen
+          if ('maxZoom' in this.world.camera.controls && typeof (this.world.camera.controls as any).maxZoom === 'number') {
+            (this.world.camera.controls as any).maxZoom = Math.max((this.world.camera.controls as any).maxZoom, 1e6);
+          }
+          const targetZoom = Math.min(currentZoom * this.fitCloseFactor, 1e6);
+          await this.world.camera.controls.zoomTo(targetZoom, true);
+        }
+      } else if ((cam as any).isPerspectiveCamera) {
+        // PERSPECTIVE: reducir distancia al target con dollyTo
+        const controls: any = this.world.camera.controls;
+        if (controls && typeof controls.dollyTo === 'function') {
+          const target = controls.getTarget ? controls.getTarget(new THREE.Vector3()) : (controls.target ?? new THREE.Vector3());
+          const currentDistance = cam.position.clone().sub(target).length();
+          const targetDistance = Math.max(currentDistance / this.fitCloseFactor, 0.01);
+          await controls.dollyTo(targetDistance, true);
+        } else if (controls && typeof controls.dolly === 'function') {
+          // Fallback: dolly relativo (aproximado)
+          await controls.dolly(1 / this.fitCloseFactor, true);
+        }
+      }
+
+      console.log('✅ Cámara ajustada exitosamente (fitToBox + zoom ortográfico opcional)');
     } catch (error) {
       console.error('❌ Error ajustando cámara:', error);
     }
@@ -496,14 +571,14 @@ export class CameraUtils {
         const size = box.getSize(new THREE.Vector3());
 
         // Posicionar cámara desde arriba
-        const height = Math.max(size.x, size.z) * 1.5; // Altura basada en el tamaño del modelo
+        const height = Math.max(size.x, size.z) * 1.0; // Altura más baja para ver marcadores más cerca
 
         // Rotación para alinear con el norte del proyecto
         // Convertir grados a radianes
         const northRotationRadians = (northRotationDegrees * Math.PI) / 180;
 
         // Calcular posición de cámara con rotación más efectiva
-        const radius = height * 0.8; // Radio para la posición de la cámara
+        const radius = height * 0.6; // Radio menor para acercar aún más
         const offsetX = Math.sin(northRotationRadians) * radius * 0.01;
         const offsetZ = Math.cos(northRotationRadians) * radius * 0.01;
 
@@ -670,6 +745,124 @@ export class CameraUtils {
     return null;
   }
 }
+
+// === Controls presets for 2D vs 3D ===
+// We avoid importing ACTION enums; instead we reuse current mappings so it's version-agnostic.
+
+export interface TwoDControlsOptions {
+  lockAzimuth?: boolean; // default true
+}
+
+export class CameraControlsPresets {
+  static setControlsFor2D(world: any, opts: TwoDControlsOptions = {}) {
+    try {
+      const cam: any = world?.camera;
+      const controls: any = cam?.controls;
+      if (!cam || !controls) return;
+
+      // Switch to orthographic projection if supported
+      try { cam.projection?.set?.('Orthographic'); } catch {}
+
+      // Disable rotation/orbit
+      if ('rotateSpeed' in controls) controls.rotateSpeed = 0;
+      if ('azimuthRotateSpeed' in controls) controls.azimuthRotateSpeed = 0;
+      if ('polarRotateSpeed' in controls) controls.polarRotateSpeed = 0;
+
+      // Lock polar angle straight-down
+      if ('minPolarAngle' in controls) controls.minPolarAngle = 0;
+      if ('maxPolarAngle' in controls) controls.maxPolarAngle = 0;
+
+      // Optionally lock azimuth to current value
+      const lockAzimuth = opts.lockAzimuth !== false;
+      const currentAzimuth = (typeof controls.getAzimuthAngle === 'function') ? controls.getAzimuthAngle() : 0;
+      if (lockAzimuth) {
+        if ('minAzimuthAngle' in controls) controls.minAzimuthAngle = currentAzimuth;
+        if ('maxAzimuthAngle' in controls) controls.maxAzimuthAngle = currentAzimuth;
+      }
+
+      // Mouse and touch mappings: left = pan (truck), wheel = zoom (dolly), right = none
+      try {
+        // Save originals once
+        (controls as any).__origMouseButtons = (controls as any).__origMouseButtons || { ...(controls.mouseButtons || {}) };
+        (controls as any).__origTouches = (controls as any).__origTouches || { ...(controls.touches || {}) };
+
+        const current = controls.mouseButtons || {};
+        const rightAsTruck = current.right ?? current.secondary ?? current.contextmenu;
+        const noneToken = (current as any).none ?? (current as any).NONE ?? undefined;
+        const middleAsDolly = current.middle ?? current.wheel ?? current.MIDDLE ?? undefined;
+        const wheelAsDolly = current.wheel ?? current.middle ?? undefined;
+
+        controls.mouseButtons = {
+          ...current,
+          left: rightAsTruck ?? current.left, // force left to act like TRUCK
+          right: noneToken ?? current.right,  // disable right if possible
+          middle: middleAsDolly ?? current.middle,
+          wheel: wheelAsDolly ?? current.wheel,
+        };
+
+        const tcur = controls.touches || {};
+        const twoAsDollyTruck = (tcur as any).two ?? (tcur as any).TWO;
+        const oneAsTruck = (tcur as any).one ?? (tcur as any).ONE;
+        const noneTouch = (tcur as any).none ?? (tcur as any).NONE ?? undefined;
+        controls.touches = {
+          ...tcur,
+          one: oneAsTruck,  // prefer pan on single touch
+          two: twoAsDollyTruck,
+          three: noneTouch ?? (tcur as any).three,
+        } as any;
+      } catch {}
+
+      // Remove rotation inertia
+      if ('enableDamping' in controls) controls.enableDamping = true;
+      if ('draggingDampingFactor' in controls) controls.draggingDampingFactor = 0.25;
+      if (typeof controls.update === 'function') controls.update(0);
+    } catch {}
+  }
+
+  static setControlsFor3D(world: any) {
+    try {
+      const cam: any = world?.camera;
+      const controls: any = cam?.controls;
+      if (!cam || !controls) return;
+
+      // Allow perspective or keep current projection
+      // Reset limits for free orbit
+      if ('rotateSpeed' in controls) controls.rotateSpeed = 1.0;
+      if ('azimuthRotateSpeed' in controls) controls.azimuthRotateSpeed = 1.0;
+      if ('polarRotateSpeed' in controls) controls.polarRotateSpeed = 1.0;
+      if ('minPolarAngle' in controls) controls.minPolarAngle = 0;
+      if ('maxPolarAngle' in controls) controls.maxPolarAngle = Math.PI;
+      if ('minAzimuthAngle' in controls) controls.minAzimuthAngle = -Infinity as any;
+      if ('maxAzimuthAngle' in controls) controls.maxAzimuthAngle = Infinity as any;
+
+      // Restore original mappings if we saved them
+      try {
+        if ((controls as any).__origMouseButtons) {
+          controls.mouseButtons = { ...(controls as any).__origMouseButtons };
+        }
+        if ((controls as any).__origTouches) {
+          controls.touches = { ...(controls as any).__origTouches };
+        }
+      } catch {}
+
+      if (typeof controls.update === 'function') controls.update(0);
+    } catch {}
+  }
+}
+
+// Backward-compatible helpers bound to CameraUtils for convenience
+export interface CameraUtils {
+  setControlsFor2D: (opts?: TwoDControlsOptions) => void;
+  setControlsFor3D: () => void;
+}
+
+CameraUtils.prototype.setControlsFor2D = function (this: CameraUtils, opts?: TwoDControlsOptions) {
+  CameraControlsPresets.setControlsFor2D((this as any).world, opts);
+};
+
+CameraUtils.prototype.setControlsFor3D = function (this: CameraUtils) {
+  CameraControlsPresets.setControlsFor3D((this as any).world);
+};
 
 /**
  * Función de conveniencia para crear una instancia de CameraUtils

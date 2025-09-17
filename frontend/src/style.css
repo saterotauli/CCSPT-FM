@@ -251,6 +251,85 @@ bim-grid>div[style*="border-right"] {
   max-width: 12rem;
 }
 
+/* Responsive layout improvements */
+bim-grid {
+  min-width: 0; /* Allow grid to shrink below content size */
+}
+
+/* Ensure panels can shrink and don't overflow */
+bim-panel {
+  min-width: 0;
+  overflow: hidden;
+}
+
+/* Responsive breakpoints for BIM layout */
+@media (max-width: 1400px) {
+  bim-grid[style*="minmax(250px"] {
+    --medium-column-width: min(25rem, 30vw);
+  }
+  
+  bim-grid[style*="minmax(200px"] {
+    --small-column-width: min(18rem, 20vw);
+  }
+}
+
+@media (max-width: 1200px) {
+  bim-grid[style*="minmax(250px"] {
+    --medium-column-width: min(20rem, 25vw);
+  }
+  
+  bim-grid[style*="minmax(200px"] {
+    --small-column-width: min(15rem, 18vw);
+  }
+}
+
+@media (max-width: 1000px) {
+  /* Stack panels vertically on very small screens */
+  bim-grid[style*="minmax(250px"] {
+    --medium-column-width: 100%;
+  }
+  
+  bim-grid[style*="minmax(200px"] {
+    --small-column-width: 100%;
+  }
+}
+
+/* Sensor History Chart positioning */
+.sensor-history-chart {
+  /* Base styles are now handled inline for better control */
+}
+
+/* Ensure the chart doesn't interfere with the layout */
+.sensor-history-chart * {
+  box-sizing: border-box;
+}
+
+/* Sensor History Chart - Posicionamiento fijo con anchos mínimos forzados */
+.sensor-history-chart {
+  position: fixed;
+  bottom: 0;
+  left: calc(5rem + max(300px, min(400px, 25vw)) + 1rem);  /* Sidebar + panel izquierdo responsivo */
+  right: calc(max(300px, min(400px, 25vw)) + 1.25rem);     /* Panel derecho responsivo */
+  height: 40vh;
+  background: #fff;
+  border-top: 2px solid #e0e6ef;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.1);
+  width: auto;
+  max-width: none;
+}
+
+/* Solo en móviles se permite ancho completo */
+@media (max-width: 768px) {
+  .sensor-history-chart {
+    left: 0;
+    right: 0;
+    width: 100vw;
+  }
+}
+
 /* Global icon styling - make all icons larger with maximum specificity */
 * bim-icon,
 bim-icon,

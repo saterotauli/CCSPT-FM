@@ -40,10 +40,10 @@ export const viewportGridTemplate: BUI.StatefullComponent<ViewportGridState> = (
     grid.layouts = {
       main: {
         template: `
-          "messages floorSelector" auto
-          "empty floorSelector" 1fr
+          "floorSelector messages" auto
+          "floorSelector empty" 1fr
           "bottomToolbar bottomToolbar" auto
-          /1fr auto
+          /auto 1fr
         `,
       },
     };

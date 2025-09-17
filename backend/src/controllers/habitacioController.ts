@@ -120,7 +120,7 @@ export const getDevicesByGuids = async (req: Request, res: Response) => {
     console.log(`[ifcspace] Primeros 5 GUIDs:`, guidArray.slice(0, 5));
     
     const devices = await prisma.$queryRaw`
-      SELECT guid, dispositiu, codi, departament, planta, area
+      SELECT guid, dispositiu, codi, departament, planta, id, centre_cost, area
       FROM "patrimoni"."ifcspace" 
       WHERE guid = ANY(${guidArray})
         AND edifici = ${edifici}
@@ -442,5 +442,29 @@ export const searchDepartmentsAndDevices = async (req: Request, res: Response) =
   } catch (err: any) {
     console.error('❌ Error en búsqueda:', err);
     res.status(500).json({ error: 'Error al buscar departamentos y dispositivos', details: err.message });
+  }
+};
+
+// PATCH /api/ifcspace/item
+// Actualiza campos editables de una única fila identificada por GUID y edificio.
+export const updateIfcSpaceFields = async (req: Request, res: Response) => {
+  try {
+    const { guid, edifici, dispositiu, departament, id, centre_cost } = req.body || {};
+    if (!guid || typeof guid !== 'string') return res.status(400).json({ error: 'guid requerido' });
+    if (!edifici || typeof edifici !== 'string') return res.status(400).json({ error: 'edifici requerido' });
+
+    await prisma.$executeRaw`
+      UPDATE "patrimoni"."ifcspace"
+      SET
+        dispositiu = COALESCE(${dispositiu}, dispositiu),
+        departament = COALESCE(${departament}, departament),
+        id = COALESCE(${id}, id),
+        centre_cost = COALESCE(${centre_cost}, centre_cost)
+      WHERE guid = ${guid} AND edifici = ${edifici}
+    `;
+
+    res.json({ message: 'IfcSpace actualizado' });
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al actualizar IfcSpace', details: err.message });
   }
 };

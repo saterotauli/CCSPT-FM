@@ -1,0 +1,2218 @@
+<?xml version="1.0"?>
+<Workbook xmlns="urn:schemas-microsoft-com:office:spreadsheet" xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet">
+<Worksheet ss:Name="Actius">
+<Table>
+<Row>
+<Cell><Data ss:Type="String">GUID</Data></Cell>
+<Cell><Data ss:Type="String">Departament</Data></Cell>
+<Cell><Data ss:Type="String">Dispositiu</Data></Cell>
+<Cell><Data ss:Type="String">Edifici</Data></Cell>
+<Cell><Data ss:Type="String">Planta</Data></Cell>
+<Cell><Data ss:Type="String">Zona</Data></Cell>
+<Cell><Data ss:Type="String">Space Dispositiu</Data></Cell>
+<Cell><Data ss:Type="String">Àrea Total (m²)</Data></Cell>
+<Cell><Data ss:Type="String">Nombre d'Elements</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0nfXwQlzH0duwGu6O2hqKn</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">020</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. F</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6oR</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">009</Data></Cell>
+<Cell><Data ss:Type="String">Office net Q3-Q4</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6ro</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Passadís brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6tk</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">015</Data></Cell>
+<Cell><Data ss:Type="String">Mgtz. 1</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6ny</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">013</Data></Cell>
+<Cell><Data ss:Type="String">Office net Q1-Q2</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0nfXwQlzH0duwGu6O2hqRm</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">020</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. F</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0nfXwQlzH0duwGu6O2hq1O</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">019</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. M</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0nfXwQlzH0duwGu6O2hqBl</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">019</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. M</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8heMi</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String">Pas Gen.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8hh4R</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">006</Data></Cell>
+<Cell><Data ss:Type="String">Office brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8hhBP</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String">Pas Gen.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8hh9A</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String">Pas Gen.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8hgzn</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String">Pas Gen.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8hj1h</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">021</Data></Cell>
+<Cell><Data ss:Type="String">Transfer</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2sEEv9W_vAy81gipu8eJ0q</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">016</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona neta quiròfans</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0nfXwQlzH0duwGu6O2hr8W</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'observació</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6Zk</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">023</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor i WC públic</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2okLOxHIPErgv53IHgR2ft</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Rentat 4</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2okLOxHIPErgv53IHgR2fs</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">010</Data></Cell>
+<Cell><Data ss:Type="String">Rentat 3</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC2eQ</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">012</Data></Cell>
+<Cell><Data ss:Type="String">Rentat 2</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC4l7</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Rentat 1</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC7Hy</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">038</Data></Cell>
+<Cell><Data ss:Type="String">Infor./admisions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC7If</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">037</Data></Cell>
+<Cell><Data ss:Type="String">Box 1</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC7J6</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">036</Data></Cell>
+<Cell><Data ss:Type="String">Box 2</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6jf</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">035</Data></Cell>
+<Cell><Data ss:Type="String">Box 3</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6jR</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">040</Data></Cell>
+<Cell><Data ss:Type="String">WC F</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6lo</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">039</Data></Cell>
+<Cell><Data ss:Type="String">WC H</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6eY</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">030</Data></Cell>
+<Cell><Data ss:Type="String">WD àrea personal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6eR</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">029</Data></Cell>
+<Cell><Data ss:Type="String">Àrea personal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6fF</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">028</Data></Cell>
+<Cell><Data ss:Type="String">WC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6g9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">027</Data></Cell>
+<Cell><Data ss:Type="String">Control infermeria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6hA</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">034</Data></Cell>
+<Cell><Data ss:Type="String">Dptx.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6bZ</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">032</Data></Cell>
+<Cell><Data ss:Type="String">Aboc./Neteja</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6bA</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">031</Data></Cell>
+<Cell><Data ss:Type="String">Mgtz.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6dY</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">033</Data></Cell>
+<Cell><Data ss:Type="String">Office/cuina</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6Wj</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'observació</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6WR</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'observació</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6XU</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">023</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor i WC públic</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6Y6</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">023</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor i WC públic</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6yo</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String">Pas Gen.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6zf</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">021</Data></Cell>
+<Cell><Data ss:Type="String">Transfer</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6_W</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">020</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. F</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6_G</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">017</Data></Cell>
+<Cell><Data ss:Type="String">URPA</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6$C</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">017</Data></Cell>
+<Cell><Data ss:Type="String">URPA</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6v8</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">Relax</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6wF</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">006</Data></Cell>
+<Cell><Data ss:Type="String">Office brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6wR</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Passadís brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6xY</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Passadís brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3q_7I27fz7uAWjDRAhC6xx</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Passadís brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2jK6F59IL1KQ6HCUUQJ8jQ</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">046</Data></Cell>
+<Cell><Data ss:Type="String">Punt d’ús</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3a15SdQ6nFHxUg0ZbdvMX7</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">020</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. F</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3a15SdQ6nFHxUg0ZbdvMcp</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">019</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor Prof. M</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2jK6F59IL1KQ6HCUUQJAUP</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">043</Data></Cell>
+<Cell><Data ss:Type="String">Vestíbul indep. costat brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2jK6F59IL1KQ6HCUUQJATN</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Passadís brut</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">06B7s$i5P3hAciytk_0ISr</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">047</Data></Cell>
+<Cell><Data ss:Type="String">Mgtz. net</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">06B7s$i5P3hAciytk_0ITc</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Vestíbul indep. costat net</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3a15SdQ6nFHxUg0ZbdvMZ1</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String">Pas Gen.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3a15SdQ6nFHxUg0ZbdvMWP</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">PortaTallafocs</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">021</Data></Cell>
+<Cell><Data ss:Type="String">Transfer</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3soXJEH$HArA0xKKnD6Emh</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">CQA</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Sala Màq.</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0EIX1eco9B5A9cYVjo8qcp</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">003</Data></Cell>
+<Cell><Data ss:Type="String">Cancell</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOcF</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOag</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOaB</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGObY</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOb_</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGObU</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOY$</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOZe</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOW1</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGOXn</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">WC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPUa</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPUB</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPV3</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPSx</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">033</Data></Cell>
+<Cell><Data ss:Type="String">Escala de servei</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPRm</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPOa</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPOi</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPOq</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPOy</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPOC</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">014</Data></Cell>
+<Cell><Data ss:Type="String">Sala d'espera extraccions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPM2</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">002</Data></Cell>
+<Cell><Data ss:Type="String">Vestíbul/pas general</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPIx</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPJd</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPGP</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGPCZ</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">025</Data></Cell>
+<Cell><Data ss:Type="String">Pas laboratori</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP8Z</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">003</Data></Cell>
+<Cell><Data ss:Type="String">Cancell</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP8T</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP6l</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP65</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP7X</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP7U</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">011</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria direcció</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP5s</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">011</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria direcció</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP5V</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2hLrug0VDEDOLgOtgdGP3h</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">011</Data></Cell>
+<Cell><Data ss:Type="String">Secretaria direcció</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2kC6_jVVPD4u3biKT2xfi9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">002</Data></Cell>
+<Cell><Data ss:Type="String">Vestíbul/pas general</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2kC6_jVVPD4u3biKT2xflr</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2kC6_jVVPD4u3biKT2xfkE</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2kC6_jVVPD4u3biKT2xfm9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2kC6_jVVPD4u3biKT2xfpn</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2kC6_jVVPD4u3biKT2xfoM</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0dLlR4SH52h8ogmGwFKRTd</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">032</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0dLlR4SH52h8ogmGwFKRTc</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">032</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1$3gjDcUDB2hRr4evSR8fA</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">030</Data></Cell>
+<Cell><Data ss:Type="String">Nevera</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1$3gjDcUDB2hRr4evSR8fc</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P00</Data></Cell>
+<Cell><Data ss:Type="Number">030</Data></Cell>
+<Cell><Data ss:Type="String">Nevera</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cp$</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona informàtcia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cnk</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona informàtcia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_d7s</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">007</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor 2</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_d5b</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">004</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor 1</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cQD</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona informàtcia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1Y57hoWCP1rfmgpHYXs$4H</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1Y57hoWCP1rfmgpHYXs$4r</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ZWCajoPHD5RGgAVlN1hWi</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">Relax</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ObjyVdUT4Bg8spmVaIJG6</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ObjyVdUT4Bg8spmVaIJVU</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">002</Data></Cell>
+<Cell><Data ss:Type="String">Pas general</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ObjyVdUT4Bg8spmVaIJUF</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ObjyVdUT4Bg8spmVaIJT2</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ObjyVdUT4Bg8spmVaIJSG</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2ObjyVdUT4Bg8spmVaIJRt</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2NOh6n0MD5GPJIkIfeSSYm</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">038</Data></Cell>
+<Cell><Data ss:Type="String">Armaris tècnics  informàtica</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2NOh6n0MD5GPJIkIfeSQqq</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">038</Data></Cell>
+<Cell><Data ss:Type="String">Armaris tècnics  informàtica</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_dF3</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">019</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_dC$</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">019</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_d3y</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">004</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor 1</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_d2h</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">004</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor 1</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_d1T</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">007</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor 2</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_d4t</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">033</Data></Cell>
+<Cell><Data ss:Type="String">Cultius recerca</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cxk</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">002</Data></Cell>
+<Cell><Data ss:Type="String">Pas general</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cwp</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Accés vestidors</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cwH</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Accés vestidors</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cvX</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Accés vestidors</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cuo</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">005</Data></Cell>
+<Cell><Data ss:Type="String">Accés vestidors</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cu9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">007</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor 2</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_c$r</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">002</Data></Cell>
+<Cell><Data ss:Type="String">Pas general</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_c_N</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona informàtcia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_czM</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona informàtcia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3Ljdw17Rn9xAbcBVq7_cyl</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P01</Data></Cell>
+<Cell><Data ss:Type="Number">008</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona informàtcia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1PsCqFpN510PG0gsLHWGEb</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P02</Data></Cell>
+<Cell><Data ss:Type="Number">009</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1PsCqFpN510PG0gsLHWGIL</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P02</Data></Cell>
+<Cell><Data ss:Type="Number">009</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1PsCqFpN510PG0gsLHWGDg</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P02</Data></Cell>
+<Cell><Data ss:Type="Number">009</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1PsCqFpN510PG0gsLHWGCn</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P02</Data></Cell>
+<Cell><Data ss:Type="Number">009</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1PsCqFpN510PG0gsLHWG9r</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">P02</Data></Cell>
+<Cell><Data ss:Type="Number">010</Data></Cell>
+<Cell><Data ss:Type="String">WC minusvàlids</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1nvMRYwqDFOwRYiE1NVb$Q</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1nvMRYwqDFOwRYiE1NVf2g</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">23GUQQWDvD9gPiXjik2Bgf</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">23GUQQWDvD9gPiXjik2Bhv</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">23GUQQWDvD9gPiXjik2Bix</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">070</Data></Cell>
+<Cell><Data ss:Type="String">Mamògraf</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">23GUQQWDvD9gPiXjik2BjT</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">071</Data></Cell>
+<Cell><Data ss:Type="String">Ecògraf</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">23GUQQWDvD9gPiXjik2Bks</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">072</Data></Cell>
+<Cell><Data ss:Type="String">Mamògraf</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">23GUQQWDvD9gPiXjik2BlL</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">073</Data></Cell>
+<Cell><Data ss:Type="String">Mamògraf</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1QLpSD4Or33xSsUQuLC8_h</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2FhH63TsD2WRlT5VJpm3Lr</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2FhH63TsD2WRlT5VJpm3Q2</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">064</Data></Cell>
+<Cell><Data ss:Type="String">Sala esterotàxia</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2FhH63TsD2WRlT5VJpm3Si</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2FhH63TsD2WRlT5VJpm2Zq</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">078</Data></Cell>
+<Cell><Data ss:Type="String">Sala informes</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2FhH63TsD2WRlT5VJpm2bs</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2FhH63TsD2WRlT5VJpm2bL</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1iMJMgDRn669eYnSlKIl_9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1iMJMgDRn669eYnSlKIlzL</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1iMJMgDRn669eYnSlKIlz4</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">091</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1Q7OiaaerAVhfBhuCgwBa_</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">078</Data></Cell>
+<Cell><Data ss:Type="String">Sala informes</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0XZWZnvRb0PuSaHYuNq7bU</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">063</Data></Cell>
+<Cell><Data ss:Type="String">Sala informes ECOS</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0HTxKUouLAKR3$_g$Lggb2</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">036</Data></Cell>
+<Cell><Data ss:Type="String">Injectats 3</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0HTxKUouLAKR3$_g$Lggc_</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">034</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona PET-TAC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">244Kn$Iaj7pPk5H2YHRFM9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona medicina nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3cb3gDxLj42vSKJhXhyCA0</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">034</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona PET-TAC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3cb3gDxLj42vSKJhXhyDiW</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3cb3gDxLj42vSKJhXhyDiU</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2L_5jbk_T8bR5hh$lP56zw</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2L_5jbk_T8bR5hh$lP56yw</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2L_5jbk_T8bR5hh$lP56$2</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2L_5jbk_T8bR5hh$lP56$_</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3JShm$V6v6sA01TcsrL$$z</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">3JShm$V6v6sA01TcsrL$yS</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">20Us3SQ7z1mOcwWURa_FLp</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">003</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona RM</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">20Us3SQ7z1mOcwWURa_FKd</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">001</Data></Cell>
+<Cell><Data ss:Type="String">Mòdul lavabos escala principal</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2Vptber7DF1xiIK3LVKtUe</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2Vptber7DF1xiIK3LVKtPi</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">003</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona RM</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">2Vptber7DF1xiIK3LVKtQ9</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDNG6</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">Pas RM</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDNJh</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">024</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDNIZ</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">Pas RM</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDNDo</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">Pas RM</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDNDk</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">021</Data></Cell>
+<Cell><Data ss:Type="String">Control RM 3</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDNF6</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">018</Data></Cell>
+<Cell><Data ss:Type="String">Pas RM</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDN5G</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">004</Data></Cell>
+<Cell><Data ss:Type="String">Pas TAC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDN5o</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">006</Data></Cell>
+<Cell><Data ss:Type="String">Control TAC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDN4r</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">009</Data></Cell>
+<Cell><Data ss:Type="String">Vestidor TAC</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDN4X</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">010</Data></Cell>
+<Cell><Data ss:Type="String">Lliteres</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0OOU4R27rELw4FSrnDDN69</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">002</Data></Cell>
+<Cell><Data ss:Type="String">Sala tècnica extinció (gasos)</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1SqiwPlQb4m9YSVw05xGpZ</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">033</Data></Cell>
+<Cell><Data ss:Type="String">Gamma-càmera 3</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1$WyWKAp16AOudCeEVpwmX</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">089</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona Ecos- Mamos</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1$WyWKAp16AOudCeEVpx7A</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">012</Data></Cell>
+<Cell><Data ss:Type="String">Sala informes</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">1$WyWKAp16AOudCeEVpxBz</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona medicina nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKdtn</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">056</Data></Cell>
+<Cell><Data ss:Type="String">Pas i espera zona M. Nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKdv_</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">055</Data></Cell>
+<Cell><Data ss:Type="String">Rack comunicacions</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKdxL</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona medicina nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKdzl</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona medicina nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKdyO</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona medicina nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKd_e</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">044</Data></Cell>
+<Cell><Data ss:Type="String">Pas zona medicina nuclear</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+<Row>
+<Cell><Data ss:Type="Number">0kigphT89F1PJplFBgKdXs</Data></Cell>
+<Cell><Data ss:Type="String"></Data></Cell>
+<Cell><Data ss:Type="String">Porta</Data></Cell>
+<Cell><Data ss:Type="String">UDI</Data></Cell>
+<Cell><Data ss:Type="String">PSS</Data></Cell>
+<Cell><Data ss:Type="Number">049</Data></Cell>
+<Cell><Data ss:Type="String">Magatzem</Data></Cell>
+<Cell><Data ss:Type="Number">0</Data></Cell>
+<Cell><Data ss:Type="Number">1</Data></Cell>
+</Row>
+</Table>
+</Worksheet>
+</Workbook>

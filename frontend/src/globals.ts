@@ -106,8 +106,8 @@ class ModelStore {
 export const modelStore = new ModelStore();
 
 export const CONTENT_GRID_GAP = "1rem";
-export const SMALL_COLUMN_WIDTH = "22rem";
-export const MEDIUM_COLUMN_WIDTH = "25rem";
+export const SMALL_COLUMN_WIDTH = "300px";
+export const MEDIUM_COLUMN_WIDTH = "300px";
 
 import * as BUI from "@thatopen/ui";
 import React from 'react';
@@ -223,7 +223,8 @@ export interface Discipline {
 }
 
 export const BUILDINGS: Building[] = [
-  { label: "RAC Advanced", value: "RAC", file: "CCSPT-RAC-M3D-AS.frag" },
+  { label: "MAP", value: "MAP", file: "CCSPT-MAP-M3D-AS.frag" },
+  { label: "Taulí", value: "TAU", file: "CCSPT-TAU-M3D-AS.frag" },
   { label: "That OPEN", value: "TOC", file: "CCSPT-TOC-M3D-AS.frag" },
   { label: "Albada", value: "ALB", file: "CCSPT-ALB-M3D-AS.frag" },
   { label: "CQA", value: "CQA", file: "CCSPT-CQA-M3D-AS.frag" },
@@ -231,6 +232,19 @@ export const BUILDINGS: Building[] = [
   { label: "UDIAT", value: "UDI", file: "CCSPT-UDI-M3D-AS.frag" },
   { label: "VII Centenari", value: "VII", file: "CCSPT-VII-M3D-AS.frag" },
 ];
+
+// Color mapping for buildings by code. Use hex colors (with or without '#').
+// Example: 'ALB' in red, 'TAU' in green. Add or change as needed.
+export const BUILDING_COLORS: Record<string, string> = {
+  // MAP is the campus shell; usually we don't color it here.
+  ALB: '#FF0000',
+  TAU: '#00FF00',
+  TOC: '#00FFFF',
+  CQA: '#FFA500',
+  MIN: '#FF00FF',
+  UDI: '#3366FF',
+  VII: '#996600',
+};
 
 export const DISCIPLINES: Discipline[] = [
   { code: "HVAC", name: "Climatització", icon: "HVAC.png" },

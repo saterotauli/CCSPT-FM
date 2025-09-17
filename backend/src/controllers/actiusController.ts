@@ -1,7 +1,29 @@
 import { Request, Response } from 'express';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient, Prisma } from '@prisma/client';
 
 const prisma = new PrismaClient();
+
+// GET /api/actius/:guid
+export const getActiuByGuid = async (req: Request, res: Response) => {
+  try {
+    const { guid } = req.params;
+    if (!guid || typeof guid !== 'string') {
+      return res.status(400).json({ error: 'GUID requerit' });
+    }
+
+    const actiu = await prisma.actius.findUnique({
+      where: { guid },
+    });
+
+    if (!actiu) {
+      return res.status(404).json({ error: 'Actiu no trobat' });
+    }
+
+    res.json(actiu);
+  } catch (err: any) {
+    res.status(500).json({ error: 'Error al obtenir el actiu', details: err.message });
+  }
+};
 
 // GET /api/actius
 export const getActius = async (req: Request, res: Response) => {
@@ -10,6 +32,117 @@ export const getActius = async (req: Request, res: Response) => {
     res.json(actius);
   } catch (err: any) {
     res.status(500).json({ error: 'Error al obtener los actius', details: err.message });
+  }
+};
+
+// GET /api/actius/plantes?edifici=I3P
+export const getDistinctPlantes = async (req: Request, res: Response) => {
+  try {
+    const edifici = typeof req.query.edifici === 'string' ? req.query.edifici.trim() : '';
+    if (!edifici) {
+      return res.status(400).json({ error: 'Parámetro edifici requerido' });
+    }
+
+    const rows = await prisma.$queryRaw<Array<{ planta: string }>>`
+      SELECT DISTINCT s.planta
+      FROM "patrimoni"."ifcspace" s
+      WHERE s.edifici = ${edifici} AND s.planta IS NOT NULL AND s.planta <> ''
+      ORDER BY s.planta ASC
+    `;
+
+    const plantes = rows.map((r) => r.planta);
+    res.json(plantes);
+  } catch (error: any) {
+    res.status(500).json({ error: 'Error al obtener plantes', details: error?.message || String(error) });
+  }
+};
+
+// GET /api/actius/search-all?query=texto
+export const searchActius = async (req: Request, res: Response) => {
+  try {
+    const { query } = req.query;
+    if (!query || typeof query !== 'string') {
+      return res.status(400).json({ error: 'Parámetro query requerido' });
+    }
+
+    const q = query.trim();
+    if (q.length < 2) {
+      return res.json([]);
+    }
+
+    // Optional filters:
+    //  - by building codes: ?edificis=TAU,TOC
+    //  - by floor/planta values: ?plantes=P0,P1
+    const edificisParam = typeof req.query.edificis === 'string' ? req.query.edificis : '';
+    const edificis = edificisParam
+      ? edificisParam.split(',').map((s) => s.trim()).filter((s) => s.length > 0)
+      : [];
+    const plantesParam = typeof req.query.plantes === 'string' ? req.query.plantes : '';
+    const plantes = plantesParam
+      ? plantesParam.split(',').map((s) => s.trim()).filter((s) => s.length > 0)
+      : [];
+
+    // Buscar por subtipus, tipus, ubicacio, zona, planta y edifici
+    // y unir con ifcspace para obtener el dispositiu que coincide con edifici, planta e id (id = zona)
+    const rows = await prisma.$queryRaw<
+      Array<{
+        guid: string;
+        tipus: string;
+        subtipus: string | null;
+        edifici: string | null;
+        planta: string | null;
+        zona: string | null;
+        ubicacio: string | null;
+        space_dispositiu: string | null;
+      }>
+    >`
+      SELECT 
+        a.guid,
+        a.tipus,
+        a.subtipus,
+        a.edifici,
+        a.planta,
+        a.zona,
+        a.ubicacio,
+        s.dispositiu AS space_dispositiu
+      FROM "patrimoni"."actius" a
+      LEFT JOIN "patrimoni"."ifcspace" s
+        ON s.edifici = a.edifici
+       AND s.planta = a.planta
+       AND s.id = a.zona
+      WHERE 
+        (
+          COALESCE(a.subtipus, '') ILIKE ${`%${q}%`} OR
+          COALESCE(a.tipus, '') ILIKE ${`%${q}%`} OR
+          COALESCE(a.ubicacio, '') ILIKE ${`%${q}%`} OR
+          COALESCE(a.zona, '') ILIKE ${`%${q}%`} OR
+          COALESCE(a.planta, '') ILIKE ${`%${q}%`} OR
+          COALESCE(a.edifici, '') ILIKE ${`%${q}%`}
+        )
+        ${edificis.length > 0 ? Prisma.sql` AND a.edifici IN (${Prisma.join(edificis)})` : Prisma.sql``}
+        ${plantes.length > 0 ? Prisma.sql` AND a.planta IN (${Prisma.join(plantes)})` : Prisma.sql``}
+      ORDER BY a.edifici NULLS LAST, a.planta NULLS LAST, a.subtipus NULLS LAST, a.tipus ASC
+      LIMIT 200
+    `;
+
+    // Adaptar al shape esperado por el panel (tratamos todos como "dispositiu")
+    const results = rows.map((r) => ({
+      guid: r.guid,
+      departament: '',
+      dispositiu: (r.subtipus && r.subtipus.trim().length > 0 ? r.subtipus : r.tipus) || '',
+      edifici: r.edifici ?? (r.ubicacio ? r.ubicacio.substring(0, 3) : ''),
+      planta: r.planta ?? '',
+      zona: r.zona ?? '',
+      space_dispositiu: r.space_dispositiu ?? '',
+      total_area: 0,
+      element_count: 1,
+      tipo_coincidencia: 'actiu',
+    }));
+
+    res.json(results);
+  } catch (err: any) {
+    console.error('❌ Error en búsqueda de actius:', err);
+    res.status(500).json({ error: 'Error al buscar actius', details: err.message });
   }
 };
 

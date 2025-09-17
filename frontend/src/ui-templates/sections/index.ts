@@ -3,3 +3,4 @@ export * from "./elements-data";
 export * from "./viewpoints";
 export * from "./queries";
 export * from "./actius";
+export * from "./espais";

@@ -1,5 +1,5 @@
 import express from 'express';
-import { updateHabitacions, getHabitacions, buscarPorDepartamento, getDepartamentsByEdifici, getDevicesByGuids, searchDepartmentsAndDevices } from '../controllers/habitacioController';
+import { updateHabitacions, getHabitacions, buscarPorDepartamento, getDepartamentsByEdifici, getDevicesByGuids, searchDepartmentsAndDevices, updateIfcSpaceFields } from '../controllers/habitacioController';
 
 const router = express.Router();
 
@@ -15,6 +15,8 @@ router.get('/ifcspace', getHabitacions);
 router.get('/ifcspace/departaments', getDepartamentsByEdifici);
 // POST /api/ifcspace
 router.post('/ifcspace', updateHabitacions);
+// PATCH /api/ifcspace/item
+router.patch('/ifcspace/item', updateIfcSpaceFields);
 // POST /api/ifcspace/summary
 import { summaryHabitacions } from '../controllers/habitacioController';
 router.post('/ifcspace/summary', summaryHabitacions);

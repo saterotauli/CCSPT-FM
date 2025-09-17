@@ -16,11 +16,11 @@ export const getIfcBuildings = async (req: Request, res: Response) => {
 };
 
 export const createIfcBuilding = async (req: Request, res: Response) => {
-  const { guid, nom, codi } = req.body;
+  const { guid, nom, codi, id, centre_cost } = req.body;
   try {
     const result = await prisma.$executeRaw`
-      INSERT INTO "patrimoni"."ifcbuilding" (guid, nom, codi)
-      VALUES (${guid}, ${nom}, ${codi})
+      INSERT INTO "patrimoni"."ifcbuilding" (guid, nom, codi, id, centre_cost)
+      VALUES (${guid}, ${nom}, ${codi}, ${id}, ${centre_cost})
     `;
     res.status(201).json({ message: 'IfcBuilding creado' });
   } catch (error) {

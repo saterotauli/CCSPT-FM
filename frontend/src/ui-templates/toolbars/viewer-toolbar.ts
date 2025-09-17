@@ -20,7 +20,6 @@ const setModelTransparent = (components: OBC.Components) => {
 
   const materials = [...fragments.core.models.materials.list.values()];
   for (const material of materials) {
-    if (material.userData.customId) continue;
     // save colors
     let color: number | undefined;
     if ("color" in material) {
@@ -73,17 +72,35 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
   const areaMeasurer = components.get(OBF.AreaMeasurement);
   const clipper = components.get(OBC.Clipper);
 
-  const onToggleGhost = () => {
+  // Garantizar que inician desactivados para que los botones no salgan resaltados
+  try { lengthMeasurer.enabled = false; } catch {}
+  try { areaMeasurer.enabled = false; } catch {}
+
+
+  let prevHighlighterEnabled: boolean | null = null;
+  const onToggleGhost = async () => {
     if (originalColors.size) {
       restoreModelMaterials();
+      // Re-enable previous highlighter state so building/space colors come back
+      try {
+        if (prevHighlighterEnabled !== null) highlighter.enabled = prevHighlighterEnabled;
+        prevHighlighterEnabled = null;
+      } catch {}
     } else {
+      // Disable Highlighter while ghost is active so overlays don't override transparency
+      try {
+        prevHighlighterEnabled = highlighter.enabled;
+        highlighter.enabled = false;
+      } catch {}
       setModelTransparent(components);
+      try {
+        const fragments = components.get(OBC.FragmentsManager);
+        await fragments.core.update(true);
+      } catch {}
     }
   };
 
   // Tool functions for the "Eines" section
-  const areMeasurementsEnabled = lengthMeasurer.enabled || areaMeasurer.enabled;
-
   const disableAll = (exceptions?: ("clipper" | "length" | "area")[]) => {
     BUI.ContextMenu.removeMenus();
     highlighter.clear("select");
@@ -96,14 +113,16 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
   const onLengthMeasurement = () => {
     disableAll(["length"]);
     lengthMeasurer.enabled = !lengthMeasurer.enabled;
-    highlighter.enabled = !lengthMeasurer.enabled;
+    areaMeasurer.enabled = false;
+    highlighter.enabled = !(lengthMeasurer.enabled || areaMeasurer.enabled) && !clipper.enabled;
     update(state);
   };
 
   const onAreaMeasurement = () => {
     disableAll(["area"]);
     areaMeasurer.enabled = !areaMeasurer.enabled;
-    highlighter.enabled = !areaMeasurer.enabled;
+    lengthMeasurer.enabled = false;
+    highlighter.enabled = !(lengthMeasurer.enabled || areaMeasurer.enabled) && !clipper.enabled;
     update(state);
   };
 
@@ -114,14 +133,7 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
     update(state);
   };
 
-  const onMeasurementsClick = () => {
-    if (areMeasurementsEnabled) {
-      lengthMeasurer.enabled = false;
-      areaMeasurer.enabled = false;
-      highlighter.enabled = true;
-    }
-    update(state);
-  };
+  // Eliminar desplegable de mediciones: botones directos
 
   let focusBtn: BUI.TemplateResult | undefined;
   if (world.camera instanceof OBC.SimpleCamera) {
@@ -206,6 +218,7 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
       <bim-toolbar-section label="Visibilitat" icon=${appIcons.SHOW}>
         <bim-button tooltip-title=${tooltips.SHOW_ALL.TITLE} tooltip-text=${tooltips.SHOW_ALL.TEXT} icon=${appIcons.SHOW} label="Mostrar Tot" @click=${onShowAll}></bim-button> 
         <bim-button tooltip-title=${tooltips.GHOST.TITLE} tooltip-text=${tooltips.GHOST.TEXT} icon=${appIcons.TRANSPARENT} label="Mode Fantasma" @click=${onToggleGhost}></bim-button>
+        <bim-button ?active=${clipper.enabled} @click=${onModelSection} label="Secció" icon=${appIcons.CLIPPING}></bim-button> 
       </bim-toolbar-section> 
       <bim-toolbar-section label="Selecció" icon=${appIcons.SELECT}>
         ${focusBtn}
@@ -220,14 +233,9 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
           </bim-context-menu>
         </bim-button>
       </bim-toolbar-section>
-      <bim-toolbar-section label="Eines" icon=${appIcons.SETTINGS}>
-        <bim-button @click=${onMeasurementsClick} ?active=${areMeasurementsEnabled} label="Mesurament" tooltip-title="Mesurament" icon=${appIcons.RULER}>
-          <bim-context-menu>
-            <bim-button ?active=${lengthMeasurer.enabled} label="Longitud" @click=${onLengthMeasurement}></bim-button>
-            <bim-button ?active=${areaMeasurer.enabled} label="Àrea" @click=${onAreaMeasurement}></bim-button>
-          </bim-context-menu>
-        </bim-button>
-        <bim-button ?active=${clipper.enabled} @click=${onModelSection} label="Secció" tooltip-title="Secció del Model" icon=${appIcons.CLIPPING}></bim-button> 
+      <bim-toolbar-section label="Mesurar" icon=${appIcons.RULER}>
+        <bim-button id="btn-length" ?active=${lengthMeasurer.enabled} label="Longitud" icon=${appIcons.RULER} @click=${onLengthMeasurement}></bim-button>
+        <bim-button id="btn-area" ?active=${areaMeasurer.enabled} label="Àrea" icon=${appIcons.RULER} @click=${onAreaMeasurement}></bim-button>
       </bim-toolbar-section>
     </bim-toolbar>
   `;
