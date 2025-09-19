@@ -4,8 +4,6 @@ import * as TEMPLATES from "..";
 import {
   CONTENT_GRID_GAP,
   CONTENT_GRID_ID,
-  SMALL_COLUMN_WIDTH,
-  MEDIUM_COLUMN_WIDTH,
 } from "../../globals";
 
 type Viewer = "viewer";

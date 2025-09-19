@@ -1,5 +1,4 @@
-import { useRef, useState, useCallback } from 'react';
-import * as THREE from "three";
+import { useRef, useState } from 'react';
 import * as OBC from "@thatopen/components";
 import * as OBF from "@thatopen/components-front";
 
@@ -47,7 +46,7 @@ export interface ModelViewerState {
   setIsMobile: (mobile: boolean) => void;
 }
 
-export const useModelViewer = (code: string | undefined): ModelViewerState => {
+export const useModelViewer = (_code: string | undefined): ModelViewerState => {
   // 3D References
   const componentsRef = useRef<OBC.Components | null>(null);
   const worldRef = useRef<OBC.World | null>(null);

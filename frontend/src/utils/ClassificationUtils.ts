@@ -38,7 +38,6 @@ export class ClassificationUtils {
     const finder = this.components.get(OBC.ItemsFinder);
 
     const classificationName = "Dynamic Levels Classification";
-    const results: Map<string, any> = new Map();
 
     // Crear un grupo para cada nivel
     for (const level of levels) {

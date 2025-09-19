@@ -458,3 +458,29 @@ bim-toolbar {
 bim-toolbar-section {
   border-right: 1px solid var(--bim-ui_main-base);
 }
+
+/* ===================== */
+/* FM-only light panel overrides (won't touch sidebar) */
+.fm-light bim-grid:not([floating]) {
+  background-color: #f8fafc;
+}
+
+.fm-light bim-panel-section {
+  background: #ffffff !important;
+  color: #0f172a !important;
+}
+
+.fm-light :not(bim-panel) > bim-panel-section {
+  outline: 1px solid #e6ecf5 !important;
+  border-radius: 0.9rem !important;
+}
+
+.fm-light bim-panel {
+  background: #ffffff !important;
+}
+
+/* Buttons inside light panels */
+.fm-light bim-panel-section button,
+.fm-light bim-panel button {
+  color: #0f172a;
+}

@@ -75,6 +75,7 @@ export const viewerToolbarTemplate: BUI.StatefullComponent<
   // Garantizar que inician desactivados para que los botones no salgan resaltados
   try { lengthMeasurer.enabled = false; } catch {}
   try { areaMeasurer.enabled = false; } catch {}
+  try { clipper.enabled = false; } catch {}
 
 
   let prevHighlighterEnabled: boolean | null = null;

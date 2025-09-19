@@ -80,7 +80,7 @@ export async function labelSpacesAtBBoxTop(components: OBC.Components) {
  * Coloca etiquetas para edificios usando datos de BD (/api/ifcbuildings):
  * texto = nom, búsqueda por GUID, posición = centro XZ y yMax + offset de la bounding box del elemento.
  */
-async function labelBuildingsFromDB(components: OBC.Components) {
+export async function labelBuildingsFromDB(components: OBC.Components) {
   const fragments = components.get(OBC.FragmentsManager);
   const worlds = components.get(OBC.Worlds);
   const marker = components.get(OBF.Marker);
@@ -138,12 +138,7 @@ async function labelBuildingsFromDB(components: OBC.Components) {
       const topY = box.max.y + 2; // pequeño offset, igual que en labelSpacesAtBBoxTop
       const elevated = new THREE.Vector3(center.x, topY, center.z);
 
-      try {
-        const width = (box.max.x - box.min.x);
-        const height = (box.max.y - box.min.y);
-        const depth = (box.max.z - box.min.z);
-        // console.log(`[BuildingBBox] ${label}: width=${width.toFixed(2)}, depth=${depth.toFixed(2)}, height=${height.toFixed(2)}, topY=${topY.toFixed(2)} (merged)`);
-      } catch {}
+      // Removed debug-only width/height/depth to satisfy noUnusedLocals
 
       ensureGlobalMarkerCSS();
       const markerElement = createBuildingMarker(label);
@@ -335,7 +330,7 @@ export async function logIfcSpaceAttributes(components: OBC.Components) {
 /**
  * Lista simple de GUIDs de IFCSPACE al cargar el modelo
  */
-async function listIfcSpaceGuidsOnLoad(components: OBC.Components) {
+export async function listIfcSpaceGuidsOnLoad(components: OBC.Components) {
   const fragments = components.get(OBC.FragmentsManager);
   
   console.log('📋 [IFCSPACE GUIDs] Lista de GUIDs en el modelo:');
@@ -452,10 +447,7 @@ export async function compareAndColorIfcSpaces(components: OBC.Components, build
     return;
   }
   // Log de control: tamaño y una muestra de GUIDs del modelo
-  try {
-    const sample = Array.from(modelGuids).slice(0, 10);
-    // console.log(`[IFCSPACE Color] Total GUIDs en modelo: ${modelGuids.size}. Muestra(10):`, sample);
-  } catch {}
+  // Removed debug sample to satisfy noUnusedLocals
   
   // 2. Obtener departamentos de la BD usando el mismo endpoint que espais.ts
   try {
@@ -484,11 +476,8 @@ export async function compareAndColorIfcSpaces(components: OBC.Components, build
       
       // Diagnóstico: comprobar uno a uno si cada GUID de BD existe en el modelo
       try {
-        // console.log(`[IFCSPACE Color] Departamento ${departament}: comprobando ${guids.length} GUIDs contra el modelo...`);
-        for (const g of guids) {
-          const exists = modelGuids.has(g);
-          // console.log(`   ${exists ? '✔' : '✖'} ${g}${exists ? ' (match)' : ''}`);
-        }
+        // Touch membership to satisfy TS without logging
+        for (const g of guids) { void modelGuids.has(g); }
       } catch {}
 
       // Filtrar solo los GUIDs que están en el modelo
@@ -526,7 +515,7 @@ export async function compareAndColorIfcSpaces(components: OBC.Components, build
 /**
  * Aplica colores a edificios combinando defaults (BUILDING_COLORS) con los guardados en localStorage.
  */
-async function colorizeBuildingsByCode(components: OBC.Components) {
+export async function colorizeBuildingsByCode(components: OBC.Components) {
   const highlighter = components.get(OBF.Highlighter);
   const classifier = components.get(OBC.Classifier);
   const finder = components.get(OBC.ItemsFinder);
@@ -917,7 +906,7 @@ export async function loadBuilding(components: OBC.Components, buildingCode: str
 }
 
 // Helper: intenta recuperar el Name (o GlobalId) de un elemento
-async function getElementName(
+export async function getElementName(
   components: OBC.Components,
   model: any,
   id: number
@@ -1043,7 +1032,7 @@ async function getSpaceElementInfo(
 /**
  * Crea un marker de prueba con texto fijo "Edifici" para validar el render de markers.
  */
-async function createTestMarker(components: OBC.Components) {
+export async function createTestMarker(components: OBC.Components) {
   const worlds = components.get(OBC.Worlds);
   const worldKeys = Array.from(worlds.list.keys());
   const worldId = worldKeys[0];
@@ -1078,7 +1067,7 @@ async function createTestMarker(components: OBC.Components) {
  * Coloca etiquetas sobre cada IFCSPACE usando sus propiedades para identificar cada espacio
  * del modelo cargado (diagnóstico de posicionamiento por espacio)
  */
-async function labelSpacesFixed(components: OBC.Components) {
+export async function labelSpacesFixed(components: OBC.Components) {
   const fragments = components.get(OBC.FragmentsManager);
   const worlds = components.get(OBC.Worlds);
   const worldKeys = Array.from(worlds.list.keys());

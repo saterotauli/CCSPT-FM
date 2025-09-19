@@ -24,7 +24,7 @@ export const modelsPanelTemplate: BUI.StatefullComponent<ModelsPanelState> = (
     (globalThis as any).__modelsPanelSubscribed = true;
     
     window.addEventListener('ccspt:building-loaded', async (event: any) => {
-      const { buildingCode, fragments: newFragments } = event.detail;
+      const { buildingCode } = event.detail;
       console.log(`🏢 Panel de edificios: Edificio ${buildingCode} cargado desde actius`);
       
       // Forzar actualización de la interfaz

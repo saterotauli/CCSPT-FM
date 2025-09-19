@@ -33,7 +33,7 @@ export const useRealTimeSensors = (options: UseRealTimeSensorsOptions = {}): Use
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const isActiveRef = useRef(false);
 
   const fetchData = useCallback(async () => {
@@ -136,7 +136,7 @@ export const useRealTimeStatistics = (interval: number = 5000) => {
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<number | null>(null);
   const isActiveRef = useRef(false);
 
   const fetchStats = useCallback(async () => {

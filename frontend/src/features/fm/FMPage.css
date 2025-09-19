@@ -1,0 +1,159 @@
+/* Migrated FM styles (from src/fm/FMPageNew.css) */
+.fm-page {
+  width: 100%;
+  height: 100%;
+  background: #f8fafc;
+}
+
+.fm-layout {
+  background: #f8fafc;
+}
+
+.fm-info-panel {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 16px;
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+}
+
+.fm-info-panel h3 {
+  margin: 0 0 12px 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.fm-info-panel p {
+  margin: 0;
+  color: #6b7280;
+  line-height: 1.5;
+}
+
+/* Asset list styles */
+.fm-asset-list,
+.fm-space-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  max-width: 100%;
+  overflow-x: hidden; /* prevent horizontal scrollbar */
+}
+
+.fm-asset-item,
+.fm-space-item {
+  padding: 12px;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  background: #f9fafb;
+  transition: background-color 0.2s;
+  max-width: 100%;
+}
+
+.fm-asset-item:hover,
+.fm-space-item:hover {
+  background: #f3f4f6;
+}
+
+.asset-header,
+.space-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.asset-name,
+.space-name {
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.asset-building,
+.space-type {
+  font-size: 12px;
+  color: #6b7280;
+  background: #e5e7eb;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.asset-details,
+.space-details {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+
+.asset-zone {
+  font-size: 12px;
+  color: #059669;
+  font-style: italic;
+}
+
+.space-building,
+.space-floor {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.space-metrics {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #374151;
+  margin-top: 8px;
+}
+
+.space-area {
+  font-weight: 500;
+  color: #059669;
+}
+
+.space-occupancy {
+  color: #dc2626;
+}
+
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  color: #6b7280;
+  text-align: center;
+}
+
+.empty-state span {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.btn-secondary {
+  background: #f3f4f6;
+  border: 1px solid #d1d5db;
+  color: #374151;
+  padding: 6px 12px;
+  border-radius: 4px;
+  font-size: 12px;
+  cursor: pointer;
+  transition: all 0.2s;
+  max-width: 100%;
+}
+
+/* Search section should never overflow horizontally */
+.fm-search-section { max-width: 100%; overflow-x: hidden; }
+
+/* Ensure all FM page elements use border-box sizing to avoid overflow by padding */
+.fm-page, .fm-page * { box-sizing: border-box; }
+
+.btn-secondary:hover:not(:disabled) {
+  background: #e5e7eb;
+}
+
+.btn-secondary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

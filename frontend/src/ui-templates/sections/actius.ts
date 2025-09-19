@@ -3,7 +3,7 @@ import * as OBC from "@thatopen/components";
 import * as OBF from "@thatopen/components-front";
 import * as FRAGS from "@thatopen/fragments";
 import * as THREE from "three";
-import { appIcons, modelStore, BUILDINGS } from "../../globals";
+import { appIcons, modelStore } from "../../globals";
 import { ClassificationUtils } from "../../utils/ClassificationUtils";
 import { ensureGlobalMarkerCSS, createSpaceMarker } from "../../bim/Markers";
 
@@ -539,26 +539,23 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
    };
 
            // Función para limpiar el efecto fantasma y highlights de departamentos y dispositivos
-      const clearDepartmentFocus = async () => {
-        const highlighter = components.get(OBF.Highlighter);
-        
-        // Limpiar highlights de departamentos
-        for (const [styleName] of highlighter.styles) {
-          if (typeof styleName === "string" && (styleName.startsWith("dept-focus:") || styleName.startsWith("device-focus:") || styleName.startsWith("dept-ghost:"))) {
-            await highlighter.clear(styleName);
-            highlighter.styles.delete(styleName);
-          }
-        }
-        
-        // Restaurar materiales originales
-        restoreModelMaterials();
-        
-        // Limpiar markers
-        const marker = components.get(OBF.Marker);
-        marker.list.clear();
-        
-        console.log('🧹 Efecto fantasma y highlights limpiados');
-      };
+  const clearDepartmentFocus = async () => {
+    const highlighter = components.get(OBF.Highlighter);
+    // Limpiar highlights de departamentos
+    for (const [styleName] of highlighter.styles) {
+      if (typeof styleName === "string" && (styleName.startsWith("dept-focus:") || styleName.startsWith("device-focus:") || styleName.startsWith("dept-ghost:"))) {
+        await highlighter.clear(styleName);
+        highlighter.styles.delete(styleName);
+      }
+    }
+    // Restaurar materiales originales
+    restoreModelMaterials();
+    // Limpiar markers
+    const marker = components.get(OBF.Marker);
+    marker.list.clear();
+    console.log('🧹 Efecto fantasma y highlights limpiados');
+  };
+  void clearDepartmentFocus;
 
       // Función para enfocar en un dispositivo específico con efecto fantasma
       const focusOnDevice = async (deviceGuid: string, deviceName: string) => {
@@ -1025,7 +1022,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
 
        const legendItems: { name: string; color: string; count: number }[] = [];
                        for (let index = 0; index < departaments.length; index++) {
-          const { departament, guids, count, totalArea } = departaments[index] as any;
+          const { departament, guids, totalArea } = departaments[index] as any;
           console.log(`🔍 Procesando departament="${departament}": totalArea=${totalArea} (tipo: ${typeof totalArea})`);
           if (!departament || !Array.isArray(guids) || guids.length === 0) continue;
 
@@ -1097,7 +1094,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
               type="text"
               placeholder="Cerca actius"
               value=${state.searchQuery || ''}
-              style="width: 100%; box-sizing: border-box; padding: 0.75rem; padding-left: 2.5rem; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-20); color: var(--bim-ui_bg-contrast-100); font-size: 0.875rem; font-family: inherit; outline: none; transition: all 0.2s ease;"
+              style="width: 100%; box-sizing: border-box; padding: 0.75rem; padding-left: 2.5rem; border: 1px solid #e6ecf5; border-radius: 0.5rem; background: #f8fafc; color: #0f172a; font-size: 0.9rem; font-family: inherit; outline: none; transition: all 0.2s ease;"
               @input=${(e: Event) => {
                 const input = e.target as HTMLInputElement;
                 state.searchQuery = input.value;
@@ -1108,19 +1105,19 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
               }}
               @focus=${(e: Event) => {
                 const input = e.target as HTMLInputElement;
-                input.style.borderColor = 'var(--bim-ui_accent-base)';
-                input.style.boxShadow = '0 0 0 2px rgba(40, 180, 215, 0.2)';
+                input.style.borderColor = '#cfe1ff';
+                input.style.boxShadow = '0 0 0 2px rgba(47,128,237,0.18)';
               }}
               @blur=${(e: Event) => {
                 const input = e.target as HTMLInputElement;
-                input.style.borderColor = 'var(--bim-ui_bg-contrast-40)';
+                input.style.borderColor = '#e6ecf5';
                 input.style.boxShadow = 'none';
               }}
             />
-            <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: var(--bim-ui_bg-contrast-60); font-size: 0.875rem; pointer-events: none;">🔍</div>
+            <div style="position: absolute; left: 0.75rem; top: 50%; transform: translateY(-50%); color: #94a3b8; font-size: 0.9rem; pointer-events: none;">🔍</div>
             <!-- Funnel button on the right of searcher -->
             <button
-              style="position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); height: 28px; padding: 0 8px; border: 1px solid var(--bim-ui_bg-contrast-40); border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-10); color: var(--bim-ui_bg-contrast-100); cursor: pointer; display: flex; align-items: center; gap: 6px;"
+              style="position: absolute; right: 0.4rem; top: 50%; transform: translateY(-50%); height: 30px; padding: 0 10px; border: 1px solid #e6ecf5; border-radius: 0.5rem; background: #ffffff; color: #0f172a; cursor: pointer; display: flex; align-items: center; gap: 6px; box-shadow: 0 1px 2px rgba(0,0,0,0.04);"
               @click=${async () => {
                 // Open modal and preload buildings list if needed
                 state.showFilterModal = true;
@@ -1168,10 +1165,10 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
           ${state.selectedBuildings && state.selectedBuildings.length > 0 ? BUI.html`
             <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.4rem;">
               ${state.selectedBuildings.map((code) => BUI.html`
-                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.45rem; background: var(--bim-ui_bg-contrast-20); border: 1px solid var(--bim-ui_bg-contrast-40); color: var(--bim-ui_bg-contrast-100); border-radius: 9999px; font-size: 0.75rem;">
+                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.18rem 0.55rem; background: #f8fafc; border: 1px solid #e6ecf5; color: #0f172a; border-radius: 9999px; font-size: 0.78rem;">
                   ${code}
                   <button
-                    style="border: none; background: transparent; color: var(--bim-ui_bg-contrast-80); cursor: pointer; font-weight: 700;"
+                    style="border: none; background: transparent; color: #64748b; cursor: pointer; font-weight: 700;"
                     @click=${() => {
                       state.selectedBuildings = (state.selectedBuildings || []).filter((c) => c !== code);
                       update(state);
@@ -1184,7 +1181,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                 </span>
               `)}
               <button
-                style="border: 1px dashed var(--bim-ui_bg-contrast-50); background: transparent; color: var(--bim-ui_bg-contrast-90); border-radius: 0.375rem; padding: 0.15rem 0.45rem; font-size: 0.75rem; cursor: pointer;"
+                style="border: 1px dashed #cbd5e1; background: transparent; color: #334155; border-radius: 0.45rem; padding: 0.18rem 0.55rem; font-size: 0.78rem; cursor: pointer;"
                 @click=${() => { state.showFilterModal = true; state.activeFilterTab = 'edifici'; state.tempSelectedBuildings = [...(state.selectedBuildings || [])]; state.tempSelectedFloors = [...(state.selectedFloors || [])]; update(state); }}
               >Editar filtres…</button>
             </div>
@@ -1432,10 +1429,10 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
           ${state.selectedFloors && state.selectedFloors.length > 0 ? BUI.html`
             <div style="display: flex; flex-wrap: wrap; gap: 0.35rem; margin-top: 0.25rem;">
               ${state.selectedFloors.map((p) => BUI.html`
-                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.15rem 0.45rem; background: var(--bim-ui_bg-contrast-20); border: 1px solid var(--bim-ui_bg-contrast-40); color: var(--bim-ui_bg-contrast-100); border-radius: 9999px; font-size: 0.75rem;">
+                <span style="display: inline-flex; align-items: center; gap: 0.35rem; padding: 0.18rem 0.55rem; background: #f8fafc; border: 1px solid #e6ecf5; color: #0f172a; border-radius: 9999px; font-size: 0.78rem;">
                   ${p}
                   <button
-                    style="border: none; background: transparent; color: var(--bim-ui_bg-contrast-80); cursor: pointer; font-weight: 700;"
+                    style="border: none; background: transparent; color: #64748b; cursor: pointer; font-weight: 700;"
                     @click=${() => {
                       state.selectedFloors = (state.selectedFloors || []).filter((x) => x !== p);
                       update(state);
@@ -1448,7 +1445,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
                 </span>
               `)}
               <button
-                style="border: 1px dashed var(--bim-ui_bg-contrast-50); background: transparent; color: var(--bim-ui_bg-contrast-90); border-radius: 0.375rem; padding: 0.15rem 0.45rem; font-size: 0.75rem; cursor: pointer;"
+                style="border: 1px dashed #cbd5e1; background: transparent; color: #334155; border-radius: 0.45rem; padding: 0.18rem 0.55rem; font-size: 0.78rem; cursor: pointer;"
                 @click=${() => { state.showFilterModal = true; state.activeFilterTab = 'planta'; state.tempSelectedBuildings = [...(state.selectedBuildings || [])]; state.tempSelectedFloors = [...(state.selectedFloors || [])]; update(state); }}
               >Editar plantes…</button>
             </div>
@@ -1583,7 +1580,7 @@ export const actiusPanelTemplate: BUI.StatefullComponent<ActiusPanelState> = (
               </button>
             </div>
             <div style="max-height: 20rem; overflow: auto; border: 1px solid var(--bim-ui_bg-contrast-40); background: var(--bim-ui_bg-contrast-20); border-radius: 0.5rem; padding: 0.75rem;">
-              ${state.searchResults.map((result, index) => BUI.html`
+              ${state.searchResults.map((result, _index) => BUI.html`
                 <div 
                   style="display: flex; flex-direction: column; gap: 0.35rem; padding: 0.6rem; border-radius: 0.375rem; background: var(--bim-ui_bg-contrast-10); margin-bottom: 0.35rem; cursor: pointer; transition: background-color 0.2s ease;"
                   @mouseover=${(e: Event) => {

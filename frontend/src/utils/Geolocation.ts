@@ -1,6 +1,6 @@
 import * as THREE from "three";
 import * as OBC from "@thatopen/components";
-import * as OBF from "@thatopen/components-front";
+// import * as OBF from "@thatopen/components-front";
 // import { createUserMarker, ensureGlobalMarkerCSS } from "../bim/Markers"; // No usado ahora
 
 export type GeorefCalibration = {
@@ -28,6 +28,20 @@ export function loadGeorefCalibration(): GeorefCalibration | null {
 
 export function saveGeorefCalibration(calib: GeorefCalibration) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(calib)); } catch {}
+}
+
+// Public helper: convert WGS84 to model coordinates using saved calibration
+export function wgs84ToModel(lat: number, lon: number, alt?: number): THREE.Vector3 | null {
+  try {
+    const calib = loadGeorefCalibration();
+    if (!calib) return null;
+    const pECEF = geodeticToECEF(lat, lon, alt ?? 0);
+    const rECEF = geodeticToECEF(calib.lat0, calib.lon0, calib.alt0 ?? 0);
+    const enu = ecefToENU(pECEF, rECEF, calib.lat0, calib.lon0);
+    return enuToModel(enu, calib);
+  } catch {
+    return null;
+  }
 }
 
 // WGS84 ellipsoid constants
@@ -94,7 +108,6 @@ function enuToModel(enu: THREE.Vector3, calib: GeorefCalibration): THREE.Vector3
 
 export class GeoTracker {
   private world: OBC.World;
-  private markerSvc: any;
   private markerEl: HTMLElement | null = null;
   private watchId: number | null = null;
   private lastUpdate = 0;
@@ -102,9 +115,8 @@ export class GeoTracker {
   private snapEnabled: boolean = true;
   private userMarker: THREE.Object3D | null = null;
 
-  constructor(components: OBC.Components, world: OBC.World) {
+  constructor(_components: OBC.Components, world: OBC.World) {
     this.world = world;
-    this.markerSvc = components.get(OBF.Marker);
   }
 
   private ensureUserMarker(): THREE.Object3D {

@@ -83,7 +83,7 @@ export const searchActius = async (req: Request, res: Response) => {
       : [];
 
     // Buscar por subtipus, tipus, ubicacio, zona, planta y edifici
-    // y unir con ifcspace para obtener el dispositiu que coincide con edifici, planta e id (id = zona)
+    // y unir con ifcspace usando el codi (ubicacio) para obtener dispositiu y departament
     const rows = await prisma.$queryRaw<
       Array<{
         guid: string;
@@ -104,12 +104,11 @@ export const searchActius = async (req: Request, res: Response) => {
         a.planta,
         a.zona,
         a.ubicacio,
-        s.dispositiu AS space_dispositiu
+        s.dispositiu AS space_dispositiu,
+        s.departament AS space_departament
       FROM "patrimoni"."actius" a
       LEFT JOIN "patrimoni"."ifcspace" s
-        ON s.edifici = a.edifici
-       AND s.planta = a.planta
-       AND s.id = a.zona
+        ON s.codi = a.ubicacio
       WHERE 
         (
           COALESCE(a.subtipus, '') ILIKE ${`%${q}%`} OR
@@ -128,12 +127,13 @@ export const searchActius = async (req: Request, res: Response) => {
     // Adaptar al shape esperado por el panel (tratamos todos como "dispositiu")
     const results = rows.map((r) => ({
       guid: r.guid,
-      departament: '',
-      dispositiu: (r.subtipus && r.subtipus.trim().length > 0 ? r.subtipus : r.tipus) || '',
+      departament: (r as any).space_departament ?? '',
+      dispositiu: (r as any).space_dispositiu ?? ((r.subtipus && r.subtipus.trim().length > 0 ? r.subtipus : r.tipus) || ''),
+      actiu_nom: (r.subtipus && r.subtipus.trim().length > 0 ? r.subtipus : r.tipus) || '',
       edifici: r.edifici ?? (r.ubicacio ? r.ubicacio.substring(0, 3) : ''),
       planta: r.planta ?? '',
       zona: r.zona ?? '',
-      space_dispositiu: r.space_dispositiu ?? '',
+      space_dispositiu: (r as any).space_dispositiu ?? '',
       total_area: 0,
       element_count: 1,
       tipo_coincidencia: 'actiu',

@@ -171,6 +171,7 @@ export const sidebarItems = [
   { label: 'Projectes', icon: 'PROJECTES', route: '/projectes' },
   { label: 'Docs', icon: 'DOCS', route: '/docs' },
   { label: 'Consultes', icon: 'CONSULTES', route: '/consultes' },
+  { label: 'Actius mòbils', icon: 'CONTROL', route: '/actius-mobils' },
   { label: 'Config', icon: 'CONFIG', route: '/config' },
 ];
 

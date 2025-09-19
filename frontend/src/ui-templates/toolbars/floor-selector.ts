@@ -1,7 +1,5 @@
 import * as BUI from "@thatopen/ui";
 import * as OBC from "@thatopen/components";
-import * as OBF from "@thatopen/components-front";
-import * as FRAGS from "@thatopen/fragments";
 import * as THREE from "three";
 import { modelStore } from "../../globals";
 import { CameraUtils } from "../../utils/CameraUtils";
@@ -29,7 +27,7 @@ export const floorSelectorTemplate: BUI.StatefullComponent<
     cameraUtils = new CameraUtils(components, world);
   }
 
-  const onFloorSelect = async ({ target }: { target: BUI.Button }, floorName: string) => {
+  const onFloorSelect = async (_e: any, floorName: string) => {
     //console.log('onFloorSelect llamado con:', floorName);
 
     const hider = components.get(OBC.Hider);
@@ -217,7 +215,7 @@ export const floorSelectorTemplate: BUI.StatefullComponent<
 
 
 
-  const onToggleView = async ({ target }: { target: BUI.Button }, is3D: boolean) => {
+  const onToggleView = async (_e: any, is3D: boolean) => {
     //console.log('Toggle view:', is3D ? '3D' : '2D');
 
     try {
@@ -273,7 +271,7 @@ export const floorSelectorTemplate: BUI.StatefullComponent<
     })) : [];
 
   // Suscribirse al store para re-renderizar cuando cambie el estado
-  modelStore.subscribe((newState) => {
+  modelStore.subscribe(() => {
     /*console.log('FloorSelector - Store actualizado:', {
       hasModels: newState.hasModels,
       floorsLength: newState.floors?.length,

@@ -11,6 +11,7 @@ import consultesRoutes from './routes/consultesRoutes';
 import maintenanceRoutes from './routes/maintenanceRoutes';
 import sensorRoutes from './routes/sensorRoutes';
 import ephemeralSensorRoutes from './routes/ephemeralSensorRoutes';
+import mobileAssetsRoutes from './routes/mobileAssetsRoutes';
 
 dotenv.config();
 
@@ -40,5 +41,7 @@ app.use('/api', consultesRoutes);
 app.use('/api', maintenanceRoutes);
 app.use('/api/sensors', sensorRoutes);
 app.use('/api/ephemeral-sensors', ephemeralSensorRoutes);
+app.use('/api/mobile-assets', mobileAssetsRoutes);
 
 export default app;
+
