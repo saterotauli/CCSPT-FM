@@ -1,0 +1,193 @@
+/* Sensor History Chart - Gráfica de histórico de sensores */
+
+/* Contenedor principal (overlay mode) */
+.sensor-history-chart {
+  position: absolute;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(1100px, 94%);
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+  z-index: 10;
+  overflow: hidden;
+}
+
+/* Contenedor embebido (embedded mode) */
+.sensor-history-chart--embedded {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Header del panel */
+.sensor-history-chart__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  border-bottom: 1px solid #e0e6ef;
+  background: #f8f9fa;
+}
+
+.sensor-history-chart__title {
+  margin: 0;
+  font-size: 18px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Controles de escala de tiempo */
+.sensor-history-chart__controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.sensor-history-chart__controls-label {
+  font-size: 14px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.sensor-history-chart__scale-button {
+  background: #e0e6ef;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+}
+
+.sensor-history-chart__scale-button:hover {
+  background: #c8d0dd;
+}
+
+.sensor-history-chart__scale-button--active {
+  background: #4179b5;
+  color: white;
+}
+
+.sensor-history-chart__close-button {
+  background: #f87171;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+
+.sensor-history-chart__close-button:hover {
+  background: #dc2626;
+}
+
+/* Leyenda de severidad */
+.sensor-history-chart__legend {
+  display: 'flex';
+  gap: 15px;
+  flex-wrap: wrap;
+  padding: 12px 20px;
+  background: #f9fafb;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sensor-history-chart__legend-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #333;
+}
+
+.sensor-history-chart__legend-items {
+  display: flex;
+  gap: 15px;
+  flex-wrap: wrap;
+}
+
+.sensor-history-chart__legend-item {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.sensor-history-chart__legend-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.sensor-history-chart__legend-dot--ok {
+  background-color: #36a2eb;
+}
+
+.sensor-history-chart__legend-dot--mitja {
+  background-color: #ff9f40;
+}
+
+.sensor-history-chart__legend-dot--alt {
+  background-color: #ff6384;
+}
+
+.sensor-history-chart__legend-label {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Contenido del gráfico */
+.sensor-history-chart__content {
+  flex: 1;
+  padding: 20px;
+  position: relative;
+}
+
+.sensor-history-chart__content--embedded {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+/* Controles de escala de tiempo inline (embedded mode) */
+.sensor-history-chart__inline-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px 0;
+  margin-bottom: 16px;
+}
+
+.sensor-history-chart__inline-label {
+  font-size: 12px;
+  color: #666;
+  margin-right: 8px;
+}
+
+.sensor-history-chart__inline-button {
+  background: #e0e6ef;
+  color: #333;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 8px;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: bold;
+  transition: all 0.2s ease;
+  margin-left: 4px;
+}
+
+.sensor-history-chart__inline-button:hover {
+  background: #c8d0dd;
+}
+
+.sensor-history-chart__inline-button--active {
+  background: #4179b5;
+  color: white;
+}
+

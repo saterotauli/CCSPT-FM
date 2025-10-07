@@ -23,18 +23,28 @@ class SensorSimulationService {
   private roomStates: Map<string, RoomSensorState> = new Map();
   private isRunning: boolean = false;
   private intervalId: NodeJS.Timeout | null = null;
-  private readonly UPDATE_INTERVAL = parseInt(process.env.SENSOR_UPDATE_INTERVAL || '30000'); // 30 segundos por defecto
-  private readonly MAX_ROOMS_PER_BATCH = parseInt(process.env.SENSOR_BATCH_SIZE || '50'); // Procesar máximo 50 habitaciones por vez
-  private readonly ENABLE_BATCH_MODE = process.env.SENSOR_BATCH_MODE === 'true'; // Modo lote para reducir carga
+  private readonly UPDATE_INTERVAL = parseInt(process.env.SENSOR_UPDATE_INTERVAL || '120000'); // 2 minutos por defecto (optimizado)
+  private readonly MAX_ROOMS_PER_BATCH = parseInt(process.env.SENSOR_BATCH_SIZE || '25'); // Procesar máximo 25 habitaciones por vez (optimizado)
+  private readonly ENABLE_BATCH_MODE = process.env.SENSOR_BATCH_MODE !== 'false'; // Modo lote habilitado por defecto
+  private dbAvailable: boolean = true;
 
   constructor() {
     this.initializeRoomStates();
+    this.startAutoCleanup();
   }
 
   /**
    * Inicializa los estados base de los sensores para cada habitación
    */
   private async initializeRoomStates(): Promise<void> {
+    // Si no hay BD configurada, evitamos intentar Prisma y usamos fallback
+    if (!process.env.DATABASE_URL || process.env.DISABLE_DB === 'true') {
+      this.dbAvailable = false;
+      this.seedFallbackRooms();
+      console.log(`[SensorSimulation] Fallback inicializado (sin BD) para ${this.roomStates.size} habitaciones`);
+      return;
+    }
+
     try {
       const rooms = await prisma.ifcspace.findMany({
         select: {
@@ -65,7 +75,37 @@ class SensorSimulationService {
 
       console.log(`[SensorSimulation] Estados inicializados para ${this.roomStates.size} habitaciones`);
     } catch (error) {
-      console.error('[SensorSimulation] Error inicializando estados:', error);
+      this.dbAvailable = false;
+      console.error('[SensorSimulation] Error inicializando estados desde BD. Continuando con fallback en memoria:', error);
+      this.seedFallbackRooms();
+      console.log(`[SensorSimulation] Fallback inicializado para ${this.roomStates.size} habitaciones`);
+    }
+  }
+
+  /**
+   * Genera un conjunto mínimo de habitaciones cuando la BD no está disponible
+   */
+  private seedFallbackRooms() {
+    const examples = [
+      { guid: 'UDI-P1-001', dispositiu: 'Habitació' },
+      { guid: 'UDI-P1-002', dispositiu: 'Habitació' },
+      { guid: 'TAU-P2-015', dispositiu: 'Oficina' },
+      { guid: 'MAP-P0-010', dispositiu: 'Quiròfan' },
+      { guid: 'ALB-P3-007', dispositiu: 'Magatzem' },
+    ];
+
+    for (const r of examples) {
+      const base = this.getBaseValuesForRoomType(r.dispositiu);
+      this.roomStates.set(r.guid, {
+        spaceGuid: r.guid,
+        baseTemperature: base.temperature,
+        baseHumidity: base.humidity,
+        basePpm: base.ppm,
+        temperatureTrend: 0,
+        humidityTrend: 0,
+        ppmTrend: 0,
+        lastUpdate: new Date(),
+      });
     }
   }
 
@@ -146,6 +186,7 @@ class SensorSimulationService {
    * Guarda una lectura de sensor en la base de datos
    */
   private async saveSensorReading(spaceGuid: string, reading: SensorReading): Promise<void> {
+    if (!this.dbAvailable) return; // Si no hay BD, no persistimos pero seguimos simulando
     try {
       await prisma.sensor_data.create({
         data: {
@@ -157,7 +198,9 @@ class SensorSimulationService {
         }
       });
     } catch (error) {
-      console.error(`[SensorSimulation] Error guardando lectura para ${spaceGuid}:`, error);
+      // Si falla al guardar, marcamos la BD como no disponible para evitar más intentos
+      this.dbAvailable = false;
+      console.error(`[SensorSimulation] Error guardando lectura para ${spaceGuid}. Desactivando persistencia:`, error);
     }
   }
 
@@ -287,6 +330,29 @@ class SensorSimulationService {
       batchMode: this.ENABLE_BATCH_MODE,
       batchSize: this.MAX_ROOMS_PER_BATCH
     };
+  }
+
+  /**
+   * Inicia limpieza automática de datos antiguos
+   */
+  private startAutoCleanup(): void {
+    const cleanupInterval = parseInt(process.env.CLEANUP_INTERVAL_HOURS || '24') * 60 * 60 * 1000; // 24 horas por defecto
+    const retentionDays = parseInt(process.env.DATA_RETENTION_DAYS || '7');
+    
+    if (process.env.AUTO_CLEANUP_ENABLED !== 'false') {
+      setInterval(async () => {
+        try {
+          const deletedCount = await this.cleanupOldData(retentionDays);
+          if (deletedCount > 0) {
+            console.log(`[SensorSimulation] Limpieza automática completada: ${deletedCount} registros eliminados`);
+          }
+        } catch (error) {
+          console.error('[SensorSimulation] Error en limpieza automática:', error);
+        }
+      }, cleanupInterval);
+      
+      console.log(`[SensorSimulation] Limpieza automática configurada cada ${cleanupInterval / (60 * 60 * 1000)} horas`);
+    }
   }
 
   /**

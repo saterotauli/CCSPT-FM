@@ -1,0 +1,151 @@
+/* Estilos específicos para el componente EspaisPanel */
+
+.espaisPanel {
+  background: #fff;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 14px 16px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  max-height: 85vh;
+  margin-top: 12px;
+}
+
+.espaisTitle {
+  font-weight: 700;
+  color: #111827;
+  margin: 0 0 0.4rem 0;
+  font-size: 0.95rem;
+}
+
+.espaisList {
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-top: 8px;
+  padding-right: 10px;
+  flex: 1;
+}
+
+.espaisItem {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.6rem 0.7rem 0.6rem 0.9rem;
+  margin-bottom: 10px;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: 8px;
+  background: #fff;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.espaisItem:last-child {
+  margin-bottom: 5px;
+}
+
+.clickable {
+  cursor: pointer;
+}
+
+.clickable:hover {
+  background-color: #fdea80 !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  border-color: #cbd5e1;
+}
+
+.clickable:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.left {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  min-width: 0;
+  flex: 1;
+}
+
+.espaisItemDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.mainText {
+  font-size: 0.8rem;
+  color: #1f2937;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  border-radius: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.badgePlanta {
+  background: #dbeafe;
+  color: #1e40af;
+  border: 1px solid #bfdbfe;
+}
+
+.badgeDepartament {
+  background: #d1fae5;
+  color: #065f46;
+  border: 1px solid #a7f3d0;
+}
+
+.detailRow {
+  display: flex;
+  gap: 0.4rem;
+  align-items: center;
+}
+
+.right {
+  display: flex;
+  gap: 0.3rem;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.typeIndicator {
+  display: flex;
+  align-items: center;
+}
+
+.typeBadge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.typeDepartament {
+  background: #e0f2fe;
+  color: #0369a1;
+  border: 1px solid #bae6fd;
+}
+
+.typeDispositiu {
+  background: #f0fdf4;
+  color: #166534;
+  border: 1px solid #bbf7d0;
+}
+
+.emptyState {
+  color: #6b7280;
+  padding: 1rem;
+  text-align: center;
+  font-style: italic;
+}

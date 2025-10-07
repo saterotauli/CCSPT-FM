@@ -10,21 +10,217 @@ datasource db {
 }
 
 model Usuario {
-  id       Int    @id @default(autoincrement())
-  nombre   String
-  email    String @unique
-  password String
-  rol      Rol    @default(CONSULTOR)
+  id              Int      @id @default(autoincrement())
+  nombre          String
+  apellidos       String?
+  email           String   @unique
+  telefono        String?
+  password        String
+  rol             Rol      @default(VISOR)
+  activo          Boolean  @default(true)
+  fcmToken        String?  // Token para notificaciones Firebase
+  avatar          String?  // URL del avatar
+  ultimoAcceso    DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  // Relaciones
+  tareasAsignadas    Tarea[]           @relation("TareaAsignada")
+  tareasCreadas      Tarea[]           @relation("TareaCreada")
+  mensajesEnviados   Mensaje[]         @relation("MensajeEnviado")
+  mensajesRecibidos  Mensaje[]         @relation("MensajeRecibido")
+  notificaciones     Notificacion[]
+  conversaciones     ConversacionParticipante[]
+  tareaAdjuntos      TareaAdjunto[]
+  tareaComentarios   TareaComentario[]
 
   @@schema("public")
 }
 
 enum Rol {
-  ADMIN
-  EDITOR
-  CONSULTOR
+  ADMIN           // Acceso total al sistema
+  COORDINADOR     // Puede asignar tareas y gestionar operarios
+  OPERARIO        // Puede resolver tareas asignadas
+  VISOR           // Solo lectura
+  EDITOR          // Mantener compatibilidad con datos existentes
+  CONSULTOR       // Mantener compatibilidad con datos existentes
 
   @@schema("public")
+}
+
+enum EstadoTarea {
+  PENDIENTE
+  EN_PROGRESO
+  COMPLETADA
+  CANCELADA
+
+  @@schema("public")
+}
+
+enum PrioridadTarea {
+  BAJA
+  MEDIA
+  ALTA
+  CRITICA
+
+  @@schema("public")
+}
+
+enum TipoTarea {
+  MANTENIMIENTO
+  REPARACION
+  INSPECCION
+  ALARMA
+  EMERGENCIA
+
+  @@schema("public")
+}
+
+model Tarea {
+  id              String        @id @default(uuid())
+  titulo          String
+  descripcion     String?
+  tipo            TipoTarea     @default(MANTENIMIENTO)
+  prioridad       PrioridadTarea @default(MEDIA)
+  estado          EstadoTarea   @default(PENDIENTE)
+  
+  // Ubicación
+  edifici         String?
+  planta          String?
+  zona            String?
+  ubicacio        String?
+  
+  // Fechas
+  fechaCreacion   DateTime      @default(now())
+  fechaAsignacion DateTime?
+  fechaInicio     DateTime?
+  fechaVencimiento DateTime?
+  fechaCompletada DateTime?
+  
+  // Usuarios
+  creadoPorId     Int
+  asignadoAId     Int?
+  
+  // Relaciones con activos
+  actiuGuid       String?
+  
+  // Datos adicionales
+  observaciones   String?
+  tiempoEstimado  Int?          // En minutos
+  tiempoReal      Int?          // En minutos
+  
+  // Relaciones
+  creadoPor       Usuario       @relation("TareaCreada", fields: [creadoPorId], references: [id])
+  asignadoA       Usuario?      @relation("TareaAsignada", fields: [asignadoAId], references: [id])
+  actiu           actius?       @relation(fields: [actiuGuid], references: [guid])
+  adjuntos        TareaAdjunto[]
+  comentarios     TareaComentario[]
+  notificaciones  Notificacion[]
+
+  @@schema("public")
+  @@index([estado, prioridad])
+  @@index([asignadoAId, estado])
+  @@index([creadoPorId])
+}
+
+model TareaAdjunto {
+  id        String   @id @default(uuid())
+  tareaId   String
+  filename  String
+  url       String
+  mime      String
+  size      Int
+  uploadedBy Int
+  createdAt DateTime @default(now())
+  
+  tarea     Tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  usuario   Usuario  @relation(fields: [uploadedBy], references: [id])
+
+  @@schema("public")
+}
+
+model TareaComentario {
+  id        String   @id @default(uuid())
+  tareaId   String
+  usuarioId Int
+  contenido String
+  createdAt DateTime @default(now())
+  
+  tarea     Tarea    @relation(fields: [tareaId], references: [id], onDelete: Cascade)
+  usuario   Usuario  @relation(fields: [usuarioId], references: [id])
+
+  @@schema("public")
+}
+
+model Conversacion {
+  id            String     @id @default(uuid())
+  nombre        String?    // Para conversaciones grupales
+  esGrupal      Boolean    @default(false)
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  
+  participantes ConversacionParticipante[]
+  mensajes      Mensaje[]
+
+  @@schema("public")
+}
+
+model ConversacionParticipante {
+  id             String       @id @default(uuid())
+  conversacionId String
+  usuarioId      Int
+  fechaUnion     DateTime     @default(now())
+  ultimaLectura  DateTime?
+  
+  conversacion   Conversacion @relation(fields: [conversacionId], references: [id], onDelete: Cascade)
+  usuario        Usuario      @relation(fields: [usuarioId], references: [id])
+
+  @@unique([conversacionId, usuarioId])
+  @@schema("public")
+}
+
+model Mensaje {
+  id             String       @id @default(uuid())
+  conversacionId String
+  remitenteId    Int
+  destinatarioId Int?         // Para mensajes directos
+  contenido      String
+  leido          Boolean      @default(false)
+  createdAt      DateTime     @default(now())
+  
+  conversacion   Conversacion @relation(fields: [conversacionId], references: [id], onDelete: Cascade)
+  remitente      Usuario      @relation("MensajeEnviado", fields: [remitenteId], references: [id])
+  destinatario   Usuario?     @relation("MensajeRecibido", fields: [destinatarioId], references: [id])
+
+  @@schema("public")
+  @@index([conversacionId, createdAt])
+}
+
+enum TipoNotificacion {
+  TAREA_ASIGNADA
+  TAREA_VENCIDA
+  MENSAJE_NUEVO
+  ALARMA_CRITICA
+  SISTEMA
+
+  @@schema("public")
+}
+
+model Notificacion {
+  id        String            @id @default(uuid())
+  usuarioId Int
+  tipo      TipoNotificacion
+  titulo    String
+  mensaje   String
+  leida     Boolean           @default(false)
+  tareaId   String?
+  createdAt DateTime          @default(now())
+  
+  usuario   Usuario           @relation(fields: [usuarioId], references: [id])
+  tarea     Tarea?            @relation(fields: [tareaId], references: [id])
+
+  @@schema("public")
+  @@index([usuarioId, leida])
 }
 
 model ifcbuilding {
@@ -67,6 +263,7 @@ model actius {
   ifcdoor  ifcdoor?
   images   actiu_images[]
   maintenanceRecords maintenance_record[]
+  tareas   Tarea[]  // Relación inversa con Tarea
 
   @@map("actius")
   @@schema("patrimoni")

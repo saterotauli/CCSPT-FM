@@ -1,0 +1,222 @@
+/* Header - Barra superior */
+
+.appHeader {
+  position: fixed;
+  top: 0;
+  right: 0;
+  height: 52px;
+  background: #ffffff;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  z-index: 50;
+}
+
+/* Sección izquierda - Navegación y contexto */
+.appHeader__left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.appHeader__backButton {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.appHeader__backButton:hover {
+  background: #f9fafb;
+}
+
+.appHeader__buildingBadge {
+  color: white;
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-weight: 700;
+  font-size: 13px;
+}
+
+.appHeader__sectionLabel {
+  font-size: 14px;
+  font-weight: 700;
+  color: #111827;
+}
+
+/* Sección derecha - Acciones */
+.appHeader__right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+/* Botones de notificación */
+.appHeader__notificationBtn {
+  position: relative;
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 1px solid #e5e7eb;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.appHeader__notificationBtn:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.appHeader__notificationIcon {
+  font-size: 18px;
+}
+
+.appHeader__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  color: #fff;
+  border-radius: 10px;
+  padding: 0 6px;
+  font-size: 11px;
+  line-height: 18px;
+  font-weight: 600;
+}
+
+.appHeader__badgemessages {
+  background: #10b981;
+}
+
+.appHeader__badgenotifications {
+  background: #ef4444;
+}
+
+/* Menú de usuario */
+.appHeader__userMenu {
+  position: relative;
+}
+
+.appHeader__userButton {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 999px;
+  padding: 4px 8px;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s;
+}
+
+.appHeader__userButton:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
+.appHeader__userInfo {
+  text-align: right;
+  line-height: 1;
+}
+
+.appHeader__userName {
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.appHeader__userEmail {
+  font-size: 11px;
+  color: #6b7280;
+}
+
+.appHeader__userAvatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #e5e7eb;
+  color: #111827;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  font-size: 12px;
+}
+
+.appHeader__userAvatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Dropdown del usuario */
+.appHeader__userDropdown {
+  position: absolute;
+  right: 0;
+  top: 40px;
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  min-width: 220px;
+  z-index: 100;
+}
+
+.appHeader__userDropdown-header {
+  padding: 10px 12px;
+  border-bottom: 1px solid #f3f4f6;
+}
+
+.appHeader__userDropdown-name {
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.appHeader__userDropdown-email {
+  font-size: 12px;
+  color: #6b7280;
+}
+
+.appHeader__dropdownButton {
+  display: block;
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 10px 12px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.appHeader__dropdownButton:hover {
+  background: #f9fafb;
+}
+
+.appHeader__dropdownButton--logout {
+  color: #b91c1c;
+}
+
+/* Botón de login */
+.appHeader__loginButton {
+  background: #66bb6a;
+  color: white;
+  border: none;
+  padding: 6px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: background 0.2s;
+}
+
+.appHeader__loginButton:hover {
+  background: #5aac5e;
+}
+
+

@@ -1,0 +1,9 @@
+{
+  "totalRooms": 8,
+  "averageTemperature": 26.1,
+  "averageHumidity": 45.0,
+  "averagePpm": 851.25,
+  "temperatureRange": { "min": 21.7, "max": 31.0 },
+  "humidityRange": { "min": 35.0, "max": 55.2 },
+  "ppmRange": { "min": 480, "max": 1400 }
+}

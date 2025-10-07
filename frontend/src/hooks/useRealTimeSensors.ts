@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { sensorService, RoomInfo, SensorStatistics } from '../services/sensorService';
 
 interface UseRealTimeSensorsOptions {
@@ -23,7 +23,7 @@ export const useRealTimeSensors = (options: UseRealTimeSensorsOptions = {}): Use
   const {
     edifici,
     planta,
-    interval = 2000, // 2 segundos por defecto
+    interval = 0, // por defecto sin polling: una sola lectura estática
     autoStart = true
   } = options;
 
@@ -33,8 +33,9 @@ export const useRealTimeSensors = (options: UseRealTimeSensorsOptions = {}): Use
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  const intervalRef = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isActiveRef = useRef(false);
+  const statsUpdateCounterRef = useRef(0);
 
   const fetchData = useCallback(async () => {
     if (!isActiveRef.current) return;
@@ -52,12 +53,31 @@ export const useRealTimeSensors = (options: UseRealTimeSensorsOptions = {}): Use
         sensorData = await sensorService.getAllReadings();
       }
       
-      setData(sensorData);
+      // Filtrar sensores sin edificio válido para evitar errores downstream
+      const validSensorData = sensorData.filter(sensor => {
+        const hasValidBuilding = sensor.edifici && sensor.edifici.trim() !== '';
+        if (!hasValidBuilding) {
+          console.warn(`[useRealTimeSensors] Sensor filtrado sin edificio: ${sensor.dispositiu || 'desconocido'} (spaceGuid: ${sensor.spaceGuid})`);
+        }
+        return hasValidBuilding;
+      });
+      
+      // OPTIMIZACIÓN: Solo actualizar estado si los datos realmente cambiaron
+      setData(prevData => {
+        if (JSON.stringify(prevData) === JSON.stringify(validSensorData)) {
+          return prevData; // No hay cambios, evitar re-render
+        }
+        return validSensorData;
+      });
 
-      // Obtener estadísticas (solo si no hay filtros específicos)
+      // Obtener estadísticas (solo si no hay filtros específicos y cada 5 actualizaciones)
       if (!edifici && !planta) {
-        const statistics = await sensorService.getStatistics();
-        setStats(statistics);
+        statsUpdateCounterRef.current++;
+        
+        if (statsUpdateCounterRef.current % 5 === 0) { // Solo cada 5 actualizaciones
+          const statistics = await sensorService.getStatistics();
+          setStats(statistics);
+        }
       }
 
     } catch (err) {
@@ -77,10 +97,12 @@ export const useRealTimeSensors = (options: UseRealTimeSensorsOptions = {}): Use
     // Primera carga inmediata
     fetchData().finally(() => setLoading(false));
 
-    // Configurar intervalo
-    intervalRef.current = setInterval(() => {
-      fetchData();
-    }, interval);
+    // Configurar intervalo (solo si se solicita un polling > 0)
+    if (interval > 0) {
+      intervalRef.current = setInterval(() => {
+        fetchData();
+      }, interval);
+    }
 
   }, [fetchData, interval]);
 
@@ -136,7 +158,7 @@ export const useRealTimeStatistics = (interval: number = 5000) => {
   const [error, setError] = useState<string | null>(null);
   const [isConnected, setIsConnected] = useState(false);
 
-  const intervalRef = useRef<number | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const isActiveRef = useRef(false);
 
   const fetchStats = useCallback(async () => {

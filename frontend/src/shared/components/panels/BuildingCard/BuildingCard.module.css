@@ -1,0 +1,91 @@
+/* BuildingCard - Tarjeta de edificio moderna y limpia */
+
+.buildingCard {
+  background: #ffffff;
+  border: var(--border-width) solid var(--border-color);
+  border-radius: var(--border-radius);
+  padding: 14px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  position: relative;
+  height: fit-content;
+}
+
+.buildingCard:hover {
+  background-color: #fdea80;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border-color: #f5d34f;
+}
+
+.buildingCard:active {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Header con logo y nombre */
+.cardHeader {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.cardTitle {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #111827;
+  margin: 0;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  line-height: 1.3;
+}
+
+/* Estadísticas de alertas con puntitos (igual que el resumen) */
+.stats {
+  display: flex;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+.alertStat {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.alertDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+}
+
+.alertCount {
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: #374151;
+}
+
+/* Consumo actual */
+.consumption {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding-top: 8px;
+  border-top: 1px solid #f3f4f6;
+}
+
+.consumptionIcon {
+  font-size: 1.1rem;
+}
+
+.consumptionValue {
+  font-size: 0.8rem;
+  font-weight: 400;
+  color: #6b7280;
+}

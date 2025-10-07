@@ -61,28 +61,23 @@ export const getDepartamentsByEdifici = async (req: Request, res: Response) => {
 export const buscarPorDepartamento = async (req: Request, res: Response) => {
   try {
     const { departament, edificio } = req.query;
-    
     if (!departament || typeof departament !== 'string') {
       return res.status(400).json({ error: 'Parámetro departament requerido' });
     }
-    
     if (departament.trim().length < 3) {
       return res.status(400).json({ error: 'Mínimo 3 caracteres para buscar' });
     }
-    
+
     let ifcSpaces;
-    
     if (edificio && typeof edificio === 'string') {
-      // Buscar solo en el edificio especificado
       ifcSpaces = await prisma.$queryRaw`
         SELECT guid, codi, dispositiu, edifici, planta, departament, area 
         FROM "patrimoni"."ifcspace" 
         WHERE LOWER(departament) LIKE LOWER(${`%${departament}%`})
-        AND edifici = ${edificio}
+          AND edifici = ${edificio}
         ORDER BY departament, codi ASC
       `;
     } else {
-      // Buscar en todos los edificios
       ifcSpaces = await prisma.$queryRaw`
         SELECT guid, codi, dispositiu, edifici, planta, departament, area 
         FROM "patrimoni"."ifcspace" 
@@ -90,35 +85,28 @@ export const buscarPorDepartamento = async (req: Request, res: Response) => {
         ORDER BY edifici, departament, codi ASC
       `;
     }
-    
+
     res.json(ifcSpaces);
   } catch (err: any) {
     res.status(500).json({ error: 'Error al buscar por departamento', details: err.message });
   }
 };
 
-// GET /api/ifcspace/devices?guids=guid1,guid2,guid3&edifici=CQA
+// GET /api/ifcspace/devices?guids=guid1,guid2&edifici=CQA
 export const getDevicesByGuids = async (req: Request, res: Response) => {
   try {
     const { guids, edifici } = req.query;
-    
     if (!guids || typeof guids !== 'string') {
       return res.status(400).json({ error: 'Parámetro guids requerido' });
     }
-    
     if (!edifici || typeof edifici !== 'string') {
       return res.status(400).json({ error: 'Parámetro edifici requerido' });
     }
-    
     const guidArray = guids.split(',').map(g => g.trim()).filter(g => g.length > 0);
-    
     if (guidArray.length === 0) {
       return res.status(400).json({ error: 'Al menos un GUID debe ser proporcionado' });
     }
-    
-    console.log(`[ifcspace] Buscando dispositivos para ${guidArray.length} GUIDs en edifici=${edifici}`);
-    console.log(`[ifcspace] Primeros 5 GUIDs:`, guidArray.slice(0, 5));
-    
+
     const devices = await prisma.$queryRaw`
       SELECT guid, dispositiu, codi, departament, planta, id, centre_cost, area
       FROM "patrimoni"."ifcspace" 
@@ -126,12 +114,6 @@ export const getDevicesByGuids = async (req: Request, res: Response) => {
         AND edifici = ${edifici}
       ORDER BY departament, codi ASC
     ` as any;
-    
-    console.log(`[ifcspace] Dispositivos encontrados: ${devices.length}`);
-    if (devices.length > 0) {
-      console.log(`[ifcspace] Primeros 3 dispositivos:`, devices.slice(0, 3));
-    }
-    
     res.json(devices);
   } catch (err: any) {
     res.status(500).json({ error: 'Error al obtener dispositivos por GUIDs', details: err.message });

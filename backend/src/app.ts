@@ -13,6 +13,12 @@ import sensorRoutes from './routes/sensorRoutes';
 import ephemeralSensorRoutes from './routes/ephemeralSensorRoutes';
 import mobileAssetsRoutes from './routes/mobileAssetsRoutes';
 
+// Nuevas rutas del sistema de gestión de usuarios
+import newAuthRoutes from './routes/auth';
+import newUsuariosRoutes from './routes/usuarios';
+import tareasRoutes from './routes/tareas';
+import mensajeriaRoutes from './routes/mensajeria';
+
 dotenv.config();
 
 const app = express();
@@ -32,6 +38,7 @@ app.use(express.urlencoded({ limit: '20mb', extended: true }));
 const uploadsDir = path.resolve(__dirname, '..', 'uploads');
 app.use('/uploads', express.static(uploadsDir));
 
+// Rutas existentes
 app.use('/api/usuarios', usuarioRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/ifcbuildings', ifcBuildingRoutes);
@@ -42,6 +49,12 @@ app.use('/api', maintenanceRoutes);
 app.use('/api/sensors', sensorRoutes);
 app.use('/api/ephemeral-sensors', ephemeralSensorRoutes);
 app.use('/api/mobile-assets', mobileAssetsRoutes);
+
+// Nuevas rutas del sistema de gestión
+app.use('/api/v2/auth', newAuthRoutes);
+app.use('/api/v2/usuarios', newUsuariosRoutes);
+app.use('/api/v2/tareas', tareasRoutes);
+app.use('/api/v2/mensajeria', mensajeriaRoutes);
 
 export default app;
 

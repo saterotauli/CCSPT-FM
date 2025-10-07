@@ -1,0 +1,9 @@
+/* FMAssetPanel - Panel de activos FM */
+
+.fmAssetPanel {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+

@@ -1,0 +1,61 @@
+/* ErrorBoundary - Manejo de errores */
+
+.errorBoundary {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+  background: #f8f9fa;
+}
+
+.errorContainer {
+  max-width: 600px;
+  padding: 40px;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.errorTitle {
+  font-size: 24px;
+  font-weight: 700;
+  color: #dc2626;
+  margin-bottom: 16px;
+}
+
+.errorMessage {
+  font-size: 16px;
+  color: #6b7280;
+  margin-bottom: 24px;
+}
+
+.errorDetails {
+  background: #f3f4f6;
+  padding: 16px;
+  border-radius: 8px;
+  font-family: monospace;
+  font-size: 13px;
+  color: #374151;
+  text-align: left;
+  overflow-x: auto;
+  margin-bottom: 24px;
+}
+
+.errorButton {
+  background: #3b82f6;
+  color: white;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.errorButton:hover {
+  background: #2563eb;
+}
+

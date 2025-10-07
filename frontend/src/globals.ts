@@ -13,6 +13,8 @@ export interface ModelState {
   activeFloorCode?: string; // p.ej. 'P01'
   departmentsLegend?: { name: string; color: string; count: number }[];
   isDepartamentsActive?: boolean;
+  sensorData?: any[];
+  allAlerts?: any[];
 }
 
 class ModelStore {
@@ -99,6 +101,22 @@ class ModelStore {
 
   setDepartamentsActive(active: boolean) {
     this.updateState({ isDepartamentsActive: active });
+  }
+
+  setSensorData(data: any[]) {
+    this.updateState({ sensorData: data });
+  }
+
+  setAllAlerts(alerts: any[]) {
+    this.updateState({ allAlerts: alerts });
+  }
+
+  getSensorData() {
+    return this.state.sensorData || [];
+  }
+
+  getAllAlerts() {
+    return this.state.allAlerts || [];
   }
 }
 
@@ -226,10 +244,8 @@ export interface Discipline {
 export const BUILDINGS: Building[] = [
   { label: "MAP", value: "MAP", file: "CCSPT-MAP-M3D-AS.frag" },
   { label: "Taulí", value: "TAU", file: "CCSPT-TAU-M3D-AS.frag" },
-  { label: "That OPEN", value: "TOC", file: "CCSPT-TOC-M3D-AS.frag" },
   { label: "Albada", value: "ALB", file: "CCSPT-ALB-M3D-AS.frag" },
   { label: "CQA", value: "CQA", file: "CCSPT-CQA-M3D-AS.frag" },
-  { label: "Mínimo", value: "MIN", file: "CCSPT-MIN-M3D-AS.frag" },
   { label: "UDIAT", value: "UDI", file: "CCSPT-UDI-M3D-AS.frag" },
   { label: "VII Centenari", value: "VII", file: "CCSPT-VII-M3D-AS.frag" },
 ];
@@ -246,6 +262,28 @@ export const BUILDING_COLORS: Record<string, string> = {
   UDI: '#3366FF',
   VII: '#996600',
 };
+
+// Colores centralizados para alertas de severidad
+// Estos colores se usan en todo el proyecto para mantener consistencia visual
+export const ALERT_COLORS = {
+  // Colores principales para highlighting en 3D
+  ALT: '#ff0000',      // Rojo vibrante para severidad alta
+  MITJA: '#FFAE45',    // Naranja diferenciado para severidad media  
+  BAIX: '#FFFF2E',     // Amarillo dorado más visible para severidad baja
+  OK: '#00BB00',       // Verde para severidad baja
+  
+  // Colores de fondo para badges y elementos UI
+  ALT_BG: '#ff0000',   // Fondo rojo claro
+  MITJA_BG: '#FFAE45', // Fondo naranja claro
+  BAIX_BG: '#FFFF2E',  // Fondo amarillo claro
+  OK_BG: '#00BB00',    // Fondo verde claro
+  
+  // Colores de texto para badges (unificados)
+  ALT_TEXT: '#ffffff',   // Texto rojo oscuro
+  MITJA_TEXT: '#ffffff', // Texto naranja oscuro
+  BAIX_TEXT: '#666666',  // Texto blanco para severidad baja (unificado)
+  OK_TEXT: '#ffffff',   // Texto verde oscuro
+} as const;
 
 export const DISCIPLINES: Discipline[] = [
   { code: "HVAC", name: "Climatització", icon: "HVAC.png" },

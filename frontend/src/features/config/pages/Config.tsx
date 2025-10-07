@@ -55,6 +55,15 @@ const Config: React.FC = () => {
       // Use same web-ifc version as elsewhere in the app (App.tsx uses 0.0.70)
       serializer.wasm = { absolute: true, path: "https://unpkg.com/web-ifc@0.0.70/" };
       
+      // IMPORTANT: Preserve original coordinates - do not apply any transformations
+      serializer.autoCenter = false; // Don't center the model automatically
+      if (serializer.centerModels !== undefined) {
+        serializer.centerModels = false; // Don't center models
+      }
+      if (serializer.coordinate !== undefined) {
+        serializer.coordinate = false; // Don't apply coordinate transformations
+      }
+      
       const fragmentBytes = await serializer.process({ 
         bytes: ifcBytes,
         progressCallback: (progress, data) => {
@@ -63,15 +72,52 @@ const Config: React.FC = () => {
         }
       });
 
-      const fragFile = new File([fragmentBytes], file.name.replace(/\.ifc$/i, ".frag"));
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(fragFile);
-      a.download = fragFile.name;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(a.href);
-      setIfcMessage("¡Conversión completada!");
+      const suggestedName = file.name.replace(/\.ifc$/i, ".frag");
+      // Try to use the File System Access API when available to let the user choose destination
+      try {
+        const anyWindow = window as any;
+        if (typeof anyWindow.showSaveFilePicker === 'function') {
+          const handle = await anyWindow.showSaveFilePicker({
+            suggestedName,
+            types: [
+              {
+                description: 'Fragments (.frag)',
+                accept: { 'application/octet-stream': ['.frag'] }
+              }
+            ]
+          });
+          const writable = await handle.createWritable();
+          await writable.write(new Blob([fragmentBytes], { type: 'application/octet-stream' }));
+          await writable.close();
+        } else {
+          // Fallback: trigger a download
+          const fragFile = new File([fragmentBytes], suggestedName, { type: 'application/octet-stream' });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(fragFile);
+          a.download = fragFile.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(a.href);
+        }
+        setIfcMessage("¡Conversión completada!");
+      } catch (saveErr) {
+        console.error('[IFC->FRAG] Error saving file:', saveErr);
+        // As a last resort, still try download fallback
+        try {
+          const fragFile = new File([fragmentBytes], suggestedName, { type: 'application/octet-stream' });
+          const a = document.createElement("a");
+          a.href = URL.createObjectURL(fragFile);
+          a.download = fragFile.name;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(a.href);
+          setIfcMessage("¡Conversión completada!");
+        } catch (fallbackErr) {
+          setIfcMessage("Error al guardar el archivo: " + (fallbackErr instanceof Error ? fallbackErr.message : String(fallbackErr)));
+        }
+      }
       setTimeout(() => setIfcMessage(""), 3000);
     } catch (err) {
       setIfcMessage("Error en la conversión: " + (err instanceof Error ? err.message : String(err)));

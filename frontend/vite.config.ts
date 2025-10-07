@@ -15,13 +15,14 @@ export default defineConfig({
   },
   resolve: {
     alias: {
+      "@": fileURLToPath(new URL("./src", import.meta.url)),
       "@app": fileURLToPath(new URL("./src/app", import.meta.url)),
       "@features": fileURLToPath(new URL("./src/features", import.meta.url)),
+      "@modules": fileURLToPath(new URL("./src/modules", import.meta.url)),
+      "@admin": fileURLToPath(new URL("./src/admin", import.meta.url)),
+      "@auth": fileURLToPath(new URL("./src/auth", import.meta.url)),
       "@shared": fileURLToPath(new URL("./src/shared", import.meta.url)),
-      "@viewer": fileURLToPath(new URL("./src/viewer", import.meta.url)),
-      "@bim": fileURLToPath(new URL("./src/bim", import.meta.url)),
-      "@utils": fileURLToPath(new URL("./src/utils", import.meta.url)),
-      "@ui": fileURLToPath(new URL("./src/ui-templates", import.meta.url)),
+      "@ui": fileURLToPath(new URL("./src/modules/viewer/ui", import.meta.url)),
       "@styles": fileURLToPath(new URL("./src/shared/styles", import.meta.url)),
     },
   },

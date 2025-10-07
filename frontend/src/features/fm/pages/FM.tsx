@@ -1,8 +1,6 @@
 import React from 'react';
-import AppLayout from '@shared/components/layout/AppLayout';
-import FMAssetPanel from '@features/fm/components/FMAssetPanel';
-import FMSpacePanel from '@features/fm/components/FMSpacePanel';
-import FMOverviewViewer from '@features/fm/components/FMOverviewViewer';
+import { Layout } from '@shared/components/layout';
+import { FMAssetPanel, FMOverviewViewer } from '@features/fm/components';
 import '@features/fm/FMPage.css';
 
 interface FMProps {
@@ -12,11 +10,10 @@ interface FMProps {
 const FM: React.FC<FMProps> = ({ isMobile }) => {
   return (
     <div className="fm-page">
-      <AppLayout
+      <Layout
         isMobile={isMobile}
         leftPanel={<FMAssetPanel />}
         centerContent={<FMOverviewViewer />}
-        rightPanel={<FMSpacePanel />}
         className="fm-layout"
       />
     </div>

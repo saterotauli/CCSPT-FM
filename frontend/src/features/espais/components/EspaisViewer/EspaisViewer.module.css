@@ -1,0 +1,13 @@
+/* EspaisViewer - Visor de espacios */
+
+.espaisViewer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.viewerContainer {
+  width: 100%;
+  height: 100%;
+}
+

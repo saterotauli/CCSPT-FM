@@ -15,13 +15,14 @@
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
+      "@/*": ["src/*"],
       "@app/*": ["src/app/*"],
       "@features/*": ["src/features/*"],
+      "@modules/*": ["src/modules/*"],
+      "@admin/*": ["src/admin/*"],
+      "@auth/*": ["src/auth/*"],
       "@shared/*": ["src/shared/*"],
-      "@viewer/*": ["src/viewer/*"],
-      "@bim/*": ["src/bim/*"],
-      "@utils/*": ["src/utils/*"],
-      "@ui/*": ["src/ui-templates/*"],
+      "@ui/*": ["src/modules/viewer/ui/*"],
       "@styles/*": ["src/shared/styles/*"]
     },
 

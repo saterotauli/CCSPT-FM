@@ -1,0 +1,13 @@
+/* BIMViewer - Contenedor del visor BIM */
+
+.bimViewer {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.viewerContainer {
+  width: 100%;
+  height: 100%;
+}
+

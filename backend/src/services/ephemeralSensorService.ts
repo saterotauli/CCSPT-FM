@@ -1,5 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 
+// Prisma se inicializa de forma perezosa; si la BD no está disponible,
+// evitaremos ejecutar consultas y usaremos un fallback en memoria.
 const prisma = new PrismaClient();
 
 interface SensorReading {
@@ -11,6 +13,10 @@ interface SensorReading {
 
 interface RoomSensorState {
   spaceGuid: string;
+  edifici: string;
+  planta: string;
+  departament?: string | null;
+  dispositiu: string;
   baseTemperature: number;
   baseHumidity: number;
   basePpm: number;
@@ -30,23 +36,35 @@ class EphemeralSensorService {
   private async initializeRoomStates(): Promise<void> {
     if (this.isInitialized) return;
 
+    // Si no hay BD configurada, evitamos intentar Prisma
+    if (!process.env.DATABASE_URL || process.env.DISABLE_DB === 'true') {
+      this.seedFallbackRooms();
+      this.isInitialized = true;
+      console.log(`[EphemeralSensors] Fallback inicializado (sin BD) para ${this.roomStates.size} habitaciones`);
+      return;
+    }
+
     try {
       const rooms = await prisma.ifcspace.findMany({
         select: {
           guid: true,
           dispositiu: true,
           edifici: true,
-          planta: true
+          planta: true,
+          departament: true
         }
       });
 
-      console.log(`[EphemeralSensors] Inicializando ${rooms.length} habitaciones en memoria`);
+      console.log(`[EphemeralSensors] Inicializando ${rooms.length} habitaciones en memoria (desde BD)`);
 
       for (const room of rooms) {
         const baseValues = this.getBaseValuesForRoomType(room.dispositiu);
-        
         this.roomStates.set(room.guid, {
           spaceGuid: room.guid,
+          edifici: room.edifici ?? 'MAP',
+          planta: room.planta ?? 'P0',
+          departament: room.departament ?? null,
+          dispositiu: room.dispositiu ?? 'Sala',
           baseTemperature: baseValues.temperature,
           baseHumidity: baseValues.humidity,
           basePpm: baseValues.ppm,
@@ -60,7 +78,42 @@ class EphemeralSensorService {
       this.isInitialized = true;
       console.log(`[EphemeralSensors] Estados inicializados para ${this.roomStates.size} habitaciones`);
     } catch (error) {
-      console.error('[EphemeralSensors] Error inicializando estados:', error);
+      console.error('[EphemeralSensors] Error inicializando estados desde BD, usando fallback en memoria:', error);
+      // Si la BD no está disponible, usar un conjunto de salas de ejemplo
+      this.seedFallbackRooms();
+      this.isInitialized = true;
+      console.log(`[EphemeralSensors] Fallback inicializado para ${this.roomStates.size} habitaciones`);
+    }
+  }
+
+  /**
+   * Genera un conjunto mínimo de habitaciones cuando la BD no está disponible
+   */
+  private seedFallbackRooms() {
+    const examples = [
+      { guid: 'UDI-P1-001', edifici: 'UDI', planta: 'P1', departament: 'C-101', dispositiu: 'Habitació' },
+      { guid: 'UDI-P1-002', edifici: 'UDI', planta: 'P1', departament: 'C-102', dispositiu: 'Habitació' },
+      { guid: 'TAU-P2-015', edifici: 'TAU', planta: 'P2', departament: 'D-201', dispositiu: 'Oficina' },
+      { guid: 'MAP-P0-010', edifici: 'MAP', planta: 'P0', departament: 'A-010', dispositiu: 'Quiròfan' },
+      { guid: 'ALB-P3-007', edifici: 'ALB', planta: 'P3', departament: 'E-305', dispositiu: 'Magatzem' },
+    ];
+
+    for (const r of examples) {
+      const base = this.getBaseValuesForRoomType(r.dispositiu);
+      this.roomStates.set(r.guid, {
+        spaceGuid: r.guid,
+        edifici: r.edifici,
+        planta: r.planta,
+        departament: r.departament,
+        dispositiu: r.dispositiu,
+        baseTemperature: base.temperature,
+        baseHumidity: base.humidity,
+        basePpm: base.ppm,
+        temperatureTrend: 0,
+        humidityTrend: 0,
+        ppmTrend: 0,
+        lastUpdate: new Date(),
+      });
     }
   }
 
@@ -191,36 +244,25 @@ class EphemeralSensorService {
     await this.initializeRoomStates();
     
     const readings: Array<{ spaceGuid: string; reading: SensorReading; roomInfo: any }> = [];
-    
-    // Obtener habitaciones filtradas
-    const rooms = await prisma.ifcspace.findMany({
-      where: {
-        ...(edifici && { edifici }),
-        ...(planta && { planta })
-      },
-      select: {
-        guid: true,
-        dispositiu: true,
-        edifici: true,
-        planta: true,
-        departament: true
-      }
+
+    // Filtrar usando el estado en memoria para evitar dependencias de BD
+    const rooms = Array.from(this.roomStates.values()).filter(r => {
+      if (edifici && r.edifici !== edifici) return false;
+      if (planta && r.planta !== planta) return false;
+      return true;
     });
 
     for (const room of rooms) {
-      const state = this.roomStates.get(room.guid);
-      if (state) {
-        readings.push({
-          spaceGuid: room.guid,
-          reading: this.generateSensorReading(state),
-          roomInfo: {
-            dispositiu: room.dispositiu,
-            edifici: room.edifici,
-            planta: room.planta,
-            departament: room.departament
-          }
-        });
-      }
+      readings.push({
+        spaceGuid: room.spaceGuid,
+        reading: this.generateSensorReading(room),
+        roomInfo: {
+          dispositiu: room.dispositiu,
+          edifici: room.edifici,
+          planta: room.planta,
+          departament: room.departament ?? null,
+        }
+      });
     }
 
     return readings;
