@@ -1,0 +1,57 @@
+[build]
+  # Directorio base del proyecto
+  base = "frontend"
+  # Comando para construir
+  command = "npm run build"
+  # Directorio de salida del build
+  publish = "frontend/dist"
+
+[build.environment]
+  # Versión de Node.js
+  NODE_VERSION = "18"
+
+# Configuración de redirecciones y headers
+[[redirects]]
+  # Redirigir todas las rutas de API al backend (ajusta la URL según tu backend)
+  from = "/api/*"
+  to = "https://tu-backend-url.com/api/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  # Redirigir uploads al backend
+  from = "/uploads/*"
+  to = "https://tu-backend-url.com/uploads/:splat"
+  status = 200
+  force = true
+
+[[redirects]]
+  # Redirigir todas las rutas de la SPA al index.html (para React Router)
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+# Headers de seguridad
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+

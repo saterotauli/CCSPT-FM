@@ -1,0 +1,7 @@
+# Redirecciones para Netlify
+# Redirigir todas las rutas de la SPA al index.html (para React Router)
+/*    /index.html   200
+
+# Nota: Las rutas de API deben configurarse en netlify.toml
+# o usar Netlify Functions si quieres manejar el backend en Netlify
+

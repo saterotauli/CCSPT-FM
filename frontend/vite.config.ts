@@ -7,7 +7,7 @@ import { URL } from "node:url";
 
 export default defineConfig({
   plugins: [react()],
-  base: "./",
+  base: "/",
   esbuild: {
     supported: {
       "top-level-await": true,
