@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './BasePanel.module.css';
 
 export interface BasePanelProps {
   title: string;

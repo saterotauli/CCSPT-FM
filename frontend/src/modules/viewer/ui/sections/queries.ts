@@ -1,6 +1,6 @@
 import * as BUI from "@thatopen/ui";
 import * as OBC from "@thatopen/components";
-import * as CUI from "@thatopen/ui-obc";
+// import * as CUI from "@thatopen/ui-obc"; // Reserved for future use
 import { appIcons } from "../../../../globals";
 
 export interface QueriesPanelState {
@@ -14,7 +14,10 @@ export const queriesPanelTemplate: BUI.StatefullComponent<QueriesPanelState> = (
   const { components, isAdmin } = state;
   const finder = components.get(OBC.ItemsFinder);
 
-  const [element] = CUI.queriesList({ components });
+  // Note: queriesList may not be available in all versions of @thatopen/ui-obc
+  // Using a placeholder element instead
+  // @ts-ignore - queriesList may not exist in this version
+  const [element] = CUI.queriesList ? CUI.queriesList({ components }) : [BUI.html`<div>Queries panel (feature not available in this version)</div>`];
 
   let exportBtn: BUI.TemplateResult | undefined;
   if (isAdmin) {

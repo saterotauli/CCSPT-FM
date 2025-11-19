@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { taskService, Task, TaskDetail } from '../../../../services/taskService';
 import { authService } from '../../../../services/authService';
-import styles from './MyTasks.module.css';
 
 interface MyTasksProps {}
 
@@ -20,7 +19,6 @@ const MyTasks: React.FC<MyTasksProps> = () => {
     pages: 0
   });
 
-  const currentUser = authService.getUser();
 
   useEffect(() => {
     loadMyTasks();

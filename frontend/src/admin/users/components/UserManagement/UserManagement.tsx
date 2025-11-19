@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { userService, CreateUserRequest, UpdateUserRequest } from '../../../../services/userService';
 import { authService, User } from '../../../../services/authService';
-import styles from './UserManagement.module.css';
 
 interface UserManagementProps {}
 
@@ -55,9 +54,14 @@ const UserManagement: React.FC<UserManagementProps> = () => {
     }
   };
 
-  const handleCreateUser = async (userData: CreateUserRequest) => {
+  const handleCreateUser = async (userData: CreateUserRequest | UpdateUserRequest): Promise<void> => {
     try {
-      await userService.createUser(userData);
+      // Type guard: CreateUserRequest requires password, UpdateUserRequest doesn't
+      if ('password' in userData && userData.password) {
+        await userService.createUser(userData as CreateUserRequest);
+      } else {
+        throw new Error('Password es requerido para crear un usuario');
+      }
       setShowCreateModal(false);
       loadUsers();
     } catch (err: any) {
@@ -318,7 +322,7 @@ const UserManagement: React.FC<UserManagementProps> = () => {
 interface UserModalProps {
   title: string;
   user?: User;
-  onSubmit: (data: CreateUserRequest | UpdateUserRequest) => void;
+  onSubmit: (data: CreateUserRequest | UpdateUserRequest) => void | Promise<void>;
   onClose: () => void;
 }
 
@@ -413,7 +417,7 @@ const UserModal: React.FC<UserModalProps> = ({ title, user, onSubmit, onClose })
             <label>Rol</label>
             <select
               value={formData.rol}
-              onChange={(e) => setFormData(prev => ({ ...prev, rol: e.target.value }))}
+              onChange={(e) => setFormData(prev => ({ ...prev, rol: e.target.value as "ADMIN" | "COORDINADOR" | "OPERARIO" | "VISOR" | "EDITOR" | "CONSULTOR" }))}
             >
               <option value="VISOR">Visor</option>
               <option value="OPERARIO">Operario</option>

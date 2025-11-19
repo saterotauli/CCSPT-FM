@@ -90,7 +90,7 @@ export interface BuildingCardProps {
  */
 const BuildingCard: React.FC<BuildingCardProps> = ({
   buildingStat,
-  paramType,
+  paramType: _paramType,
   onClick,
   className = '',
   style,

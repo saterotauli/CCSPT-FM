@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { taskService, Task, CreateTaskRequest, UpdateTaskRequest } from '../../../../services/taskService';
 import { userService } from '../../../../services/userService';
 import { authService, User } from '../../../../services/authService';
-import styles from './TaskManagement.module.css';
 
 interface TaskManagementProps {}
 
@@ -28,7 +27,6 @@ const TaskManagement: React.FC<TaskManagementProps> = () => {
     pages: 0
   });
 
-  const currentUser = authService.getUser();
 
   useEffect(() => {
     loadTasks();
@@ -72,9 +70,14 @@ const TaskManagement: React.FC<TaskManagementProps> = () => {
     }
   };
 
-  const handleCreateTask = async (taskData: CreateTaskRequest) => {
+  const handleCreateTask = async (taskData: CreateTaskRequest | UpdateTaskRequest): Promise<void> => {
     try {
-      await taskService.createTask(taskData);
+      // Type guard: CreateTaskRequest has required titulo, UpdateTaskRequest has optional titulo
+      if ('titulo' in taskData && taskData.titulo) {
+        await taskService.createTask(taskData as CreateTaskRequest);
+      } else {
+        throw new Error('Título es requerido para crear una tarea');
+      }
       setShowCreateModal(false);
       loadTasks();
     } catch (err: any) {
@@ -379,7 +382,7 @@ interface TaskModalProps {
   title: string;
   task?: Task;
   operarios: User[];
-  onSubmit: (data: CreateTaskRequest | UpdateTaskRequest) => void;
+  onSubmit: (data: CreateTaskRequest | UpdateTaskRequest) => void | Promise<void>;
   onClose: () => void;
 }
 
@@ -456,7 +459,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ title, task, operarios, onSubmit,
               <label>Tipo</label>
               <select
                 value={formData.tipo}
-                onChange={(e) => setFormData(prev => ({ ...prev, tipo: e.target.value }))}
+                onChange={(e) => setFormData(prev => ({ ...prev, tipo: e.target.value as "MANTENIMIENTO" | "REPARACION" | "INSPECCION" | "ALARMA" | "EMERGENCIA" }))}
               >
                 <option value="MANTENIMIENTO">Mantenimiento</option>
                 <option value="REPARACION">Reparación</option>
@@ -470,7 +473,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ title, task, operarios, onSubmit,
               <label>Prioridad</label>
               <select
                 value={formData.prioridad}
-                onChange={(e) => setFormData(prev => ({ ...prev, prioridad: e.target.value }))}
+                onChange={(e) => setFormData(prev => ({ ...prev, prioridad: e.target.value as "BAJA" | "MEDIA" | "ALTA" | "CRITICA" }))}
               >
                 <option value="BAJA">Baja</option>
                 <option value="MEDIA">Media</option>
@@ -484,7 +487,7 @@ const TaskModal: React.FC<TaskModalProps> = ({ title, task, operarios, onSubmit,
                 <label>Estado</label>
                 <select
                   value={formData.estado}
-                  onChange={(e) => setFormData(prev => ({ ...prev, estado: e.target.value }))}
+                  onChange={(e) => setFormData(prev => ({ ...prev, estado: e.target.value as "PENDIENTE" | "EN_PROGRESO" | "COMPLETADA" | "CANCELADA" }))}
                 >
                   <option value="PENDIENTE">Pendiente</option>
                   <option value="EN_PROGRESO">En Progreso</option>

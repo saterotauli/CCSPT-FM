@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { taskService, Task } from '../../../../services/taskService';
 import { userService } from '../../../../services/userService';
 import { messagingService, Notification } from '../../../../services/messagingService';
-import { authService, User } from '../../../../services/authService';
-import styles from './Dashboard.module.css';
+import { authService } from '../../../../services/authService';
 
 interface DashboardStats {
   totalTasks: number;

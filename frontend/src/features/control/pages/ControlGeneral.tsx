@@ -109,19 +109,6 @@ const ControlGeneral: React.FC = () => {
   }, []);
   // Columns: Data | Edifici | Planta | Departament | Zona (dispositiu) | Par | Valor | Nivell | Estat
   const tableGrid = '140px 120px 90px 220px 1fr 36px 160px 110px 140px';
-  // Función para obtener estilos de estado (usada en el renderizado)
-  const getStatusView = (status: StatusType) => {
-    const label = status === 'Obert' ? 'Alerta' : status;
-    const styles: Record<string, {bg: string; color: string; border: string}> = {
-      'Alerta': { bg: '#fee2e2', color: '#b91c1c', border: '#fca5a5' },
-      'Assignat': { bg: '#dbeafe', color: '#1d4ed8', border: '#93c5fd' },
-      'Pendent': { bg: '#fef3c7', color: '#b45309', border: '#fde68a' },
-      'Completat': { bg: '#dcfce7', color: '#166534', border: '#86efac' },
-      'Tancat': { bg: '#dcfce7', color: '#166534', border: '#86efac' },
-      'Cancel·lat': { bg: '#e5e7eb', color: '#374151', border: '#d1d5db' }
-    };
-    return { label, style: styles[label] || styles['Cancel·lat'] };
-  };
 
   // Usar datos reales de sensores para todos los edificios - OPTIMIZADO
   const { data: sensorData } = useRealTimeSensors({
@@ -256,13 +243,13 @@ const ControlGeneral: React.FC = () => {
     });
     
     // De-duplicate by id: keep highest severity and, if equal, highest deviation
-    const rank: Record<'mitjà' | 'alt' | 'ok', number> = { ok: 0, mitjà: 1, alt: 2 };
+    const rank: Record<Severity, number> = { ok: 0, baix: 1, mitjà: 2, alt: 3 };
     const map = new Map<string, AlertItem>();
     for (const a of alerts) {
       const prev = map.get(a.id);
       if (!prev) { map.set(a.id, a); continue; }
-      const pr = rank[prev.severity];
-      const cr = rank[a.severity];
+      const pr = (rank[prev.severity as Severity] ?? 0) as number;
+      const cr = (rank[a.severity as Severity] ?? 0) as number;
       if (cr > pr || (cr === pr && (a.deviation ?? 0) > (prev.deviation ?? 0))) {
         map.set(a.id, a);
       }
@@ -652,7 +639,7 @@ const ControlGeneral: React.FC = () => {
     }
 
     // Sorting
-    const sevOrder: Record<Severity, number> = { alt: 3, 'mitjà': 2, ok: 1 };
+    const sevOrder: Record<Severity, number> = { alt: 3, 'mitjà': 2, baix: 1, ok: 0 };
     return filtered.sort((a, b) => {
       let cmp = 0;
       if (sortBy === 'date') {

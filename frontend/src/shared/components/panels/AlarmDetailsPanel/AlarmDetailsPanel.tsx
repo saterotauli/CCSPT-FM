@@ -1,6 +1,5 @@
 import React from 'react';
 import { CodeBall } from '@shared/components/common';
-import { PEERS_HIGHLIGHT } from '@shared/styles/highlightColors';
 import { MiniSpaceViewer } from '@modules/viewer/components';
 import { SensorHistoryChart } from '@shared/components/charts';
 import styles from './AlarmDetailsPanel.module.css';

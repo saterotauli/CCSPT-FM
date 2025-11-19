@@ -101,7 +101,6 @@ const FMAssetPanel: React.FC = () => {
   }, [fetchAssets]);
 
   const handleSearch = (query: string) => setSearchQuery(query);
-  const handleRefresh = () => fetchAssets();
 
   // Open asset detail modal and focus in viewer
   const handleAssetDoubleClick = async (asset: Asset) => {

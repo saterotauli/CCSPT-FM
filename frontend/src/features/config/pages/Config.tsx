@@ -69,13 +69,14 @@ const Config: React.FC = () => {
       serializer.wasm = { absolute: true, path: "https://unpkg.com/web-ifc@0.0.70/" };
       
       // IMPORTANT: Preserve original coordinates - do not apply any transformations
-      serializer.autoCenter = false; // Don't center the model automatically
-      if (serializer.centerModels !== undefined) {
-        serializer.centerModels = false; // Don't center models
-      }
-      if (serializer.coordinate !== undefined) {
-        serializer.coordinate = false; // Don't apply coordinate transformations
-      }
+      // Note: These properties may not exist in all versions of IfcImporter
+      // They are optional and may be ignored if not supported
+      // @ts-ignore - Properties may not exist in all versions
+      if (serializer.autoCenter !== undefined) serializer.autoCenter = false;
+      // @ts-ignore
+      if (serializer.centerModels !== undefined) serializer.centerModels = false;
+      // @ts-ignore
+      if (serializer.coordinate !== undefined) serializer.coordinate = false;
       
       const fragmentBytes = await serializer.process({ 
         bytes: ifcBytes,

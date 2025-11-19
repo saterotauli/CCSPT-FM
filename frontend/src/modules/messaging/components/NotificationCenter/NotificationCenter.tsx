@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { messagingService, Notification } from '../../../../services/messagingService';
-import styles from './NotificationCenter.module.css';
 
 interface NotificationCenterProps {
   isOpen: boolean;
