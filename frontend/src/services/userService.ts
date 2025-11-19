@@ -1,7 +1,6 @@
 import axios from './axiosConfig';
 import { User } from './authService';
-
-const API_BASE_URL = 'http://localhost:4000/api/v2';
+import { API_BASE_URL } from '@/config/api';
 
 export interface CreateUserRequest {
   nombre: string;

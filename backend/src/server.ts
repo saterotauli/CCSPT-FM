@@ -6,6 +6,19 @@ import { initializeSocketService } from './services/socketService';
 
 const PORT = process.env.PORT || 4000;
 
+// Ejecutar migraciones en producción antes de iniciar el servidor
+if (process.env.NODE_ENV === 'production') {
+  try {
+    console.log('Ejecutando migraciones de base de datos...');
+    const { execSync } = require('child_process');
+    execSync('npx prisma migrate deploy', { stdio: 'inherit' });
+    console.log('Migraciones completadas');
+  } catch (error) {
+    console.warn('Advertencia: Error ejecutando migraciones automáticas:', error);
+    console.warn('Puedes ejecutarlas manualmente con: npx prisma migrate deploy');
+  }
+}
+
 // Crear servidor HTTP
 const server = createServer(app);
 

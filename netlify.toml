@@ -11,17 +11,19 @@
   NODE_VERSION = "18"
 
 # Configuración de redirecciones y headers
+# NOTA: Reemplaza BACKEND_URL_PLACEHOLDER con la URL real de tu backend en Railway
+# Ejemplo: https://tu-backend.railway.app
 [[redirects]]
-  # Redirigir todas las rutas de API al backend (ajusta la URL según tu backend)
+  # Redirigir todas las rutas de API al backend
   from = "/api/*"
-  to = "/api/:splat"
+  to = "BACKEND_URL_PLACEHOLDER/api/:splat"
   status = 200
   force = true
 
 [[redirects]]
   # Redirigir uploads al backend
   from = "/uploads/*"
-  to = "/uploads/:splat"
+  to = "BACKEND_URL_PLACEHOLDER/uploads/:splat"
   status = 200
   force = true
 
