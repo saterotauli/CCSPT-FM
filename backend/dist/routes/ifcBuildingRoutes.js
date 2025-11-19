@@ -1,0 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const ifcBuildingController_1 = require("../controllers/ifcBuildingController");
+const router = (0, express_1.Router)();
+router.get('/', ifcBuildingController_1.getIfcBuildings);
+router.post('/', ifcBuildingController_1.createIfcBuilding);
+router.put('/:guid', ifcBuildingController_1.updateIfcBuilding);
+router.delete('/:guid', ifcBuildingController_1.deleteIfcBuilding);
+exports.default = router;

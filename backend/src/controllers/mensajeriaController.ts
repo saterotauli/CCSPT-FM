@@ -255,6 +255,9 @@ export const enviarMensaje = async (req: AuthRequest, res: Response) => {
       data: { updatedAt: new Date() }
     });
 
+    // Obtener nombre del remitente
+    const nombreRemitente = mensaje.remitente.nombre + (mensaje.remitente.apellidos ? ` ${mensaje.remitente.apellidos}` : '');
+
     // Enviar notificaciones a otros participantes
     const notificacionesPromises = otrosParticipantes.map(async (participante) => {
       await Promise.all([
@@ -264,12 +267,12 @@ export const enviarMensaje = async (req: AuthRequest, res: Response) => {
             usuarioId: participante.usuarioId,
             tipo: 'MENSAJE_NUEVO',
             titulo: 'Nuevo mensaje',
-            mensaje: `${req.user?.nombre || 'Alguien'}: ${contenido.substring(0, 50)}${contenido.length > 50 ? '...' : ''}`
+            mensaje: `${nombreRemitente}: ${contenido.substring(0, 50)}${contenido.length > 50 ? '...' : ''}`
           }
         }),
         // Enviar notificación push
         FirebaseService.sendNotificationToUser(participante.usuarioId, {
-          title: `Mensaje de ${req.user?.nombre || 'Alguien'}`,
+          title: `Mensaje de ${nombreRemitente}`,
           body: contenido.substring(0, 100),
           data: { 
             conversacionId: id, 

@@ -1,0 +1,34 @@
+UBICACION DE LA CONNECTION STRING EN SUPABASE
+==============================================
+
+1. En el menu lateral izquierdo, busca el icono de ENGRANAJE (Settings)
+   - Esta en la parte inferior del menu lateral
+   - Es un icono circular con dientes (como una rueda)
+
+2. Click en "Settings" (el engranaje)
+
+3. Aparecera un submenu. Busca "Database" en ese submenu
+   - NO confundas con la seccion "Database" del menu principal
+   - Debe estar dentro de Settings
+
+4. Click en "Database" (dentro de Settings)
+
+5. Scroll hacia abajo en la pagina
+
+6. Busca una seccion que dice "Connection string"
+
+7. Veras varias pestañas: URI, JDBC, Golang, etc.
+
+8. Click en la pestaña "URI"
+
+9. Ahi veras la connection string de PostgreSQL
+
+URL DIRECTA:
+https://supabase.com/dashboard/project/xowzybvqhvozwvhojkil/settings/database
+
+La connection string se vera asi:
+postgresql://postgres:[YOUR-PASSWORD]@db.xxx.supabase.co:5432/postgres
+
+O asi (con pooler):
+postgresql://postgres.xxx:[YOUR-PASSWORD]@aws-0-xxx.pooler.supabase.com:6543/postgres
+
