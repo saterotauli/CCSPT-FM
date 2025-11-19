@@ -1,0 +1,20 @@
+═══════════════════════════════════════════════════════════════
+  COMANDOS PARA EJECUTAR EN RAILWAY
+═══════════════════════════════════════════════════════════════
+
+Una vez que Railway haya desplegado el backend:
+
+1. Ve a Railway → Tu servicio backend → Deployments
+2. Click en los tres puntos (⋯) del último deployment
+3. Selecciona "Open in Shell"
+4. Ejecuta este comando:
+
+───────────────────────────────────────────────────────────────
+npx prisma migrate deploy
+───────────────────────────────────────────────────────────────
+
+Deberías ver:
+"All migrations have been successfully applied"
+
+═══════════════════════════════════════════════════════════════
+
