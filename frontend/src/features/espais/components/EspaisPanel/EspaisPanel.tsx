@@ -287,13 +287,13 @@ const EspaisPanel: React.FC = () => {
 
         {items.length === 0 && !loading && searchQuery.trim().length >= 2 && (
           <div className={styles.emptyState}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>📦</div>
+            <div style={{ fontSize: 32, marginBottom: 8, fontStyle: 'normal' }}>📦</div>
             <p style={{ margin: 0, fontSize: 14 }}>No s'han trobat resultats</p>
           </div>
         )}
         {items.length === 0 && !loading && searchQuery.trim().length < 2 && (
           <div className={styles.emptyState}>
-            <div style={{ fontSize: 32, marginBottom: 8 }}>🎧</div>
+            <div style={{ fontSize: 32, marginBottom: 8, fontStyle: 'normal' }}>🎧</div>
             <p style={{ margin: 0, fontSize: 14 }}>Escriu almenys 2 caràcters per buscar</p>
           </div>
         )}

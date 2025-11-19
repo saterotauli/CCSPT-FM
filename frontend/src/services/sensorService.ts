@@ -116,12 +116,12 @@ class SensorService {
    * Enriquece los datos de sensores con información de ifcspace
    */
   private async enrichWithIfcSpaceData(sensorData: SensorReading[]): Promise<RoomInfo[]> {
-    console.log(`[SensorService] Enriching ${sensorData.length} sensor readings`);
+    //console.log(`[SensorService] Enriching ${sensorData.length} sensor readings`);
     const enrichedData: RoomInfo[] = [];
     
     for (const sensor of sensorData) {
-      console.log(`[SensorService] Processing sensor: ${sensor.spaceGuid}`);
-      const spaceInfo = await ifcSpaceService.getSpaceByGuid(sensor.spaceGuid);
+      //console.log(`[SensorService] Processing sensor: ${sensor.spaceGuid}`);
+      const spaceInfo = await ifcSpaceService.getSpaceByCodi(sensor.spaceGuid);
       
       // Extraer información del edificio desde spaceGuid si no hay datos en ifcspace
       let edifici = spaceInfo?.edifici;
@@ -150,18 +150,18 @@ class SensorService {
         departament: departament
       };
       
-      console.log(`[SensorService] Enriched sensor:`, {
+      /*console.log(`[SensorService] Enriched sensor:`, {
         spaceGuid: enrichedSensor.spaceGuid,
         dispositiu: enrichedSensor.dispositiu,
         edifici: enrichedSensor.edifici,
         planta: enrichedSensor.planta,
         foundInIfcSpace: !!spaceInfo
-      });
+      });*/
       
       enrichedData.push(enrichedSensor);
     }
     
-    console.log(`[SensorService] Enrichment complete. ${enrichedData.length} sensors processed`);
+    //console.log(`[SensorService] Enrichment complete. ${enrichedData.length} sensors processed`);
     return enrichedData;
   }
 

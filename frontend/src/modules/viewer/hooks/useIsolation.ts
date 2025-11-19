@@ -30,9 +30,20 @@ export const useIsolation = ({
   clearMarkers,
   restoreSceneMaterials,
 }: UseIsolationProps) => {
+  // Toggle verbose logs for debugging isolation behaviour
+  const DEBUG_ISOLATION = false;
   const lastHiddenIdsRef = useRef<number[] | null>(null);
   const lastHiddenIdsSetRef = useRef<Set<number>>(new Set());
   const lastDeptIdsRef = useRef<number[] | null>(null);
+
+  const isFragmentsReady = () => {
+    try {
+      const mgr = fragmentsRef.current as any;
+      return Boolean(mgr && mgr.core);
+    } catch {
+      return false;
+    }
+  };
 
   const isolateLevel = useCallback(async (level: string) => {
     try {
@@ -42,7 +53,7 @@ export const useIsolation = ({
       const model = fragments.list.get(code) || Array.from(fragments.list.values())[0];
       if (!model) return;
 
-      console.log(`Isolating level: ${level}`);
+      if (DEBUG_ISOLATION) console.log(`Isolating level: ${level}`);
 
       // Clear previous hiding - aislar con mapa vacío para mostrar todos
       await hider.isolate({});
@@ -68,7 +79,7 @@ export const useIsolation = ({
         sensGuids.forEach(g => guidsSet.add(g));
       }
 
-      console.log(`Found ${guidsSet.size} GUIDs for level ${level}`);
+      if (DEBUG_ISOLATION) console.log(`Found ${guidsSet.size} GUIDs for level ${level}`);
 
       // 2) Obtener todos los elementos IFCSPACE
       const categories = await (model as any).getItemsOfCategories([/IFCSPACE/i]);
@@ -92,12 +103,12 @@ export const useIsolation = ({
         return;
       }
 
-      console.log(`Found ${selectedLocalIds.length} elements for level ${level}`);
+      if (DEBUG_ISOLATION) console.log(`Found ${selectedLocalIds.length} elements for level ${level}`);
 
       if (selectedLocalIds.length === 0) return;
 
       // 4) Usar el Hider para AISLAR elementos del nivel seleccionado (mostrar solo estos)
-      console.log(`Isolating ${selectedLocalIds.length} elements from level ${level}`);
+      if (DEBUG_ISOLATION) console.log(`Isolating ${selectedLocalIds.length} elements from level ${level}`);
 
       // Aislar elementos del nivel seleccionado usando el Hider
       if (selectedLocalIds.length > 0) {
@@ -116,8 +127,9 @@ export const useIsolation = ({
       lastHiddenIdsRef.current = elementsToHide;
       lastHiddenIdsSetRef.current = new Set(elementsToHide);
 
-      // Actualizar la escena
-      await fragments.core.update(true);
+      // Actualizar la escena (solo si fragments está listo)
+      if (!isFragmentsReady()) return;
+      await (fragmentsRef.current as any).core.update(true);
       
       // Centrar la cámara en los elementos del nivel seleccionado
       try {
@@ -132,7 +144,7 @@ export const useIsolation = ({
               const sphere = new THREE.Sphere();
               boundingBox.getBoundingSphere(sphere);
               worldRef.current.camera.controls.fitToSphere(sphere, true);
-              console.log('Focused camera on level elements:', level);
+              if (DEBUG_ISOLATION) console.log('Focused camera on level elements:', level);
             }
             boxer.list.clear();
           }
@@ -141,7 +153,7 @@ export const useIsolation = ({
         console.error('Error centering camera on level:', e);
       }
       
-      console.log(`Level ${level} isolated successfully`);
+      if (DEBUG_ISOLATION) console.log(`Level ${level} isolated successfully`);
 
     } catch (e) {
       console.error('Error isolating level:', e);
@@ -150,6 +162,8 @@ export const useIsolation = ({
 
   const isolateDepartment = useCallback(async (level: string, department: string, departments: {[key: string]: any[]}) => {
     try {
+      // Evitar aislar si fragments aún no está listo
+      if (!isFragmentsReady()) return;
       await isolateLevel(level);
       if (!code || !fragmentsRef.current) return;
       const fragments = fragmentsRef.current;

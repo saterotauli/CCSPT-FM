@@ -5,6 +5,12 @@
   background: #f8fafc;
 }
 
+.fm-full-width {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
 .fm-layout {
   background: #f8fafc;
 }

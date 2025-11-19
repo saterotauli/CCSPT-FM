@@ -34,14 +34,14 @@ class IfcSpaceService {
     if (this.initialized) return;
     
     try {
-      console.log('[IfcSpaceService] Initializing...');
+      //console.log('[IfcSpaceService] Initializing...');
       const response = await fetch('/api/ifcspace', {
         headers: { Accept: 'application/json' }
       });
       
       if (response.ok) {
         const allSpaces: IfcSpaceItem[] = await response.json();
-        console.log(`[IfcSpaceService] Loaded ${allSpaces.length} spaces`);
+        //console.log(`[IfcSpaceService] Loaded ${allSpaces.length} spaces`);
         
         // Agrupar por edificio
         const spacesByBuilding = new Map<string, IfcSpaceItem[]>();
@@ -61,7 +61,7 @@ class IfcSpaceService {
         }
         
         this.initialized = true;
-        console.log(`[IfcSpaceService] Initialized with ${spacesByBuilding.size} buildings`);
+        //console.log(`[IfcSpaceService] Initialized with ${spacesByBuilding.size} buildings`);
       } else {
         console.error('[IfcSpaceService] Failed to load ifcspace data:', response.status);
       }
@@ -166,10 +166,18 @@ class IfcSpaceService {
   }
 
   /**
-   * Busca un espacio específico por código (codi)
+   * Busca un espacio específico por GUID
    */
   async getSpaceByGuid(spaceGuid: string): Promise<IfcSpaceItem | null> {
-    return this.getSpaceByCodi(spaceGuid);
+    await this.ensureInitialized();
+    for (const spaces of this.cache.values()) {
+      for (const space of spaces) {
+        if (space.guid === spaceGuid) {
+          return space;
+        }
+      }
+    }
+    return null;
   }
 
   /**
@@ -177,25 +185,13 @@ class IfcSpaceService {
    */
   async getSpaceByCodi(codi: string): Promise<IfcSpaceItem | null> {
     await this.ensureInitialized();
-    console.log(`[IfcSpaceService] Searching for codi: ${codi}`);
-    
-    // Buscar por el campo 'codi'
     for (const spaces of this.cache.values()) {
       for (const space of spaces) {
         if (space.codi === codi) {
-          console.log(`[IfcSpaceService] Found space by codi:`, {
-            codi: space.codi,
-            nom: space.nom,
-            edifici: space.edifici,
-            planta: space.planta,
-            departament: space.departament
-          });
           return space;
         }
       }
     }
-    
-    console.log(`[IfcSpaceService] No space found for codi: ${codi}`);
     return null;
   }
 

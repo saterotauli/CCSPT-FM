@@ -36,16 +36,8 @@ export const useAlerts = ({
   
   const performInitialColorization = useCallback(async () => {
     try {
-      console.log('=== Initial colorization after model load ===');
       const fragments = fragmentsRef.current;
-      if (!fragments) {
-        console.log('No fragments available for initial colorization');
-        return;
-      }
-
-      // Check if fragments is properly initialized
-      if (!fragments.core) {
-        console.log('FragmentsManager not ready, skipping colorization');
+      if (!fragments || !fragments.core) {
         return;
       }
 
@@ -93,13 +85,11 @@ export const useAlerts = ({
           renderedFaces: 0,
         });
         
-        console.log("Highlighter initialized for initial colorization");
       }
 
       // Get model and IFCSPACE elements
       const model = fragments.list.get(code || '') || Array.from(fragments.list.values())[0];
       if (!model) {
-        console.log('No model found for initial colorization');
         return;
       }
 
@@ -108,11 +98,8 @@ export const useAlerts = ({
       const spaceIds: number[] = (categories?.IFCSPACE || []) as number[];
       
       if (spaceIds.length === 0) {
-        console.log('No IFCSPACE elements found for initial colorization');
         return;
       }
-
-      console.log('Initial colorization: Found', spaceIds.length, 'spaces');
       
       // For initial colorization, trigger alert-based coloring if alerts are available
       const currentHighlighter = highlighterRef.current;
@@ -122,11 +109,9 @@ export const useAlerts = ({
         currentHighlighter.clear("mitja");
         currentHighlighter.clear("alt");
         currentHighlighter.clear("ok");
-        console.log('Initial colorization: Cleared existing highlights');
         
         // Trigger alert-based coloring if alerts are available
         if (sensorData.length > 0) {
-          console.log('Initial colorization: Triggering alert-based coloring with', sensorData.length, 'sensors');
           setTimeout(() => {
             colorizeSpacesByAlerts();
           }, 500); // Small delay to ensure highlighter is ready
@@ -142,25 +127,21 @@ export const useAlerts = ({
   const lastSensorDataRef = useRef<any[]>([]);
   const lastCodeRef = useRef<string>('');
 
-  const colorizeSpacesByAlerts = useCallback(async (existingAlerts?: any[]) => {
+  const colorizeSpacesByAlerts = useCallback(async () => {
     try {
-      console.log('=== Colorizing spaces by alerts ===');
       const fragments = fragmentsRef.current;
       const highlighter = highlighterRef.current;
       
       if (!fragments || !code) {
-        console.log('Missing fragments or code');
         return;
       }
 
       // Check if fragments is properly initialized
       if (!fragments.core) {
-        console.log('FragmentsManager not ready for colorization, skipping');
         return;
       }
       
       if (!highlighter) {
-        console.log('Highlighter not initialized yet, waiting...');
         // Try to initialize highlighter if fragments are ready
         if (fragments && fragments.list.size > 0) {
           try {
@@ -210,11 +191,9 @@ export const useAlerts = ({
                 });
                 
                 highlighterRef.current = newHighlighter;
-                console.log('Highlighter initialized on demand with custom styles');
               }
             }
           } catch (error) {
-            console.log('Could not initialize highlighter on demand:', error);
             return;
           }
         } else {
@@ -224,7 +203,6 @@ export const useAlerts = ({
 
       const model = fragments.list.get(code) || Array.from(fragments.list.values())[0];
       if (!model) {
-        console.log('No model found');
         return;
       }
 
@@ -235,7 +213,6 @@ export const useAlerts = ({
       }
       
       if (sensorData.length === 0) {
-        console.log('No sensor data to process, keeping existing colors');
         return;
       }
 
@@ -250,7 +227,6 @@ export const useAlerts = ({
       const spaceIds: number[] = (categories?.IFCSPACE || []) as number[];
       
       if (spaceIds.length === 0) {
-        console.log('No IFCSPACE elements found');
         return;
       }
 
@@ -300,21 +276,13 @@ export const useAlerts = ({
       // USAR LAS ALERTAS EXISTENTES en lugar de recalcular para consistencia con markers
       const alertsByGuid = new Map<string, 'baix' | 'mitjà' | 'alt'>();
       
-      console.log('=== ColorizeSpacesByAlerts Debug ===');
-      console.log('sensorData length:', sensorData.length);
-      console.log('selectedLevel:', selectedLevel);
-      console.log('activeParameter:', activeParameter);
-      console.log('code (building):', code);
-      console.log('existingAlerts provided:', !!existingAlerts);
       
       // Aplicar colorización tanto en modo "Mostrar tot" como en nivel específico
       // Los markers se crearán solo en nivel específico, pero los highlights se mostrarán siempre
 
       // SIEMPRE recalcular desde sensorData para consistencia
       // Esto asegura que la colorización use la misma lógica que el conteo de alertas
-      console.log('Recalculating colorization from sensorData for consistency');
       const buildingSensors = sensorData.filter(s => s.edifici === code);
-      console.log('buildingSensors length:', buildingSensors.length);
       
       buildingSensors.forEach(sensor => {
         // Skip if wrong level
@@ -360,11 +328,10 @@ export const useAlerts = ({
             return;
           }
           alertsByGuid.set(sensor.spaceGuid, maxSeverity);
-          console.log(`Alert found for ${sensor.spaceGuid}: max severity -> ${maxSeverity}`);
+          //console.log(`Alert found for ${sensor.spaceGuid}: max severity -> ${maxSeverity}`);
         }
       });
 
-      console.log(`Total alerts found: ${alertsByGuid.size}`);
 
       const spaceGuids: string[] = [];
       
@@ -381,7 +348,6 @@ export const useAlerts = ({
       const alertKeys = Array.from(alertsByGuid.keys());
       const foundMatches = alertKeys.filter(k => spaceGuids.includes(k));
 
-      console.log(`Alert GUIDs: ${alertKeys.length}, Space GUIDs: ${spaceGuids.length}, Found matches: ${foundMatches.length}`);
 
       // Match spaces with alerts using the found matches (GUID path)
       let matchedCount = 0;
@@ -398,7 +364,6 @@ export const useAlerts = ({
                 if (alertSeverity === 'baix') baixIds.push(spaceLocalId);
                 else if (alertSeverity === 'mitjà') mitjaIds.push(spaceLocalId);
                 else if (alertSeverity === 'alt') altIds.push(spaceLocalId);
-                console.log(`Matched space ${spaceLocalId} with severity ${alertSeverity}`);
               }
             }
             break;
@@ -409,7 +374,6 @@ export const useAlerts = ({
       // Fallback: if we didn't match by GUID (or the keys look like room codes), try matching by room code in Name
       const looksLikeCodes = alertKeys.length > 0 && alertKeys.every(k => typeof k === 'string' && k.length < 20 && k.includes('-'));
       if ((matchedCount === 0) || looksLikeCodes) {
-        console.log('Using fallback matching by room code');
         try {
           // Build a normalized map of codeParts -> severity
           // e.g., 'CQA-P00-007' => '007' and also full code
@@ -421,7 +385,7 @@ export const useAlerts = ({
             codeEntries.push({ raw: raw.toUpperCase(), short: short.toUpperCase(), sev });
           }
 
-          console.log(`Code entries for fallback matching:`, codeEntries);
+          //console.log(`Code entries for fallback matching:`, codeEntries);
 
           for (const space of spaceData) {
             if (Array.isArray(space)) continue;
@@ -448,7 +412,7 @@ export const useAlerts = ({
                 if (ce.sev === 'baix') baixIds.push(spaceLocalId);
                 else if (ce.sev === 'mitjà') mitjaIds.push(spaceLocalId);
                 else if (ce.sev === 'alt') altIds.push(spaceLocalId);
-                console.log(`Fallback matched space ${spaceLocalId} (${name || 'no-name'}, GUID: ${spaceGuid || 'no-guid'}) with severity ${ce.sev}`);
+                //console.log(`Fallback matched space ${spaceLocalId} (${name || 'no-name'}, GUID: ${spaceGuid || 'no-guid'}) with severity ${ce.sev}`);
                 break;
               }
             }
@@ -458,8 +422,6 @@ export const useAlerts = ({
         }
       }
 
-      console.log(`Total matches found (GUID+fallback): ${matchedCount}`);
-      console.log(`Spaces to highlight - Baix: ${baixIds.length}, Mitjà: ${mitjaIds.length}, Alt: ${altIds.length}`);
 
       // Compute OK ids (spaces without alerts) only if requested by filter
       let okIds: number[] = [];
@@ -471,52 +433,51 @@ export const useAlerts = ({
             const allSpaceIds: number[] = (categories?.IFCSPACE || []) as number[];
             const alerted = new Set<number>([...baixIds, ...mitjaIds, ...altIds]);
             okIds = allSpaceIds.filter(id => !alerted.has(id));
-            console.log(`OK spaces computed: ${okIds.length}`);
           }
         } catch (e) {
           console.debug('Could not compute OK ids', e);
         }
       }
-      console.log(`Baix IDs:`, baixIds);
-      console.log(`Mitjà IDs:`, mitjaIds);
-      console.log(`Alt IDs:`, altIds);
+      //console.log(`Baix IDs:`, baixIds);
+      //console.log(`Mitjà IDs:`, mitjaIds);
+      //console.log(`Alt IDs:`, altIds);
 
       // Apply highlights using the highlighter
       if (baixIds.length > 0) {
         const baixMap: { [modelId: string]: Set<number> } = {};
         baixMap[code] = new Set(baixIds);
-        console.log('🟡 Applying baix highlighting with map:', baixMap);
-        console.log('🟡 Highlighter instance:', currentHighlighter);
-        console.log('🟡 Code:', code);
+        //console.log('🟡 Applying baix highlighting with map:', baixMap);
+        //console.log('🟡 Highlighter instance:', currentHighlighter);
+        //console.log('🟡 Code:', code);
         try {
           await currentHighlighter.highlightByID("baix", baixMap, false);
-          console.log(`✅ Applied yellow highlight to ${baixIds.length} spaces`);
+          //console.log(`✅ Applied yellow highlight to ${baixIds.length} spaces`);
         } catch (err) {
-          console.error('❌ Error applying baix highlight:', err);
+          //console.error('❌ Error applying baix highlight:', err);
         }
       }
       
       if (mitjaIds.length > 0) {
         const mitjaMap: { [modelId: string]: Set<number> } = {};
         mitjaMap[code] = new Set(mitjaIds);
-        console.log('🟠 Applying mitjà highlighting with map:', mitjaMap);
+        //console.log('🟠 Applying mitjà highlighting with map:', mitjaMap);
         try {
           await currentHighlighter.highlightByID("mitja", mitjaMap, false);
-          console.log(`✅ Applied orange highlight to ${mitjaIds.length} spaces`);
+          //console.log(`✅ Applied orange highlight to ${mitjaIds.length} spaces`);
         } catch (err) {
-          console.error('❌ Error applying mitjà highlight:', err);
+          //console.error('❌ Error applying mitjà highlight:', err);
         }
       }
       
       if (altIds.length > 0) {
         const altMap: { [modelId: string]: Set<number> } = {};
         altMap[code] = new Set(altIds);
-        console.log('🔴 Applying alt highlighting with map:', altMap);
+        //console.log('🔴 Applying alt highlighting with map:', altMap);
         try {
           await currentHighlighter.highlightByID("alt", altMap, false);
-          console.log(`✅ Applied red highlight to ${altIds.length} spaces`);
+          //console.log(`✅ Applied red highlight to ${altIds.length} spaces`);
         } catch (err) {
-          console.error('❌ Error applying alt highlight:', err);
+          //console.error('❌ Error applying alt highlight:', err);
         }
       }
 
@@ -524,12 +485,12 @@ export const useAlerts = ({
       if (okIds.length > 0) {
         const okMap: { [modelId: string]: Set<number> } = {};
         okMap[code] = new Set(okIds);
-        console.log('🟢 Applying ok highlighting with map:', okMap);
+        //console.log('🟢 Applying ok highlighting with map:', okMap);
         try {
           await currentHighlighter.highlightByID("ok", okMap, false);
-          console.log(`✅ Applied ok highlight to ${okIds.length} spaces`);
+          //console.log(`✅ Applied ok highlight to ${okIds.length} spaces`);
         } catch (err) {
-          console.error('❌ Error applying ok highlight:', err);
+          //console.error('❌ Error applying ok highlight:', err);
         }
       }
 
@@ -537,9 +498,9 @@ export const useAlerts = ({
       if (fragmentsRef.current?.core) {
         try {
           await fragmentsRef.current.core.update(true);
-          console.log('🔄 Model updated after applying highlights');
+          //console.log('🔄 Model updated after applying highlights');
         } catch (err) {
-          console.error('❌ Error updating model:', err);
+          //console.error('❌ Error updating model:', err);
         }
       }
 
@@ -556,7 +517,6 @@ export const useAlerts = ({
       const world = worldRef.current;
       
       if (!marker || !fragments || !world || !code) {
-        console.log('Missing marker, fragments, world or code for creating markers');
         return;
       }
 
@@ -565,7 +525,6 @@ export const useAlerts = ({
       // Get the model
       const model = fragments.list.get(code);
       if (!model) {
-        console.log('Model not found for creating markers');
         return;
       }
 
@@ -574,14 +533,14 @@ export const useAlerts = ({
       worldMarkers.forEach((_, markerId) => {
         marker.delete(markerId);
       });
-      console.log('Cleared existing markers using correct API');
+      //console.log('Cleared existing markers using correct API');
 
       // Filter alerts by selected level if provided and by severityFilter (empty => none)
       let filteredAlerts = selectedLevel ? alerts.filter(alert => alert.planta === selectedLevel) : alerts;
       if (severityFilter !== undefined) {
         filteredAlerts = filteredAlerts.filter(a => severityFilter!.includes(a.severity));
       }
-      console.log(`Creating markers for ${filteredAlerts.length} alerts${selectedLevel ? ` in level ${selectedLevel}` : ''}`);
+      //console.log(`Creating markers for ${filteredAlerts.length} alerts${selectedLevel ? ` in level ${selectedLevel}` : ''}`);
 
       // Get BoundingBoxer component
       const boxer = componentsRef.current?.get(OBC.BoundingBoxer);
@@ -595,7 +554,6 @@ export const useAlerts = ({
       const spaceIds: number[] = (categories?.IFCSPACE || []) as number[];
       
       if (!spaceIds || spaceIds.length === 0) {
-        console.log('No IFCSPACE items found');
         return;
       }
 
@@ -611,13 +569,11 @@ export const useAlerts = ({
       }
       
 
-      console.log(`🔍 Processing ${filteredAlerts.length} alerts for markers`);
       
       // Create markers for each filtered alert
       // En modo "Mostrar tot" (selectedLevel === null), no crear markers para mantener vista limpia
       // En nivel específico (selectedLevel !== null), crear markers para ese nivel
       if (!selectedLevel) {
-        console.log(`🔍 No level selected (Mostrar tot), skipping alert markers for clean view`);
         return;
       }
       
@@ -739,7 +695,6 @@ export const useAlerts = ({
         }
       }
       
-      console.log(`✅ Alert markers created: ${filteredAlerts.length}`);
     } catch (error) {
       console.error('Error creating markers for alerts:', error);
     }
@@ -748,26 +703,22 @@ export const useAlerts = ({
   // Create OK markers function
   const createOKMarkers = useCallback(async (filteredAlerts: any[]) => {
     try {
-      console.log('🟢 Creating OK markers...');
       
       const marker = markerRef.current;
       const fragments = fragmentsRef.current;
       const world = worldRef.current;
       
       if (!marker || !fragments || !world || !code) {
-        console.log('Missing dependencies for OK markers');
         return;
       }
 
       const model = fragments.list.get(code);
       if (!model) {
-        console.log('Model not found for OK markers');
         return;
       }
 
       // Get building sensors only
       const buildingSensors = sensorData.filter(s => s.edifici === code);
-      console.log(`📊 Building sensors: ${buildingSensors.length}`);
       
       // Get alert space codes to exclude
       const alertSpaceCodes = new Set<string>();
@@ -775,7 +726,6 @@ export const useAlerts = ({
         const spaceCode = a.id.replace(/-(temperatura|humitat|ppm)$/i, '');
         alertSpaceCodes.add(spaceCode);
       });
-      console.log(`🚫 Alert spaces to exclude: ${alertSpaceCodes.size}`);
       
       // Get space names to map codes to localIds
       const categories = await (model as any).getItemsOfCategories([/IFCSPACE/i]);
@@ -795,7 +745,6 @@ export const useAlerts = ({
           }
         }
       }
-      console.log(`🗺️ Space mapping: ${codeToLocalIdMap.size} entries`);
       
       let okMarkerCount = 0;
       
@@ -903,12 +852,10 @@ export const useAlerts = ({
             
             marker.create(world, markerElement, markerPosition);
             okMarkerCount++;
-            console.log(`✅ OK marker: ${sensor.dispositiu}`);
           }
         }
       }
       
-      console.log(`🟢 OK markers created: ${okMarkerCount}`);
       
     } catch (e) {
       console.error('❌ Error creating OK markers:', e);
@@ -916,23 +863,19 @@ export const useAlerts = ({
   }, [markerRef, fragmentsRef, worldRef, code, selectedLevel, activeParameter, componentsRef, sensorData]);
 
   const generateAlerts = useCallback(() => {
-      console.log('🔍 generateAlerts - Building:', code, 'Level:', selectedLevel, 'Filter:', severityFilter);
     
     if (!sensorData || !code) {
-      console.log('Missing sensorData or code, returning');
       return;
     }
     
     // Generate alerts for all levels when selectedLevel === null (Mostrar tot mode)
     // Only skip OK markers creation in Mostrar tot mode
-    console.log('Generating alerts for building:', code, 'level:', selectedLevel);
     
     // Clear previous alerts first
     setAlerts([]);
     
     try {
       const buildingSensors = sensorData.filter((s) => s.spaceGuid && s.edifici === code);
-      console.log('📊 Building sensors:', buildingSensors.length);
       
       // Definir umbrales globales (simples y consistentes)
       const thresholds = {
@@ -1110,7 +1053,7 @@ export const useAlerts = ({
       
       // Apply highlighting after generating alerts
       setTimeout(() => {
-        colorizeSpacesByAlerts(alertsFilteredBySeverity);
+        colorizeSpacesByAlerts();
       }, 500);
       
       // Create markers for the alerts
@@ -1133,7 +1076,6 @@ export const useAlerts = ({
 
   // Clear markers and alerts when level changes
   useEffect(() => {
-    console.log('🔄 Level changed to:', selectedLevel);
     
     // Always clear markers when level changes using the correct API
     if (markerRef.current && worldRef.current) {
@@ -1149,13 +1091,11 @@ export const useAlerts = ({
       highlighterRef.current.clear("mitja");
       highlighterRef.current.clear("alt");
       highlighterRef.current.clear("ok");
-      console.log('Highlights cleared for level:', selectedLevel);
     }
     
     // Generate alerts for all levels when no level is selected, or for specific level when selected
     if (!selectedLevel) {
       // For "Mostrar tot" - generate alerts for state but only highlights, no markers
-      console.log('🔍 No level selected (Mostrar tot) - generating alerts for state and highlights only');
       
       // Generate alerts for the state (for the panel) but don't create markers
       const tempGenerateAlerts = async () => {
@@ -1228,7 +1168,7 @@ export const useAlerts = ({
           
           // Generate highlights only
           setTimeout(() => {
-            colorizeSpacesByAlerts(alertsFilteredBySeverity);
+            colorizeSpacesByAlerts();
           }, 500);
         } catch (error) {
           console.error('Error generating alerts for Mostrar tot:', error);
@@ -1238,7 +1178,6 @@ export const useAlerts = ({
       tempGenerateAlerts();
     } else {
       // For specific level - generate both highlights and markers
-      console.log('🔍 Level selected - generating highlights and markers');
       generateAlerts();
     }
   }, [selectedLevel, setAlerts, generateAlerts]);
@@ -1252,9 +1191,7 @@ export const useAlerts = ({
     if (sensorDataChanged || codeChanged) {
       lastSensorDataRef.current = sensorData;
       lastCodeRef.current = code || '';
-      console.log('🔄 Sensor data or code actually changed:', sensorData?.length, code);
     } else {
-      console.log('🔄 Severity filter changed (no data change):', severityFilter);
     }
     
     // Only regenerate if we have data and a level is selected
@@ -1271,7 +1208,6 @@ export const useAlerts = ({
       generateAlerts();
     } else if (sensorData && sensorData.length > 0 && code && !selectedLevel) {
       // For "Mostrar tot", only regenerate highlights, not markers
-      console.log('🔄 Severity filter changed for Mostrar tot - regenerating highlights only');
       setTimeout(() => {
         colorizeSpacesByAlerts();
       }, 500);

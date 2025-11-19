@@ -466,6 +466,8 @@ const ModelViewerRefactored: React.FC = () => {
       // Setup raycasting and highlighter AFTER fragments is initialized
       components.get(OBC.Raycasters).get(world);
 
+      // Postproduction will be configured after model is loaded
+
       // Configurar cámara en ángulo
       if (world.camera?.controls?.setLookAt) {
         world.camera.controls.setLookAt(80, 60, 80, 0, 0, 0);
@@ -566,9 +568,17 @@ const ModelViewerRefactored: React.FC = () => {
             
             console.log("Highlighter initialized successfully");
             
-            // Trigger initial colorization after model is loaded
+            // Trigger initial colorization after model is loaded and fragments is ready
             setTimeout(() => {
-              performInitialColorization();
+              try {
+                if (fragmentsRef.current && fragmentsRef.current.core) {
+                  performInitialColorization();
+                } else {
+                  console.log('FragmentsManager not ready for colorization, skipping...');
+                }
+              } catch (error) {
+                console.error('Error in initial colorization:', error);
+              }
             }, 1000);
           }
         } catch (e) {
@@ -633,7 +643,15 @@ const ModelViewerRefactored: React.FC = () => {
                 
                 // Trigger initial colorization after model is loaded (retry)
                 setTimeout(() => {
-                  performInitialColorization();
+                  try {
+                    if (fragmentsRef.current && fragmentsRef.current.core) {
+                      performInitialColorization();
+                    } else {
+                      console.log('FragmentsManager not ready for colorization (retry), skipping...');
+                    }
+                  } catch (error) {
+                    console.error('Error in initial colorization (retry):', error);
+                  }
                 }, 1000);
               }
             } catch {}
@@ -657,6 +675,35 @@ const ModelViewerRefactored: React.FC = () => {
         
         await fragments.core.load(buffer, { modelId: code || "default" });
         console.log(`Model ${code} loaded successfully from ${modelPath}`);
+        
+        // Configure postproduction after model is loaded
+        const { postproduction } = world.renderer;
+        postproduction.enabled = true;
+        
+        // Try COLOR_PEN first, fallback to COLOR_SHADOWS if not available
+        try {
+          postproduction.style = OBF.PostproductionAspect.COLOR_PEN;
+          console.log('COLOR_PEN style applied successfully');
+        } catch (error) {
+          console.log('COLOR_PEN not available, using COLOR_SHADOWS');
+          postproduction.style = OBF.PostproductionAspect.COLOR_SHADOWS;
+        }
+        
+        // Configure edge pass for better visibility
+        if (postproduction.edgesPass) {
+          postproduction.edgesPass.color = new THREE.Color(0x000000); // Black edges
+          postproduction.edgesPass.width = 2; // Thicker edges
+        }
+        
+        // Configure outline pass for COLOR_PEN effect
+        if (postproduction.outlinePass) {
+          postproduction.outlinePass.thickness = 2;
+          postproduction.outlinePass.outlineColor = new THREE.Color(0x000000);
+          postproduction.outlinePass.fillOpacity = 0.1;
+        }
+        
+        // Force update of postproduction
+        postproduction.update();
         
         // Actualización inmediata para mostrar el modelo completo
         await fragments.core.update(true);

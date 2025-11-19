@@ -3,7 +3,7 @@
   height: 100%;
   display: grid;
   gap: 8px;
-  padding: 8px;
+  padding: 8px 8px 8px 8px;
   box-sizing: border-box;
 }
 
@@ -15,9 +15,11 @@
 }
 
 /* Desktop layout when there's no right panel */
-.appLayout.desktop.no-right {
+.appLayout.desktop.noRight {
   grid-template-columns: 400px 1fr;
   grid-template-areas: "left center";
+  padding: 8px 0 8px 8px;
+  gap: 8px 0;
 }
 
 /* Mobile layout: stacked */
@@ -35,10 +37,15 @@
   overflow: hidden;
 }
 
-.appLayout-center {
+.appLayoutCenter {
   grid-area: center;
   overflow: hidden;
   position: relative;
+}
+
+.appLayout.desktop.noRight .appLayoutCenter {
+  margin-right: 0;
+  padding-right: 0;
 }
 
 .appLayout-right {

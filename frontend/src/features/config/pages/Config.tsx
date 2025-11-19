@@ -1,6 +1,7 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import * as FRAGS from '@thatopen/fragments';
 import '@styles/Pages.css';
+import { loadGeorefCalibration, saveGeorefCalibration, type GeorefCalibration } from '@modules/viewer/utils/Geolocation';
 
 interface HabitacionIFC {
   codi: string;
@@ -39,6 +40,18 @@ const Config: React.FC = () => {
   const [spacesPage, setSpacesPage] = useState(1);
   const pageSize = 200; // avoid heavy DOM rendering
   const [actiusPopupOpen, setActiusPopupOpen] = useState(false);
+  
+  // Estados para georreferenciación
+  const [georefCalibration, setGeorefCalibration] = useState<GeorefCalibration | null>(null);
+  const [georefStatus, setGeorefStatus] = useState<string>("");
+  const [georefForm, setGeorefForm] = useState<GeorefCalibration>({
+    lat0: 0,
+    lon0: 0,
+    alt0: 0,
+    modelOrigin: { x: 0, y: 0, z: 0 },
+    headingDeg: 0,
+    scale: 1
+  });
   
   // Función para convertir IFC a FRAG
   const handleIfcFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -380,6 +393,91 @@ const Config: React.FC = () => {
       setFragStatus("Error de conexión: " + (err instanceof Error ? err.message : String(err)));
     }
   };
+  
+  // Cargar calibración de georreferenciación al montar
+  useEffect(() => {
+    const calib = loadGeorefCalibration();
+    if (calib) {
+      setGeorefCalibration(calib);
+      setGeorefForm(calib);
+    }
+  }, []);
+  
+  // Función para guardar calibración de georreferenciación
+  const handleSaveGeoref = () => {
+    try {
+      // Validar campos requeridos
+      if (typeof georefForm.lat0 !== 'number' || isNaN(georefForm.lat0) ||
+          typeof georefForm.lon0 !== 'number' || isNaN(georefForm.lon0)) {
+        setGeorefStatus("Error: Latitud y longitud de referencia son requeridas");
+        setTimeout(() => setGeorefStatus(""), 5000);
+        return;
+      }
+      
+      if (!georefForm.modelOrigin || 
+          typeof georefForm.modelOrigin.x !== 'number' || isNaN(georefForm.modelOrigin.x) ||
+          typeof georefForm.modelOrigin.y !== 'number' || isNaN(georefForm.modelOrigin.y) ||
+          typeof georefForm.modelOrigin.z !== 'number' || isNaN(georefForm.modelOrigin.z)) {
+        setGeorefStatus("Error: Origen del modelo (x, y, z) es requerido");
+        setTimeout(() => setGeorefStatus(""), 5000);
+        return;
+      }
+      
+      const calib: GeorefCalibration = {
+        lat0: georefForm.lat0,
+        lon0: georefForm.lon0,
+        alt0: georefForm.alt0 !== undefined ? georefForm.alt0 : undefined,
+        modelOrigin: {
+          x: georefForm.modelOrigin.x,
+          y: georefForm.modelOrigin.y,
+          z: georefForm.modelOrigin.z
+        },
+        headingDeg: georefForm.headingDeg !== undefined ? georefForm.headingDeg : 0,
+        scale: georefForm.scale !== undefined ? georefForm.scale : 1
+      };
+      
+      saveGeorefCalibration(calib);
+      setGeorefCalibration(calib);
+      setGeorefStatus("¡Calibración guardada correctamente!");
+      setTimeout(() => setGeorefStatus(""), 5000);
+    } catch (err) {
+      setGeorefStatus("Error al guardar: " + (err instanceof Error ? err.message : String(err)));
+      setTimeout(() => setGeorefStatus(""), 5000);
+    }
+  };
+  
+  // Función para cargar calibración existente
+  const handleLoadGeoref = () => {
+    const calib = loadGeorefCalibration();
+    if (calib) {
+      setGeorefForm(calib);
+      setGeorefCalibration(calib);
+      setGeorefStatus("Calibración cargada");
+      setTimeout(() => setGeorefStatus(""), 3000);
+    } else {
+      setGeorefStatus("No hay calibración guardada");
+      setTimeout(() => setGeorefStatus(""), 3000);
+    }
+  };
+  
+  // Función para eliminar calibración
+  const handleClearGeoref = () => {
+    if (window.confirm("¿Estás seguro de que quieres eliminar la calibración de georreferenciación?")) {
+      localStorage.removeItem("ccspt:georef");
+      setGeorefCalibration(null);
+      setGeorefForm({
+        lat0: 0,
+        lon0: 0,
+        alt0: 0,
+        modelOrigin: { x: 0, y: 0, z: 0 },
+        headingDeg: 0,
+        scale: 1
+      });
+      setGeorefStatus("Calibración eliminada");
+      setTimeout(() => setGeorefStatus(""), 3000);
+    }
+  };
+  
   return (
     <div className="page-container">
       
@@ -493,6 +591,191 @@ const Config: React.FC = () => {
                     {fragStatus}
                   </div>
                 )}
+              </div>
+            </div>
+            
+            <div className="config-section">
+              <h3>Georreferenciación del Modelo</h3>
+              <p>Configura la calibración para posicionar elementos móviles en el modelo 3D usando coordenadas GPS.</p>
+              
+              {georefCalibration && (
+                <div style={{ 
+                  marginBottom: '15px', 
+                  padding: '10px', 
+                  backgroundColor: '#d1ecf1', 
+                  borderRadius: '4px',
+                  border: '1px solid #bee5eb'
+                }}>
+                  <strong>Calibración activa:</strong> Lat: {georefCalibration.lat0.toFixed(6)}°, 
+                  Lon: {georefCalibration.lon0.toFixed(6)}°
+                </div>
+              )}
+              
+              <div className="config-item" style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                    Latitud de referencia (lat0) *
+                    <input
+                      type="number"
+                      step="any"
+                      value={georefForm.lat0}
+                      onChange={(e) => setGeorefForm({ ...georefForm, lat0: parseFloat(e.target.value) || 0 })}
+                      placeholder="41.557028"
+                      style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                    />
+                  </label>
+                  <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                    Longitud de referencia (lon0) *
+                    <input
+                      type="number"
+                      step="any"
+                      value={georefForm.lon0}
+                      onChange={(e) => setGeorefForm({ ...georefForm, lon0: parseFloat(e.target.value) || 0 })}
+                      placeholder="2.111394"
+                      style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                    />
+                  </label>
+                </div>
+                
+                <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                  Altitud de referencia (alt0) - Opcional
+                  <input
+                    type="number"
+                    step="any"
+                    value={georefForm.alt0 || ''}
+                    onChange={(e) => setGeorefForm({ ...georefForm, alt0: e.target.value ? parseFloat(e.target.value) : undefined })}
+                    placeholder="0"
+                    style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                  />
+                </label>
+                
+                <div style={{ borderTop: '1px solid #dee2e6', paddingTop: '15px' }}>
+                  <h4 style={{ marginTop: 0, marginBottom: '10px', fontSize: '16px' }}>Origen del Modelo (coordenadas 3D)</h4>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '10px' }}>
+                    <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                      X *
+                      <input
+                        type="number"
+                        step="any"
+                        value={georefForm.modelOrigin.x}
+                        onChange={(e) => setGeorefForm({ 
+                          ...georefForm, 
+                          modelOrigin: { ...georefForm.modelOrigin, x: parseFloat(e.target.value) || 0 }
+                        })}
+                        placeholder="0"
+                        style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                      />
+                    </label>
+                    <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                      Y *
+                      <input
+                        type="number"
+                        step="any"
+                        value={georefForm.modelOrigin.y}
+                        onChange={(e) => setGeorefForm({ 
+                          ...georefForm, 
+                          modelOrigin: { ...georefForm.modelOrigin, y: parseFloat(e.target.value) || 0 }
+                        })}
+                        placeholder="0"
+                        style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                      />
+                    </label>
+                    <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                      Z *
+                      <input
+                        type="number"
+                        step="any"
+                        value={georefForm.modelOrigin.z}
+                        onChange={(e) => setGeorefForm({ 
+                          ...georefForm, 
+                          modelOrigin: { ...georefForm.modelOrigin, z: parseFloat(e.target.value) || 0 }
+                        })}
+                        placeholder="0"
+                        style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                      />
+                    </label>
+                  </div>
+                </div>
+                
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
+                  <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                    Rotación (headingDeg) - Opcional
+                    <input
+                      type="number"
+                      step="any"
+                      value={georefForm.headingDeg || ''}
+                      onChange={(e) => setGeorefForm({ ...georefForm, headingDeg: e.target.value ? parseFloat(e.target.value) : 0 })}
+                      placeholder="0"
+                      style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                    />
+                    <small style={{ color: '#6b7280', marginTop: '4px' }}>Rotación para alinear el norte verdadero con el eje +Z del modelo (grados)</small>
+                  </label>
+                  <label style={{ display: 'flex', flexDirection: 'column', fontSize: '14px' }}>
+                    Escala (scale) - Opcional
+                    <input
+                      type="number"
+                      step="any"
+                      value={georefForm.scale || ''}
+                      onChange={(e) => setGeorefForm({ ...georefForm, scale: e.target.value ? parseFloat(e.target.value) : 1 })}
+                      placeholder="1"
+                      style={{ padding: '8px', marginTop: '4px', borderRadius: '4px', border: '1px solid #ddd' }}
+                    />
+                    <small style={{ color: '#6b7280', marginTop: '4px' }}>Multiplicador de escala (metros por metro), por defecto 1</small>
+                  </label>
+                </div>
+                
+                <div style={{ display: 'flex', gap: '10px', flexWrap: 'wrap', marginTop: '10px' }}>
+                  <button 
+                    className="config-button primary"
+                    onClick={handleSaveGeoref}
+                  >
+                    Guardar Calibración
+                  </button>
+                  <button 
+                    className="config-button secondary"
+                    onClick={handleLoadGeoref}
+                  >
+                    Cargar Calibración Actual
+                  </button>
+                  {georefCalibration && (
+                    <button 
+                      className="config-button"
+                      onClick={handleClearGeoref}
+                      style={{ backgroundColor: '#dc3545', color: 'white' }}
+                    >
+                      Eliminar Calibración
+                    </button>
+                  )}
+                </div>
+                
+                {georefStatus && (
+                  <div style={{ 
+                    marginTop: '10px', 
+                    padding: '10px', 
+                    borderRadius: '4px',
+                    backgroundColor: georefStatus.startsWith("¡") || georefStatus.includes("cargada") ? '#d4edda' : 
+                                    georefStatus.startsWith("Error") ? '#f8d7da' : '#d1ecf1',
+                    color: georefStatus.startsWith("¡") || georefStatus.includes("cargada") ? '#155724' : 
+                           georefStatus.startsWith("Error") ? '#721c24' : '#0c5460',
+                    border: `1px solid ${georefStatus.startsWith("¡") || georefStatus.includes("cargada") ? '#c3e6cb' : 
+                             georefStatus.startsWith("Error") ? '#f5c6cb' : '#bee5eb'}`
+                  }}>
+                    {georefStatus}
+                  </div>
+                )}
+                
+                <div style={{ 
+                  marginTop: '15px', 
+                  padding: '12px', 
+                  backgroundColor: '#fff3cd', 
+                  borderRadius: '4px',
+                  border: '1px solid #ffc107',
+                  fontSize: '13px',
+                  color: '#856404'
+                }}>
+                  <strong>💡 Consejo:</strong> Para obtener las coordenadas del origen del modelo, puedes usar las herramientas de medición del visor 3D o consultar las propiedades del modelo IFC. 
+                  La latitud y longitud de referencia deben ser un punto conocido en el mundo real que corresponda al origen del modelo.
+                </div>
               </div>
             </div>
           </div>

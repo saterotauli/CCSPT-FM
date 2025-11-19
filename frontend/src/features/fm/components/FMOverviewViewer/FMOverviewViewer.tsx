@@ -190,12 +190,11 @@ const FMOverviewViewer: React.FC = () => {
         
         // IMPORTANT: clone the buffer to avoid it being detached by the first consumer
         const bufferForModels = buffer; // FRAGS.FragmentsModels expects ArrayBuffer
-        const bufferForManager = buffer.slice(0); // clone
-        const bytesForManager = new Uint8Array(bufferForManager); // FragmentsManager.core.load expects Uint8Array
+        const bufferForManager = buffer.slice(0); // clone for FragmentsManager
         
         // Load into both systems for compatibility (use independent copies)
         await fragmentsModels.load(bufferForModels, { modelId: mapFile.replace('.frag','') });
-        await fragmentsManager.core.load(bytesForManager, { modelId: mapFile.replace('.frag','') });
+        await fragmentsManager.core.load(bufferForManager, { modelId: mapFile.replace('.frag','') });
         
         for (const [, model] of fragmentsModels.models.list) { await attachModel(model); }
         
@@ -204,7 +203,7 @@ const FMOverviewViewer: React.FC = () => {
           try {
             // Ensure marker component is available
             const marker = components.get(OBF.Marker);
-            marker.threshold = 0;
+            marker.threshold = 10;
             try { (marker as any).enabled = true; } catch {}
 
             // Force fragments update before creating markers

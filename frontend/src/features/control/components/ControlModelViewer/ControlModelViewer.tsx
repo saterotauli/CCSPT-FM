@@ -7,12 +7,13 @@ import { useModelViewer } from '@modules/viewer/hooks/useModelViewer';
 import { useIsolation } from '@modules/viewer/hooks/useIsolation';
 import { useRaycasting } from '@modules/viewer/hooks/useRaycasting';
 import { useAlerts } from '../../../../hooks/useAlerts';
-import { ALERT_COLORS, modelStore } from '../../../../globals';
+import { modelStore } from '../../../../globals';
 import { AlertsPanel, AlarmDetailsPanel } from '@shared/components/panels';
 import NavigationPanel from '@shared/components/panels/NavigationPanel/NavigationPanel';
 import type { Severity, ParamType } from '@shared/components/panels';
 import ViewerRegistry from '@modules/viewer/utils/ViewerRegistry';
 import { ifcSpaceService } from '../../../../services/ifcSpaceService';
+import { MobileAssetsLayer } from '@modules/viewer/layers/MobileAssetsLayer';
 
 // Interface for historical events (same as ControlGeneral)
 interface HistoricalEvent {
@@ -39,6 +40,7 @@ const ModelViewerRefactored: React.FC = () => {
   const originalMaterialsRef = useRef<Map<THREE.Material, { transparent: boolean; opacity: number; color?: number }>>(new Map());
   const handleResizeRef = useRef<(() => void) | null>(null);
   const markersRef = useRef<Map<string, any>>(new Map());
+  const mobileLayerRef = useRef<MobileAssetsLayer | null>(null);
   const [alarmTab, setAlarmTab] = useState<'info' | 'historic' | 'sistemes'>('info');
   const [showAlarmPanel, setShowAlarmPanel] = useState(false);
   const [selectedEvent, setSelectedEvent] = useState<HistoricalEvent | null>(null);
@@ -96,7 +98,6 @@ const ModelViewerRefactored: React.FC = () => {
       // Filtrar datos para el edificio específico
       const buildingSensorData = globalSensorData.filter(room => room.edifici === code);
       setSensorData(buildingSensorData);
-      console.log(`[ControlModelViewer] Using global sensor data for ${code}: ${buildingSensorData.length} rooms`);
     }
   }, [code]);
 
@@ -146,7 +147,6 @@ const ModelViewerRefactored: React.FC = () => {
         
         // Limpiar nuestro mapa de referencias
         markersRef.current.clear();
-        console.log('Cleared all markers using correct API');
       }
     } catch (error) {
       console.error('Error clearing markers:', error);
@@ -164,17 +164,9 @@ const ModelViewerRefactored: React.FC = () => {
     materialsEdited.clear();
   }, []);
 
-  // Helper function to ensure FragmentsManager is ready
-  const ensureFragmentsReady = useCallback(async () => {
-    const fragments = fragmentsRef.current;
-    if (fragments && fragments.core) {
-      return true;
-    }
-    throw new Error('FragmentsManager not ready');
-  }, []);
 
   // Generate alerts hook
-  const { performInitialColorization, generateAlerts } = useAlerts({
+  const { generateAlerts } = useAlerts({
     code,
     sensorData: sensorData || [],
     activeParameter,
@@ -338,7 +330,6 @@ const ModelViewerRefactored: React.FC = () => {
               boundingBox.getBoundingSphere(sphere);
               if (world.camera?.controls) {
                 world.camera.controls.fitToSphere(sphere, true);
-                console.log('Focused on element from alert:', localId);
               }
             }
             boxer.list.clear();
@@ -359,14 +350,13 @@ const ModelViewerRefactored: React.FC = () => {
             setAlarmTab('info');
             setShowHistoryPanel(true);
             
-            console.log('Opened/updated history panel for sensor:', associatedSensor.dispositiu);
           }
         }
         
-        await fragments.core.update(true);
-        console.log('Element selected from alert:', alert.dispositiu);
+        if (fragments.core) {
+          await fragments.core.update(true);
+        }
       } else {
-        console.log('No element found for alert GUID:', alert.id);
       }
     } catch (error) {
       console.error('Error selecting element by alert:', error);
@@ -477,7 +467,6 @@ const ModelViewerRefactored: React.FC = () => {
     try {
       const levels = await ifcSpaceService.getLevels(code);
       setLevels(levels);
-      console.log(`[ModelViewer] Loaded ${levels.length} levels for building ${code}:`, levels);
     } catch (error) {
       console.error('Error loading levels from ifcspace service:', error);
       setLevels(['P02', 'P01', 'P00', 'PSS', 'PS1']);
@@ -491,7 +480,6 @@ const ModelViewerRefactored: React.FC = () => {
       const newDepartments = { ...departments };
       newDepartments[level] = departmentGroups;
       setDepartments(newDepartments);
-      console.log(`[ModelViewer] Loaded ${departmentGroups.length} departments for ${code}/${level}`);
     } catch (error) {
       console.error('Error loading departments for level:', error);
     }
@@ -528,7 +516,6 @@ const ModelViewerRefactored: React.FC = () => {
 
       // Check if already initialized
       if (fragmentsRef.current && fragmentsRef.current.core) {
-        console.log('Viewer already initialized, skipping...');
         return;
       }
 
@@ -549,161 +536,65 @@ const ModelViewerRefactored: React.FC = () => {
       worldRef.current = world;
       world.scene = new OBC.SimpleScene(components);
       world.scene.setup();
-      world.scene.three.background = new THREE.Color(0x1a1d23);
+      world.scene.three.background = new THREE.Color(0x444444);
 
       world.renderer = new OBF.PostproductionRenderer(components, container);
       world.camera = new OBC.OrthoPerspectiveCamera(components);
-
-      // Ensure core components are initialized before using camera controls
       components.init();
-
-      // Setup raycasting and highlighter AFTER fragments is initialized
       components.get(OBC.Raycasters).get(world);
 
-      // Configurar cámara en ángulo
-      if (world.camera?.controls?.setLookAt) {
-        world.camera.controls.setLookAt(80, 60, 80, 0, 0, 0);
-      }
-
-      // Setup Fragments with consistent worker path
-      const workerPath = "/node_modules/@thatopen/fragments/dist/Worker/worker.mjs";
-      try { ViewerRegistry.setWorkerUrl(workerPath); } catch {}
-      const fragments = components.get(OBC.FragmentsManager);
-      
-      // Initialize fragments and wait for it to be ready
-      await fragments.init(workerPath);
-      fragmentsRef.current = fragments;
-      
-      // Wait for fragments.core to be available
-      let attempts = 0;
-      while (!fragments.core && attempts < 20) {
-        await new Promise(resolve => setTimeout(resolve, 100));
-        attempts++;
-      }
-      
-      if (!fragments.core) {
-        throw new Error('FragmentsManager core not available after initialization');
-      }
-      
-      console.log("FragmentsManager initialized successfully");
-
-      // Add model to scene when loaded
-      fragments.list.onItemSet.add(({ value: model }) => {
+      // Ensure proper renderer size and pixel ratio before first render
+      const rect = container.getBoundingClientRect();
+      if (world.renderer) {
         try {
-          if (world.camera?.three) {
-            model.useCamera(world.camera.three);
-          }
-          world.scene.three.add(model.object);
-          fragments.core.update(true);
-          
-          // Initialize highlighter and hider after model is loaded
-          if (!highlighterRef.current) {
-            const highlighter = components.get(OBF.Highlighter);
-            highlighter.setup({
-              world,
-              selectMaterialDefinition: {
-                color: new THREE.Color("#bcf124"),
-                opacity: 1,
-                transparent: false,
-                renderedFaces: 0,
-              },
-            });
-            highlighterRef.current = highlighter;
-            
-            // Initialize hider
-            const hider = components.get(OBC.Hider);
-            hiderRef.current = hider;
-            console.log("Hider initialized successfully");
+          (world.renderer.three as any).setPixelRatio?.(Math.min(window.devicePixelRatio || 1, 2));
+          (world.renderer.three as any).setSize(rect.width, rect.height);
+        } catch {}
+      }
 
-            // Initialize marker service
-            const marker = components.get(OBF.Marker);
-            markerRef.current = marker;
-            console.log("Marker service initialized successfully");
-
-            // Setup highlighter events
-            highlighter.events.select.onHighlight.add(async (modelIdMap) => {
-              console.log("Element selected:", modelIdMap);
-            });
-
-            highlighter.events.select.onClear.add(() => {
-              console.log("Selection cleared");
-            });
-
-            // Create custom highlight styles for alerts
-            highlighter.styles.set("baix", {
-              color: new THREE.Color(ALERT_COLORS.BAIX),
-              opacity: 1.0,
-              transparent: false,
-              renderedFaces: 0,
-            });
-
-            highlighter.styles.set("mitja", {
-              color: new THREE.Color(ALERT_COLORS.MITJA),
-              opacity: 1.0,
-              transparent: false,
-              renderedFaces: 0,
-            });
-
-            highlighter.styles.set("alt", {
-              color: new THREE.Color(ALERT_COLORS.ALT),
-              opacity: 1.0,
-              transparent: false,
-              renderedFaces: 0,
-            });
-            // OK style for correct values
-            highlighter.styles.set("ok", {
-              color: new THREE.Color(ALERT_COLORS.OK),
-              opacity: 1.0,
-              transparent: false,
-              renderedFaces: 0,
-            });
-            
-            console.log("Highlighter initialized successfully");
-            
-            // Trigger initial colorization after model is loaded
-            setTimeout(() => {
-              performInitialColorization();
-            }, 1000);
-          }
-        } catch (e) {
-          console.debug('Deferred model attach due to camera not ready');
-          setTimeout(() => {
-            try {
-              if (world.camera?.three) {
-                model.useCamera(world.camera.three);
-              }
-              world.scene.three.add(model.object);
-              fragments.core.update(true);
-              
-              // Initialize highlighter after model is loaded (retry)
-              if (!highlighterRef.current) {
-                const highlighter = components.get(OBF.Highlighter);
-                highlighter.setup({
-                  world,
-                  selectMaterialDefinition: {
-                    color: new THREE.Color("#bcf124"),
-                    opacity: 1,
-                    transparent: false,
-                    renderedFaces: 0,
-                  },
-                });
-                highlighterRef.current = highlighter;
-                console.log("Highlighter initialized successfully (retry)");
-                
-                // Initialize marker service (retry)
-                const marker = components.get(OBF.Marker);
-                markerRef.current = marker;
-                console.log("Marker service initialized successfully (retry)");
-                
-                // Trigger initial colorization after model is loaded (retry)
-                setTimeout(() => {
-                  performInitialColorization();
-                }, 1000);
-              }
-            } catch {}
-          }, 0);
+      // Configure camera clipping planes and FOV like MiniSpaceViewer
+      try {
+        if (world.camera?.three instanceof THREE.PerspectiveCamera) {
+          world.camera.three.near = 0.1;
+          world.camera.three.far = 1_000_000;
+          // 60º FOV para consistencia
+          (world.camera.three as THREE.PerspectiveCamera).fov = 60;
+          // Aspecto correcto desde el inicio
+          const aspect = rect.height > 0 ? rect.width / rect.height : 1;
+          world.camera.three.aspect = aspect;
+          world.camera.three.updateProjectionMatrix();
+        } else if ((world.camera?.three as any)?.isOrthographicCamera) {
+          // Para ortográfica, asegura bounds razonables respecto al contenedor
+          const w = Math.max(1, rect.width);
+          const h = Math.max(1, rect.height);
+          const cam: any = world.camera.three;
+          cam.left = -w / 2; cam.right = w / 2; cam.top = h / 2; cam.bottom = -h / 2;
+          cam.near = 0.1; cam.far = 1_000_000; cam.updateProjectionMatrix();
         }
-      });
+      } catch {}
+
+      const { postproduction } = world.renderer;
+      postproduction.enabled = true;
+      postproduction.style = OBF.PostproductionAspect.COLOR_PEN;
+
+      // Configurar cámara en ángulo
+      //if (world.camera?.controls?.setLookAt) {
+        //world.camera.controls.setLookAt(80, 60, 80, 0, 0, 0);
+      //}
+
+      // Initialize fragments like MiniSpaceViewer
+      const fragments = components.get(OBC.FragmentsManager);
+      let workerUrl = ViewerRegistry.getWorkerUrl();
+      if (!workerUrl) {
+        // fallback fetch worker
+        const gUrl = 'https://thatopen.github.io/engine_fragment/resources/worker.mjs';
+        const fetched = await fetch(gUrl);
+        const blob = await fetched.blob();
+        const file = new File([blob], 'worker.mjs', { type: 'text/javascript' });
+        workerUrl = URL.createObjectURL(file);
+      }
+      await fragments.init(workerUrl);
+      fragmentsRef.current = fragments;
 
       // Load model based on code parameter from local files
       const modelPath = `/models/Rooms/CCSPT-${code || 'ALB'}-M3D-Rooms.frag`;
@@ -715,15 +606,67 @@ const ModelViewerRefactored: React.FC = () => {
         }
         const buffer = await file.arrayBuffer();
         try { if (code) ViewerRegistry.setModelBuffer(code, buffer); } catch {}
-        
-        // Ensure fragments is fully initialized before loading
-        await ensureFragmentsReady();
-        
+
         await fragments.core.load(buffer, { modelId: code || "default" });
-        console.log(`Model ${code} loaded successfully from ${modelPath}`);
+        const model = fragments.list.get(code || "default");
+        if (!model) return;
+
+        if (world.camera?.three) model.useCamera(world.camera.three);
+        world.scene.three.add(model.object);
+        await fragments.core.update(true);
+        
+        // Initialize components after model is loaded
+        const highlighter = components.get(OBF.Highlighter);
+        highlighter.setup({
+          world,
+          selectMaterialDefinition: {
+            color: new THREE.Color("#bcf124"),
+            opacity: 1,
+            transparent: false,
+            renderedFaces: 0,
+          },
+        });
+        highlighterRef.current = highlighter;
+        
+        const hider = components.get(OBC.Hider);
+        hiderRef.current = hider;
+        
+        const marker = components.get(OBF.Marker);
+        markerRef.current = marker;
+        marker.threshold = 20;
+        
+        // Create custom highlight styles for alerts
+        highlighter.styles.set("baix", {
+          color: new THREE.Color("#FFFF2E"),
+          opacity: 1.0,
+          transparent: false,
+          renderedFaces: 0,
+        });
+        highlighter.styles.set("mitja", {
+          color: new THREE.Color("#FFAE45"),
+          opacity: 1.0,
+          transparent: false,
+          renderedFaces: 0,
+        });
+        highlighter.styles.set("alt", {
+          color: new THREE.Color("#ff0000"),
+          opacity: 1.0,
+          transparent: false,
+          renderedFaces: 0,
+        });
+        highlighter.styles.set("ok", {
+          color: new THREE.Color("#00FF00"),
+          opacity: 1.0,
+          transparent: false,
+          renderedFaces: 0,
+        });
+        
+        // Postproduction already configured earlier
         
         // Actualización inmediata para mostrar el modelo completo
-        await fragments.core.update(true);
+        if (fragments.core) {
+          await fragments.core.update(true);
+        }
         if (world.renderer) {
           world.renderer.three.render(world.scene.three, world.camera.three);
         }
@@ -749,24 +692,35 @@ const ModelViewerRefactored: React.FC = () => {
                   const cameraZ = center.z + cameraDistance * 0.7;
                   
                   // Posicionar cámara sin animación
-                  world.camera.controls.setLookAt(cameraX, cameraY, cameraZ, center.x, center.y, center.z, false);
+                  world.camera.controls.setLookAt(cameraX, cameraY, cameraZ, center.x, center.y, center.z, true);
                   
                   // Forzar múltiples actualizaciones para renderizar todo el modelo
-                  for (let i = 0; i < 3; i++) {
-                    await fragments.core.update(true);
-                    if (world.renderer) {
-                      world.renderer.three.render(world.scene.three, world.camera.three);
+                  if (fragments.core) {
+                    for (let i = 0; i < 3; i++) {
+                      await fragments.core.update(true);
+                      if (world.renderer) {
+                        world.renderer.three.render(world.scene.three, world.camera.three);
+                      }
+                      await new Promise(resolve => setTimeout(resolve, 100));
                     }
-                    await new Promise(resolve => setTimeout(resolve, 100));
                   }
                 }
                 boxer.list.clear();
               }
             }
           } catch (e) {
-            console.log('Camera centering not available, using default view');
           }
         }, 500);
+
+        // Start Mobile Assets layer (markers from /api/mobile-assets)
+        try {
+          const layer = new MobileAssetsLayer(components, world as any);
+          layer.setFrequency(8000);
+          await layer.start();
+          mobileLayerRef.current = layer;
+        } catch (e) {
+          console.warn('[ControlModelViewer] Failed to start MobileAssetsLayer', e);
+        }
       } catch (error) {
         console.error("Error loading model:", error);
         
@@ -842,6 +796,15 @@ const ModelViewerRefactored: React.FC = () => {
 
     // Cleanup
     return () => {
+      // Stop Mobile Assets layer
+      if (mobileLayerRef.current) {
+        try {
+          mobileLayerRef.current.stop();
+          mobileLayerRef.current = null;
+        } catch (e) {
+          console.warn('[ControlModelViewer] Error stopping MobileAssetsLayer', e);
+        }
+      }
       // Restore any ghosted materials or highlights
       try { restoreSceneMaterials(); } catch {}
       if (fragmentsRef.current) {
