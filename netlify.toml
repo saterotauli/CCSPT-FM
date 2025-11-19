@@ -3,8 +3,8 @@
   base = "frontend"
   # Comando para construir
   command = "npm run build"
-  # Directorio de salida del build
-  publish = "frontend/dist"
+  # Directorio de salida del build (relativo a base)
+  publish = "dist"
 
 [build.environment]
   # Versión de Node.js
